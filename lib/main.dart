@@ -1,47 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'core/theme.dart';
+import 'repositories/auth_repository.dart';
+import 'services/api_client.dart';
+import 'services/token_storage.dart';
+import 'viewmodels/auth_view_model.dart';
+import 'views/splash_screen.dart';
 
-void main() => runApp(const BungaeApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
 
-/// 앱 루트. 지금은 기초 세팅 단계라 플레이스홀더 화면만 보여준다.
-/// 로그인/홈 등 기능은 이후 커밋에서 하나씩 붙는다.
-class BungaeApp extends StatelessWidget {
-  const BungaeApp({super.key});
+  // --- 의존성 조립 (로그인 기능 범위) ---------------------------------
+  final tokens = TokenStorage();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '번개',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      home: const _SetupPlaceholder(),
-    );
-  }
+  late final AuthViewModel authVM;
+  final api = ApiClient(
+    tokens,
+    onSessionExpired: () async => authVM.onSessionExpired(),
+  );
+  authVM = AuthViewModel(
+    tokens: tokens,
+    auth: AuthRepository(api),
+  );
+
+  runApp(TukApp(authVM: authVM));
 }
 
-class _SetupPlaceholder extends StatelessWidget {
-  const _SetupPlaceholder();
+class TukApp extends StatelessWidget {
+  const TukApp({super.key, required this.authVM});
+
+  final AuthViewModel authVM;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('⚡', style: TextStyle(fontSize: 72)),
-            const SizedBox(height: 12),
-            Text('번개',
-                style: theme.textTheme.headlineMedium
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text('기초 세팅 완료 — 곧 기능이 붙습니다',
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.outline)),
-          ],
-        ),
+    return ChangeNotifierProvider.value(
+      value: authVM,
+      child: MaterialApp(
+        title: '툭',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light(),
+        home: const SplashScreen(),
       ),
     );
   }

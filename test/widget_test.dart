@@ -1,10 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bungae/main.dart';
+import 'package:bungae/core/theme.dart';
+import 'package:bungae/widgets/logo.dart';
 
 void main() {
-  testWidgets('앱이 뜨고 번개 플레이스홀더가 보인다', (tester) async {
-    await tester.pumpWidget(const BungaeApp());
-    expect(find.text('번개'), findsOneWidget);
+  testWidgets('툭 로고가 테마 위에서 렌더된다', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light(),
+        home: const Scaffold(body: Center(child: TukLogo(size: 80))),
+      ),
+    );
+    expect(find.text('툭'), findsOneWidget);
   });
 }
