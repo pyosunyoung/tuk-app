@@ -7,7 +7,7 @@ import '../viewmodels/auth_view_model.dart';
 import '../widgets/logo.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
-import 'home_coldstart_screen.dart';
+import 'home_screen.dart';
 import 'intro_screen.dart';
 
 /// 랜딩 (7a-2) — 로그인의 주 진입점. 인트로 없이도 이해하고 바로 시작.
@@ -87,7 +87,7 @@ class LandingScreen extends StatelessWidget {
 
   static void _goHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const HomeColdstartScreen()),
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
       (route) => false,
     );
   }

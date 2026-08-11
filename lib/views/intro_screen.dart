@@ -7,7 +7,7 @@ import '../viewmodels/auth_view_model.dart';
 import '../widgets/logo.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
-import 'home_coldstart_screen.dart';
+import 'home_screen.dart';
 
 /// 인트로 5컷 (6b) — 왜 필요한지(상황) → 어떻게 해결하는지(기능).
 /// 좌우 스와이프 + "다음" 버튼. 마지막 컷에서 카카오(dev) 로그인.
@@ -45,7 +45,7 @@ class _IntroScreenState extends State<IntroScreen> {
     if (!mounted) return;
     if (ok) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const HomeColdstartScreen()),
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
         (route) => false,
       );
     } else {

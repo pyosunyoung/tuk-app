@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/tokens.dart';
 import '../widgets/logo.dart';
 import '../viewmodels/auth_view_model.dart';
-import 'home_coldstart_screen.dart';
+import 'home_screen.dart';
 import 'landing_screen.dart';
 
 /// 스플래시 (7a-1) — 코랄 전면, 로고 등장(0.92→1, 320ms) 후 ~1s 만에 분기.
@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     final loggedIn = auth.status == AuthStatus.loggedIn;
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (_) => loggedIn ? const HomeColdstartScreen() : const LandingScreen(),
+      builder: (_) => loggedIn ? const HomeScreen() : const LandingScreen(),
     ));
   }
 
