@@ -11,6 +11,7 @@ import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'call_on_sheet.dart';
+import 'friend_preview_sheet.dart';
 import 'home_coldstart_screen.dart';
 import 'landing_screen.dart';
 
@@ -63,8 +64,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
   }
 
   void _onFriendTap(AvailableFriend f) {
-    // 미리보기 시트(9e)는 다음 커밋에서. 지금은 안내만.
-    showTukToast(context, '${f.nickname} 미리보기 — 다음 단계에서 연결');
+    showFriendPreviewSheet(context, f);
   }
 
   Future<void> _logout() async {
@@ -126,15 +126,18 @@ class _PresenceHomeState extends State<_PresenceHome> {
                         if (vm.friends.isEmpty)
                           _EmptyAvailable(myOn: vm.myOn)
                         else
-                          ...vm.friends.map((f) => Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: AppSpace.x8),
-                                child: FriendPresenceCard(
-                                  nickname: f.nickname,
-                                  profileImage: f.profileImage,
-                                  activityLabel: f.activity.label,
-                                  expiresAt: f.expiresAt,
-                                  onTap: () => _onFriendTap(f),
+                          ...vm.friends.map((f) => _FriendEnter(
+                                key: ValueKey(f.userId),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: AppSpace.x8),
+                                  child: FriendPresenceCard(
+                                    nickname: f.nickname,
+                                    profileImage: f.profileImage,
+                                    activityLabel: f.activity.label,
+                                    expiresAt: f.expiresAt,
+                                    onTap: () => _onFriendTap(f),
+                                  ),
                                 ),
                               )),
                         if (!vm.myOn) ...[
@@ -298,6 +301,40 @@ class _AvatarPlaceholders extends StatelessWidget {
           Positioned(left: 56, child: dot()),
         ],
       ),
+    );
+  }
+}
+
+/// 새 친구가 목록에 나타날 때 페이드+확장(240ms). userId 키라 기존 항목은
+/// 상태를 유지해 재애니메이션되지 않고, 텍스트만 매 tick 갱신된다.
+class _FriendEnter extends StatefulWidget {
+  const _FriendEnter({super.key, required this.child});
+  final Widget child;
+
+  @override
+  State<_FriendEnter> createState() => _FriendEnterState();
+}
+
+class _FriendEnterState extends State<_FriendEnter>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 240),
+  )..forward();
+  late final Animation<double> _curved =
+      CurvedAnimation(parent: _c, curve: Curves.easeOut);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+      sizeFactor: _curved,
+      child: FadeTransition(opacity: _curved, child: widget.child),
     );
   }
 }
