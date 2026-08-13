@@ -70,3 +70,57 @@ a542175  로그인(3): 홈 콜드스타트
 
 ### 8. 다음
 프레즌스 기능(#3) — 실제 콜 on/off·"지금 한가한 친구"·STOMP 실시간. 로그인 때 뗀 웹소켓 연결을 여기서 붙임.
+
+---
+
+## 프레즌스 (지금 콜 · 지금 한가한 친구) — 2026-08-13
+
+### 1. 개요
+디자인 핸드오프(`design_handoff_tuk_presence`) 기반. 로그인 이후 홈을 프레즌스 홈으로 교체.
+내 콜 on/off + 지금 한가한 친구 목록 + 콜 켜기 시트 + 친구 미리보기 + STOMP 실시간.
+
+### 2. 개발 방식
+- 디자인 주도(토큰·컴포넌트는 로그인과 동일 재사용), 검토 게이트, 기능별 서브커밋(프레즌스(1)/(2)).
+
+### 3. 구현 내용
+| 파일 | 내용 |
+|---|---|
+| `widgets/presence.dart` | NowCallCard(켜짐/꺼짐/방금켠 강조)·FriendPresenceCard·ActivityChip·CallToggle + 만료/남은시간 문구 |
+| `viewmodels/presence_view_model.dart` | 내콜·한가한친구·친구수, 로컬 카운트다운(만료시각 앵커·1분 tick), 정렬(여유 많은 순), 실시간 add/remove, turnOn/turnOff(낙관적), **STOMP 연결 lifecycle 소유** |
+| `views/home_screen.dart` | 친구 0명→콜드스타트 / 있음→프레즌스 홈. 9a 콜켜짐·9b 콜꺼짐+유도배너·9c 0명. 하단 CTA 툭띄우기/지금콜켜기. 새 친구 등장 애니메이션 |
+| `views/call_on_sheet.dart` | 활동 7칩 + 시간 프리셋(1/2/4/직접 휠피커) + "{시간} 동안 콜 켜기" + 안심문구 |
+| `views/friend_preview_sheet.dart` | 프로필 + 던지기 CTA. 연 시점 정보 기억, 온/오프라인만 실시간 판정 |
+| `main.dart` | PresenceViewModel 제공 + auth 상태→presence start/stop. 로그인 착지점=HomeScreen |
+
+프레즌스/친구 배관(presence·friend repo, stomp_service, presence·friend·activity·realtime_event 모델) 추적 시작.
+
+### 4. 핵심 결정 (왜)
+| 결정 | 이유 |
+|---|---|
+| STOMP 연결을 PresenceViewModel 이 소유 | 로그인에서 뗀 실시간을 첫 소비자인 프레즌스가 관리. main 에서 auth 상태로 start/stop |
+| 로컬 카운트다운(만료시각 앵커) | 서버 재폴링 없이 남은시간 표시. 1분 tick 은 문구만 갱신, 리스트 재정렬 안 함(오탭 방지) |
+| 정렬 = 여유 많은 순 | 곧 꺼질 친구를 위에 두면 초읽기 압박. 무부담 원칙 |
+| 친구 카드 등장 애니메이션에 AnimatedList 대신 userId 키 래퍼 | AnimatedList 는 기존 항목을 리빌드 안 해 1분 카운트다운 텍스트가 멈춤 → 키 래퍼로 신규만 애니메이션, 기존은 상태 유지+텍스트 갱신 |
+| 남은시간 10분 미만 "곧 꺼져요" | 초읽기 대신. 남은시간 빨강 강조 안 함 |
+
+### 5. 검증
+에뮬 실검증(alice 로그인, 친구 bob): 9b(콜꺼짐+친구)→9d 시트(카페+1시간)→9a(콜켜짐, 만료문구·CTA전환·토스트). bob 콜 REST on/off로 **STOMP 실시간 등장/사라짐**(→9c 빈 상태)·**미리보기 시트 오프라인 전환**(CTA 비활성) 확인.
+
+### 6. Git
+```
+4cd43dd  프레즌스(1): 홈(9a/9b/9c) + 콜 켜기 시트(9d)
+7b87e30  프레즌스(2): 친구 미리보기 시트(9e) + 실시간 등장/사라짐
+```
+
+### 7. 의도적 미연결 (다음 기능으로)
+| 항목 | 어디서 |
+|---|---|
+| "툭 띄우기" / 친구에게·모두에게 던지기 | 번개 기능(#5) — 지금은 토스트/파라미터 자리 |
+| 프로필 아바타 실제 정보 | 백엔드 `GET /users/me` |
+| 콜드스타트의 "지금 콜" 토글 | 아직 로컬 상태(친구 0명 화면). 프레즌스와 통일은 후속 |
+
+### 8. 다음
+친구 기능(#4, 초대코드) 또는 번개 기능(#5). 디자인 핸드오프 나오면 그 기준으로.
+
+### 부수 작업
+백엔드 반복 문제 해결: `application.yml` 기본 활성 프로필을 `dev`로(`spring.profiles.active: ${SPRING_PROFILES_ACTIVE:dev}`) — IntelliJ/gradle 어느 쪽으로 켜도 dev 로그인 동작. 운영은 env 로 override(백엔드 CLAUDE.md 체크리스트에 기록).
