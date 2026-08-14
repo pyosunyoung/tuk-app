@@ -9,6 +9,7 @@ import 'services/api_client.dart';
 import 'services/stomp_service.dart';
 import 'services/token_storage.dart';
 import 'viewmodels/auth_view_model.dart';
+import 'viewmodels/friend_view_model.dart';
 import 'viewmodels/presence_view_model.dart';
 import 'views/splash_screen.dart';
 
@@ -26,14 +27,16 @@ void main() {
   );
   authVM = AuthViewModel(tokens: tokens, auth: AuthRepository(api));
 
+  final friendRepo = FriendRepository(api);
   final presenceVM = PresenceViewModel(
     presence: PresenceRepository(api),
-    friend: FriendRepository(api),
+    friend: friendRepo,
     stomp: stomp,
     tokens: tokens,
   );
+  final friendVM = FriendViewModel(friendRepo);
 
-  // 인증 상태 → 실시간(프레즌스) lifecycle. 상태가 실제로 바뀔 때만.
+  // 인증 상태 → 실시간(프레즌스)·친구 lifecycle. 상태가 실제로 바뀔 때만.
   AuthStatus? prev;
   authVM.addListener(() {
     final s = authVM.status;
@@ -41,19 +44,27 @@ void main() {
     prev = s;
     if (s == AuthStatus.loggedIn) {
       presenceVM.start();
+      friendVM.load();
     } else if (s == AuthStatus.loggedOut) {
       presenceVM.stop();
+      friendVM.reset();
     }
   });
 
-  runApp(TukApp(authVM: authVM, presenceVM: presenceVM));
+  runApp(TukApp(authVM: authVM, presenceVM: presenceVM, friendVM: friendVM));
 }
 
 class TukApp extends StatelessWidget {
-  const TukApp({super.key, required this.authVM, required this.presenceVM});
+  const TukApp({
+    super.key,
+    required this.authVM,
+    required this.presenceVM,
+    required this.friendVM,
+  });
 
   final AuthViewModel authVM;
   final PresenceViewModel presenceVM;
+  final FriendViewModel friendVM;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +72,7 @@ class TukApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: authVM),
         ChangeNotifierProvider.value(value: presenceVM),
+        ChangeNotifierProvider.value(value: friendVM),
       ],
       child: MaterialApp(
         title: '툭',

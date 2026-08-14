@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
-import '../viewmodels/auth_view_model.dart';
 import '../widgets/logo.dart';
 import '../widgets/primitives.dart';
-import '../widgets/toast.dart';
-import 'landing_screen.dart';
+import 'friend_add_sheet.dart';
+import 'friends_screen.dart';
 
 /// 홈 — 콜드스타트 (1b). 로그인 직후, 친구 0명 상태.
 /// 지금 콜은 기본 ON, 친구 초대를 유도한다.
@@ -68,27 +66,9 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
     // TODO(프레즌스 기능): 실제 콜 on/off API 연결.
   }
 
-  Future<void> _confirmLogout() async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('로그아웃할까요?'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('취소')),
-          FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('로그아웃')),
-        ],
-      ),
-    );
-    if (ok != true || !mounted) return;
-    await context.read<AuthViewModel>().logout();
-    if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LandingScreen()),
-      (route) => false,
+  void _openFriends() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const FriendsScreen()),
     );
   }
 
@@ -120,9 +100,10 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
         children: [
           const TukLogo(size: 40),
           const Spacer(),
-          // 프로필 아바타 — /users/me 붙기 전 임시 이니셜.
+          // 프로필 아바타 — 친구 화면 진입 (/users/me 붙기 전 임시 이니셜).
           GestureDetector(
-            onTap: _confirmLogout,
+            onTap: _openFriends,
+            behavior: HitTestBehavior.opaque,
             child: Container(
               width: 36,
               height: 36,
@@ -200,15 +181,15 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
         children: [
           PillButton.primary(
             '친구 초대하기',
-            onPressed: () => showTukToast(context, '친구 초대는 다음 단계(친구 기능)에서 연결됩니다'),
+            onPressed: () => showFriendAddSheet(context),
           ),
           const SizedBox(height: AppSpace.x12),
           PillButton.secondary(
-            '연락처에서 찾기',
-            onPressed: () => showTukToast(context, '연락처 찾기는 다음 단계에서 연결됩니다'),
+            '내 코드 알려주기',
+            onPressed: () => showFriendAddSheet(context, startAtMyCode: true),
           ),
           const SizedBox(height: AppSpace.x12),
-          Text('초대해도 상대에겐 부담 없어요 · 링크 하나면 끝',
+          Text('코드로만 친구가 돼요 · 낯선 사람은 들어올 수 없어요',
               textAlign: TextAlign.center, style: AppText.caption12),
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/activity.dart';
-import '../viewmodels/auth_view_model.dart';
+import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/logo.dart';
 import '../widgets/presence.dart';
@@ -12,8 +12,8 @@ import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'call_on_sheet.dart';
 import 'friend_preview_sheet.dart';
+import 'friends_screen.dart';
 import 'home_coldstart_screen.dart';
-import 'landing_screen.dart';
 
 /// 로그인 이후 홈. 친구 수에 따라 콜드스타트(초대) vs 프레즌스 홈으로 분기.
 class HomeScreen extends StatelessWidget {
@@ -67,27 +67,9 @@ class _PresenceHomeState extends State<_PresenceHome> {
     showFriendPreviewSheet(context, f);
   }
 
-  Future<void> _logout() async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('로그아웃할까요?'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('취소')),
-          FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('로그아웃')),
-        ],
-      ),
-    );
-    if (ok != true || !mounted) return;
-    await context.read<AuthViewModel>().logout();
-    if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LandingScreen()),
-      (route) => false,
+  void _openFriends() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const FriendsScreen()),
     );
   }
 
@@ -171,17 +153,11 @@ class _PresenceHomeState extends State<_PresenceHome> {
           const TukLogo(size: 40),
           const Spacer(),
           GestureDetector(
-            onTap: _logout,
-            child: Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  color: AppColors.primaryTint, shape: BoxShape.circle),
-              child: Text('나',
-                  style: AppText.label14.copyWith(
-                      color: AppColors.primaryPress,
-                      fontWeight: FontWeight.w600)),
+            onTap: _openFriends,
+            behavior: HitTestBehavior.opaque,
+            child: _ProfileAvatarButton(
+              requestCount: context.select<FriendViewModel, int>(
+                  (f) => f.requestCount),
             ),
           ),
         ],
@@ -301,6 +277,57 @@ class _AvatarPlaceholders extends StatelessWidget {
           Positioned(left: 56, child: dot()),
         ],
       ),
+    );
+  }
+}
+
+/// 프로필 아바타(나) + 받은 신청 배지. 탭하면 친구 화면으로.
+class _ProfileAvatarButton extends StatelessWidget {
+  const _ProfileAvatarButton({required this.requestCount});
+  final int requestCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+              color: AppColors.primaryTint, shape: BoxShape.circle),
+          child: Text('나',
+              style: AppText.label14.copyWith(
+                  color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
+        ),
+        if (requestCount > 0)
+          Positioned(
+            top: -4,
+            right: -4,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 18),
+              height: 18,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                border: Border.all(color: AppColors.background, width: 2),
+              ),
+              child: Text(
+                requestCount > 9 ? '9+' : '$requestCount',
+                style: const TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
