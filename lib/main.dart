@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 
 import 'core/theme.dart';
 import 'repositories/auth_repository.dart';
+import 'repositories/flash_repository.dart';
 import 'repositories/friend_repository.dart';
 import 'repositories/presence_repository.dart';
 import 'services/api_client.dart';
 import 'services/stomp_service.dart';
 import 'services/token_storage.dart';
 import 'viewmodels/auth_view_model.dart';
+import 'viewmodels/flash_view_model.dart';
 import 'viewmodels/friend_view_model.dart';
 import 'viewmodels/presence_view_model.dart';
 import 'views/splash_screen.dart';
@@ -35,6 +37,7 @@ void main() {
     tokens: tokens,
   );
   final friendVM = FriendViewModel(friendRepo);
+  final flashVM = FlashViewModel(FlashRepository(api));
 
   // 인증 상태 → 실시간(프레즌스)·친구 lifecycle. 상태가 실제로 바뀔 때만.
   AuthStatus? prev;
@@ -51,7 +54,12 @@ void main() {
     }
   });
 
-  runApp(TukApp(authVM: authVM, presenceVM: presenceVM, friendVM: friendVM));
+  runApp(TukApp(
+    authVM: authVM,
+    presenceVM: presenceVM,
+    friendVM: friendVM,
+    flashVM: flashVM,
+  ));
 }
 
 class TukApp extends StatelessWidget {
@@ -60,11 +68,13 @@ class TukApp extends StatelessWidget {
     required this.authVM,
     required this.presenceVM,
     required this.friendVM,
+    required this.flashVM,
   });
 
   final AuthViewModel authVM;
   final PresenceViewModel presenceVM;
   final FriendViewModel friendVM;
+  final FlashViewModel flashVM;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +83,7 @@ class TukApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: authVM),
         ChangeNotifierProvider.value(value: presenceVM),
         ChangeNotifierProvider.value(value: friendVM),
+        ChangeNotifierProvider.value(value: flashVM),
       ],
       child: MaterialApp(
         title: '툭',

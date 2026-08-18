@@ -6,7 +6,7 @@ import '../core/typography.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
-import '../widgets/toast.dart';
+import 'flash_compose_screen.dart';
 
 /// 친구 카드 탭 → 미리보기 시트 (9e).
 /// 여기까지가 프레즌스 범위. "툭 던지기"는 발송 상세(별도 기능)로 넘어가며,
@@ -67,9 +67,12 @@ class _FriendPreviewSheet extends StatelessWidget {
             PillButton.primary(
               '${friend.nickname}에게 툭 던지기',
               onPressed: () {
-                Navigator.of(context).pop();
-                showTukToast(context,
-                    '${friend.nickname}에게 툭 — 번개 발송은 다음 기능에서 연결됩니다');
+                final nav = Navigator.of(context);
+                nav.pop();
+                nav.push(flashComposeRoute(
+                  prefillActivity: friend.activity,
+                  prefillTargetIds: [friend.userId],
+                ));
               },
             )
           else ...[
@@ -82,8 +85,9 @@ class _FriendPreviewSheet extends StatelessWidget {
           PillButton.secondary(
             '절친 모두에게 던지기',
             onPressed: () {
-              Navigator.of(context).pop();
-              showTukToast(context, '절친 모두에게 툭 — 번개 발송은 다음 기능에서 연결됩니다');
+              final nav = Navigator.of(context);
+              nav.pop();
+              nav.push(flashComposeRoute(prefillActivity: friend.activity));
             },
           ),
           const SizedBox(height: AppSpace.x12),

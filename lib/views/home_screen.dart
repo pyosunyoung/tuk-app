@@ -11,6 +11,7 @@ import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'call_on_sheet.dart';
+import 'flash_compose_screen.dart';
 import 'friend_preview_sheet.dart';
 import 'friends_screen.dart';
 import 'home_coldstart_screen.dart';
@@ -200,8 +201,11 @@ class _PresenceHomeState extends State<_PresenceHome> {
         child: myOn
             ? PillButton.primary(
                 '툭 띄우기',
-                onPressed: () =>
-                    showTukToast(context, '번개(툭) 발송은 다음 기능에서 연결됩니다'),
+                onPressed: () => Navigator.of(context).push(
+                  flashComposeRoute(
+                    prefillActivity: context.read<PresenceViewModel>().myActivity,
+                  ),
+                ),
               )
             : PillButton.primary(
                 '지금 콜 켜기',
