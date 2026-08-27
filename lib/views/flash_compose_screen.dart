@@ -145,6 +145,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
         scheduledAt: _scheduled ? _scheduledAt : null,
       );
       if (!mounted) return;
+      vm.reloadSent(); // 홈 "내가 띄운 번개" 배너 갱신
       if (_scheduled && _scheduledAt != null) {
         // 예약 → 홈으로 닫고 토스트
         Navigator.of(context).pop();

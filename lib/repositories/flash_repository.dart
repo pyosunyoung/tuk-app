@@ -35,6 +35,14 @@ class FlashRepository {
         .toList();
   }
 
+  /// 내가 띄운 활성 번개(홈 배너용).
+  Future<List<SentFlash>> sent() async {
+    final data = await _api.get('$_base/sent');
+    return (data as List)
+        .map((e) => SentFlash.fromJson((e as Map).cast<String, dynamic>()))
+        .toList();
+  }
+
   /// 합류 — 멱등. 모임방 반환.
   Future<MeetupRoom> join(int flashId) async {
     final data = await _api.post('$_base/$flashId/join');

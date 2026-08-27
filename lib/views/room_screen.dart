@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,17 +38,28 @@ class _RoomScreenState extends State<RoomScreen> {
   bool _loading = true;
   String? _error;
   late final FlashViewModel _vm;
+  StreamSubscription? _evSub;
 
   @override
   void initState() {
     super.initState();
     _vm = context.read<FlashViewModel>();
+    // 실시간: 이 방에 누가 합류하면 조용히 참여자 갱신(토스트 없음).
+    _evSub = _vm.events.listen((e) {
+      if (e.isMemberJoined && e.flashId == widget.flashId && mounted) _load();
+    });
     _load();
     if (widget.initialToast != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) showTukToast(context, widget.initialToast!);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _evSub?.cancel();
+    super.dispose();
   }
 
   bool get _ended =>

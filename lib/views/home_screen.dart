@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/flash_format.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/activity.dart';
+import '../models/flash.dart';
+import '../viewmodels/flash_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
+import '../widgets/avatar.dart';
 import '../widgets/logo.dart';
 import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
@@ -15,6 +19,8 @@ import 'flash_compose_screen.dart';
 import 'friend_preview_sheet.dart';
 import 'friends_screen.dart';
 import 'home_coldstart_screen.dart';
+import 'received_flashes_screen.dart';
+import 'room_screen.dart';
 
 /// 로그인 이후 홈. 친구 수에 따라 콜드스타트(초대) vs 프레즌스 홈으로 분기.
 class HomeScreen extends StatelessWidget {
@@ -74,6 +80,35 @@ class _PresenceHomeState extends State<_PresenceHome> {
     );
   }
 
+  /// 홈 상단 배너 (11d): 내가 띄운 번개(위) + 받은 번개(아래). 없으면 빈 리스트.
+  List<Widget> _flashBanners(BuildContext context) {
+    final flash = context.watch<FlashViewModel>();
+    final sent = flash.sent;
+    final pending = flash.pendingReceivedCount;
+    if (sent.isEmpty && pending == 0) return const [];
+
+    return [
+      if (sent.isNotEmpty)
+        _SentBanner(
+          flash: sent.first,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => RoomScreen(
+                flashId: sent.first.flashId, expiresAt: sent.first.expiresAt),
+          )),
+        ),
+      if (sent.isNotEmpty && pending > 0) const SizedBox(height: AppSpace.x8),
+      if (pending > 0)
+        _ReceivedBanner(
+          count: pending,
+          received: flash.received,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const ReceivedFlashesScreen(),
+          )),
+        ),
+      const SizedBox(height: AppSpace.x12),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<PresenceViewModel>();
@@ -95,6 +130,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
                       padding: const EdgeInsets.fromLTRB(
                           AppSpace.x20, 0, AppSpace.x20, 120),
                       children: [
+                        ..._flashBanners(context),
                         NowCallCard(
                           on: vm.myOn,
                           activityLabel: vm.myActivity?.label,
@@ -281,6 +317,137 @@ class _AvatarPlaceholders extends StatelessWidget {
           Positioned(left: 56, child: dot()),
         ],
       ),
+    );
+  }
+}
+
+/// 홈 상단 배너 공통 셸.
+class _Banner extends StatelessWidget {
+  const _Banner({required this.avatars, required this.title, required this.summary, required this.onTap});
+  final List<({String nickname, String? profileImage})> avatars;
+  final String title;
+  final String summary;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpace.x16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.primaryTint,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(color: AppColors.primaryTintBorder),
+        ),
+        child: Row(
+          children: [
+            _BannerAvatars(avatars: avatars),
+            const SizedBox(width: AppSpace.x12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 2),
+                  Text(summary,
+                      maxLines: 1, overflow: TextOverflow.ellipsis,
+                      style: AppText.caption13.copyWith(color: AppColors.primaryPress)),
+                ],
+              ),
+            ),
+            const Text('›', style: TextStyle(
+                fontFamily: 'Pretendard', fontSize: 18, color: AppColors.primaryPress)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 배너 안 아바타 스택 (32, 흰 배경, 틴트 테두리, 최대 3).
+class _BannerAvatars extends StatelessWidget {
+  const _BannerAvatars({required this.avatars});
+  final List<({String nickname, String? profileImage})> avatars;
+
+  @override
+  Widget build(BuildContext context) {
+    final show = avatars.take(3).toList();
+    if (show.isEmpty) {
+      return const SizedBox(width: 32, height: 32);
+    }
+    return SizedBox(
+      height: 32,
+      width: 32 + (show.length - 1) * 23.0,
+      child: Stack(
+        children: [
+          for (var i = 0; i < show.length; i++)
+            Positioned(
+              left: i * 23.0,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white, shape: BoxShape.circle,
+                    border: Border.fromBorderSide(BorderSide(color: AppColors.primaryTint, width: 2))),
+                child: InitialAvatar(
+                    nickname: show[i].nickname, imageUrl: show[i].profileImage, size: 32),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 내가 띄운 번개 배너.
+class _SentBanner extends StatelessWidget {
+  const _SentBanner({required this.flash, required this.onTap});
+  final SentFlash flash;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final n = flash.joinedCount;
+    final expiry = flash.expiresAt != null ? flashExpiryText(flash.expiresAt!) : '';
+    final who = n == 0 ? '아직 아무도' : '$n명 모였어요';
+    return _Banner(
+      avatars: flash.joined,
+      title: '내가 띄운 번개',
+      summary: '${flash.activity.label} · $who · $expiry',
+      onTap: onTap,
+    );
+  }
+}
+
+/// 받은 번개 배너.
+class _ReceivedBanner extends StatelessWidget {
+  const _ReceivedBanner({required this.count, required this.received, required this.onTap});
+  final int count;
+  final List<ReceivedFlash> received;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    // 미합류 중 가장 임박한 것 기준 요약.
+    final pending = received.where((f) => !f.joined).toList();
+    final first = pending.isNotEmpty ? pending.first : (received.isNotEmpty ? received.first : null);
+    final String summary;
+    if (first == null) {
+      summary = '';
+    } else if (count >= 2) {
+      summary = '${first.senderNickname} 외 ${count - 1}명 · 곧 끝나는 것부터';
+    } else {
+      final t = first.expiresAt != null ? flashExpiryText(first.expiresAt!) : '';
+      summary = '${first.senderNickname} · ${first.activity.label} · $t';
+    }
+    return _Banner(
+      avatars: pending
+          .take(3)
+          .map((f) => (nickname: f.senderNickname, profileImage: f.senderProfileImage))
+          .toList(),
+      title: '받은 번개 $count',
+      summary: summary,
+      onTap: onTap,
     );
   }
 }

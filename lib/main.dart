@@ -37,7 +37,7 @@ void main() {
     tokens: tokens,
   );
   final friendVM = FriendViewModel(friendRepo);
-  final flashVM = FlashViewModel(FlashRepository(api));
+  final flashVM = FlashViewModel(flash: FlashRepository(api), stomp: stomp);
 
   // 인증 상태 → 실시간(프레즌스)·친구 lifecycle. 상태가 실제로 바뀔 때만.
   AuthStatus? prev;
@@ -48,9 +48,11 @@ void main() {
     if (s == AuthStatus.loggedIn) {
       presenceVM.start();
       friendVM.load();
+      flashVM.load();
     } else if (s == AuthStatus.loggedOut) {
       presenceVM.stop();
       friendVM.reset();
+      flashVM.reset();
     }
   });
 

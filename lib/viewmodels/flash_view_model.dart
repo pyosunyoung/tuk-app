@@ -1,19 +1,105 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/activity.dart';
 import '../models/flash.dart';
 import '../models/meetup_room.dart';
+import '../models/realtime_event.dart';
 import '../repositories/flash_repository.dart';
 import '../services/api_client.dart';
+import '../services/stomp_service.dart';
 
-/// 번개 상태. (A: 발송·모임방·장소·합류. 받은 목록/실시간은 B에서 확장)
+/// 번개 상태 — 발송·모임방·장소·합류 + 받은/내가띄운 목록 + 실시간.
 class FlashViewModel extends ChangeNotifier {
-  FlashViewModel(this._repo);
+  FlashViewModel({required FlashRepository flash, required StompService stomp})
+      : _repo = flash,
+        _stomp = stomp {
+    _sub = _stomp.flashEvents.listen(_onEvent);
+    _ticker = Timer.periodic(const Duration(minutes: 1), (_) => _tick());
+  }
 
   final FlashRepository _repo;
+  final StompService _stomp;
+  StreamSubscription<FlashPushEvent>? _sub;
+  Timer? _ticker;
 
-  /// 번개 발송. 성공 시 FlashCreated(방 생성됨, recipientCount 포함), 실패 시 throw.
-  /// recipientCount == 0 은 실패가 아니다(방은 열림).
+  /// 방 화면 등이 직접 구독할 수 있게 flash 이벤트 노출.
+  Stream<FlashPushEvent> get events => _stomp.flashEvents;
+
+  List<ReceivedFlash> _received = [];
+  List<ReceivedFlash> get received => List.unmodifiable(_received);
+
+  List<SentFlash> _sent = [];
+  List<SentFlash> get sent => List.unmodifiable(_sent);
+
+  bool _loaded = false;
+  bool get loaded => _loaded;
+
+  /// 미합류(PENDING) 받은 번개 수 — 배너 배지.
+  int get pendingReceivedCount => _received.where((f) => !f.joined).length;
+
+  // ── lifecycle ────────────────────────────────────────────
+
+  Future<void> load() async {
+    try {
+      final results = await Future.wait([_repo.received(), _repo.sent()]);
+      _received = _sortReceived(results[0] as List<ReceivedFlash>);
+      _sent = results[1] as List<SentFlash>;
+    } catch (_) {
+      // 배너/목록은 조용히 실패 — 화면 진입 시 재시도
+    } finally {
+      _loaded = true;
+      notifyListeners();
+    }
+  }
+
+  void reset() {
+    _received = [];
+    _sent = [];
+    _loaded = false;
+    notifyListeners();
+  }
+
+  Future<void> reloadReceived() async {
+    try {
+      _received = _sortReceived(await _repo.received());
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Future<void> reloadSent() async {
+    try {
+      _sent = await _repo.sent();
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  bool _reserved(ReceivedFlash f) =>
+      f.scheduledAt != null && f.scheduledAt!.isAfter(DateTime.now());
+
+  int _rank(ReceivedFlash f) {
+    if (f.joined) return 2;
+    if (_reserved(f)) return 1; // 예약(미합류)은 합류 그룹 위
+    return 0; // 미합류 지금
+  }
+
+  List<ReceivedFlash> _sortReceived(List<ReceivedFlash> list) {
+    list.sort((a, b) {
+      final ra = _rank(a), rb = _rank(b);
+      if (ra != rb) return ra.compareTo(rb);
+      if (ra == 1) {
+        return (a.scheduledAt ?? a.expiresAt ?? DateTime.now())
+            .compareTo(b.scheduledAt ?? b.expiresAt ?? DateTime.now());
+      }
+      // 지금/합류: 곧 끝나는 것이 위
+      return (a.expiresAt ?? DateTime.now()).compareTo(b.expiresAt ?? DateTime.now());
+    });
+    return list;
+  }
+
+  // ── 발송/모임방 (checkpoint A) ────────────────────────────
+
   Future<FlashCreated> send({
     required Activity activity,
     String? message,
@@ -32,13 +118,61 @@ class FlashViewModel extends ChangeNotifier {
 
   Future<MeetupRoom> room(int flashId) => _repo.room(flashId);
 
-  /// 합류(멱등) → 모임방.
-  Future<MeetupRoom> join(int flashId) => _repo.join(flashId);
+  Future<MeetupRoom> join(int flashId) async {
+    final room = await _repo.join(flashId);
+    // 로컬: 해당 받은 번개를 JOINED 로 표시
+    final idx = _received.indexWhere((f) => f.flashId == flashId);
+    if (idx >= 0 && !_received[idx].joined) {
+      _received[idx] = _asJoined(_received[idx]);
+      _received = _sortReceived(_received);
+      notifyListeners();
+    }
+    return room;
+  }
+
+  ReceivedFlash _asJoined(ReceivedFlash f) => ReceivedFlash(
+        flashId: f.flashId,
+        senderId: f.senderId,
+        senderNickname: f.senderNickname,
+        senderProfileImage: f.senderProfileImage,
+        activity: f.activity,
+        message: f.message,
+        scheduledAt: f.scheduledAt,
+        expiresAt: f.expiresAt,
+        myStatus: 'JOINED',
+      );
 
   Future<MeetupRoom> setPlace(int flashId, String placeName) =>
       _repo.setPlace(flashId, placeName: placeName);
 
-  /// ApiException 여부 헬퍼(끝난 번개 합류 등 문구 분기용).
   bool isEnded(Object e) =>
       e is ApiException && (e.statusCode == 400 || e.statusCode == 404);
+
+  // ── 실시간 ───────────────────────────────────────────────
+
+  void _onEvent(FlashPushEvent e) {
+    if (e.isNewFlash) {
+      reloadReceived(); // 새 번개 도착 → 목록/배너 갱신
+    } else if (e.isMemberJoined) {
+      reloadSent(); // 누가 합류 → 내가 띄운 번개 "N명 모였어요" 갱신
+    }
+  }
+
+  void _tick() {
+    final now = DateTime.now();
+    final r = _received.where((f) => (f.expiresAt ?? now).isAfter(now)).toList();
+    final s = _sent.where((f) => (f.expiresAt ?? now).isAfter(now)).toList();
+    if (r.length != _received.length || s.length != _sent.length) {
+      _received = r;
+      _sent = s;
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    _ticker?.cancel();
+    super.dispose();
+  }
 }

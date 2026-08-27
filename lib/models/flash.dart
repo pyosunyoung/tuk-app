@@ -76,3 +76,41 @@ DateTime? _parseDate(dynamic v) {
   if (v == null) return null;
   return DateTime.tryParse(v as String);
 }
+
+/// GET /api/flashes/sent 항목 — 내가 띄운 활성 번개(홈 배너용).
+/// joinedMembers = 합류자만(보낸 사람 제외).
+class SentFlash {
+  const SentFlash({
+    required this.flashId,
+    required this.activity,
+    this.message,
+    this.scheduledAt,
+    this.expiresAt,
+    required this.joined,
+  });
+
+  final int flashId;
+  final Activity activity;
+  final String? message;
+  final DateTime? scheduledAt;
+  final DateTime? expiresAt;
+
+  /// 합류자 (닉네임/프로필). 수 = "N명 모였어요".
+  final List<({String nickname, String? profileImage})> joined;
+
+  int get joinedCount => joined.length;
+
+  factory SentFlash.fromJson(Map<String, dynamic> json) => SentFlash(
+        flashId: json['flashId'] as int,
+        activity: Activity.fromWire(json['activity'] as String?),
+        message: json['message'] as String?,
+        scheduledAt: _parseDate(json['scheduledAt']),
+        expiresAt: _parseDate(json['expiresAt']),
+        joined: (json['joinedMembers'] as List<dynamic>? ?? [])
+            .map((e) => (
+                  nickname: (e as Map)['nickname'] as String? ?? '친구',
+                  profileImage: e['profileImage'] as String?,
+                ))
+            .toList(),
+      );
+}
