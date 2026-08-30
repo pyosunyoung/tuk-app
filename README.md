@@ -1,6 +1,6 @@
-# bungae-app
+# tuk-app
 
-번개(bungae) — 친한 친구끼리 **"지금 볼래?"를 거절 걱정 없이** 띄우는 즉흥 만남 앱 (Flutter).
+툭(Tuk) — 친한 친구끼리 **"지금 볼래?"를 거절 걱정 없이** 띄우는 즉흥 만남 앱 (Flutter).
 
 - **상태관리**: Provider + MVVM
 - **백엔드**: Spring Boot (별도 레포). API 계약서 기반으로 연동.

@@ -1,4 +1,4 @@
-package com.bungae.bungae
+package com.tuk.app
 
 import io.flutter.embedding.android.FlutterActivity
 
