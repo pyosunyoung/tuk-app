@@ -41,15 +41,16 @@ class _IntroScreenState extends State<IntroScreen> {
 
   Future<void> _startWithKakao() async {
     final auth = context.read<AuthViewModel>();
-    final ok = await auth.login(provider: 'dev', token: 'tuk_dev');
+    final ok = await auth.loginWithKakao();
     if (!mounted) return;
     if (ok) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const HomeScreen()),
         (route) => false,
       );
-    } else {
-      showTukToast(context, auth.error ?? '로그인에 실패했어요. 잠시 후 다시 시도해 주세요.');
+    } else if (auth.error != null) {
+      // error == null 이면 사용자가 취소한 것 — 아무 말도 하지 않는다
+      showTukToast(context, auth.error!);
     }
   }
 

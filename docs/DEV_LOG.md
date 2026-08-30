@@ -239,6 +239,7 @@ members '나' 표시·장소 정한 사람 → `GET /users/me` + 백엔드 응�
 | `services/kakao_auth_service.dart` | SDK 래퍼. 카카오톡 설치 시 톡 로그인, 아니면 카카오계정. 취소=`null`, 실패=`KakaoLoginException` |
 | `viewmodels/auth_view_model.dart` | `loginWithKakao()` 추가, 토큰 교환은 `_exchange()`로 추출해 dev 로그인과 공유. 로그아웃 시 카카오 세션도 정리 |
 | `views/landing_screen.dart` | 카카오 버튼 배선(취소는 토스트 없음) |
+| `views/intro_screen.dart` | 마지막 컷 "카카오로 시작하기"도 같은 배선 (랜딩만 고쳤다가 누락분 발견) |
 | `main.dart` | `KakaoSdk.init()` — 키 없으면 건너뛰고 나머지 기능은 정상 동작 |
 | `AndroidManifest.xml` | `AuthCodeHandlerActivity` 에 `kakao{앱키}://oauth` 인텐트 필터 |
 | `ios/Runner/Info.plist` | `LSApplicationQueriesSchemes`(kakaokompassauth·kakaolink) + `CFBundleURLSchemes` |
@@ -263,6 +264,8 @@ members '나' 표시·장소 정한 사람 → `GET /users/me` + 백엔드 응�
 - **에뮬 E2E**: 카카오 버튼 → (카톡 미설치) 카카오계정 웹 로그인 → 실계정 로그인 → 앱 복귀 → 홈 진입.
   로그로 리다이렉트 확인: `dat=kakaoe0a9…://oauth cmp=com.tuk.app/com.kakao.sdk.flutter.auth.AuthCodeHandlerActivity`.
   DB에서 기존 카카오 유저(id 339, providerId 5004466861) 재매칭 — 중복 생성 없음.
+- **인트로 경로**: 로그아웃 → 랜딩 → 둘러보기 → 마지막 컷 "카카오로 시작하기" → 카카오 로그인 화면 진입 확인(dev 로그인 아님)
+- **취소 경로**: 커스텀탭 닫기 → 토스트 없이 원래 화면 복귀, 로딩 안 걸림
 
 ### 6. Git
 ```
