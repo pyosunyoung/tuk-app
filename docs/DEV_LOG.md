@@ -42,7 +42,7 @@
 ### 4. 핵심 결정 (왜)
 | 결정 | 이유 |
 |---|---|
-| 브랜드 "툭" + 코랄 | 핸드오프 확정 (코드·패키지는 계속 `bungae`) |
+| 브랜드 "툭" + 코랄 | 핸드오프 확정 (당시 코드·패키지는 `bungae` 유지 → 이후 `tuk`으로 통일) |
 | 카카오 버튼 → dev 로그인 배선 | 카카오 SDK(앱키·네이티브) 설정 부담 큼 → 흐름부터 완성. 숨은 dev 경로=로고 롱프레스(멀티계정) |
 | AuthViewModel에서 STOMP 분리 | 실시간은 프레즌스용 → 인증이 웹소켓 소유는 과결합 |
 | 명령형 Navigator | 로그인 순간 선언형 게이트와 pushed 라우트 충돌 회피, 디자인 네비맵과 일치 |
@@ -214,3 +214,68 @@ members '나' 표시·장소 정한 사람 → `GET /users/me` + 백엔드 응�
 
 ### 8. 다음
 **앱 MVP 5대 핵심 기능(로그인·프레즌스·친구·번개) 완성.** 남은 것: 카카오 SDK 연동, `GET /users/me`, 폴더 rename(bungae→tuk), 배포 전 체크리스트(Flyway·CORS·Swagger차단 등).
+
+---
+
+## 카카오 로그인 + 이름 통일 (bungae → tuk) — 2026-08-30
+
+### 1. 개요
+랜딩의 카카오 버튼을 **진짜 카카오 로그인**으로 배선(그동안 dev 로그인 stub이었음).
+겸사겸사 코드·패키지·DB에 남아 있던 코드네임 `bungae` 를 제품명 `tuk` 으로 전부 통일.
+
+### 2. 개발 방식
+백엔드는 이미 카카오 토큰 검증(`KakaoClient` → `kapi.kakao.com/v2/user/me`)이 있어 **앱만** 작업.
+```
+카카오 SDK(앱) → access token → POST /api/auth/login {provider:"kakao", token}
+                              → 백엔드가 카카오에 검증 → 우리 JWT 발급
+```
+이름 통일은 카카오 콘솔에 패키지명을 등록하기 **전에** 해야 두 번 등록하지 않으므로 같은 날 묶어서 진행.
+
+### 3. 구현 내용
+| 파일 | 내용 |
+|---|---|
+| `pubspec.yaml` | `kakao_flutter_sdk_user ^2.0.0+1` |
+| `core/config.dart` | `KakaoConfig` — 네이티브 앱 키(`--dart-define` 오버라이드 가능) |
+| `services/kakao_auth_service.dart` | SDK 래퍼. 카카오톡 설치 시 톡 로그인, 아니면 카카오계정. 취소=`null`, 실패=`KakaoLoginException` |
+| `viewmodels/auth_view_model.dart` | `loginWithKakao()` 추가, 토큰 교환은 `_exchange()`로 추출해 dev 로그인과 공유. 로그아웃 시 카카오 세션도 정리 |
+| `views/landing_screen.dart` | 카카오 버튼 배선(취소는 토스트 없음) |
+| `main.dart` | `KakaoSdk.init()` — 키 없으면 건너뛰고 나머지 기능은 정상 동작 |
+| `AndroidManifest.xml` | `AuthCodeHandlerActivity` 에 `kakao{앱키}://oauth` 인텐트 필터 |
+| `ios/Runner/Info.plist` | `LSApplicationQueriesSchemes`(kakaokompassauth·kakaolink) + `CFBundleURLSchemes` |
+| **이름 통일(앱)** | dart 패키지 `bungae`→`tuk`, applicationId·번들ID `com.bungae.bungae`→**`com.tuk.app`**, Kotlin `com/tuk/app/MainActivity.kt`, 런처 라벨·iOS 표시명 "툭", web/README/.iml |
+| **이름 통일(백엔드)** | 자바 패키지 `com.bungae`→`com.tuk`(106파일), `TukServerApplication`, gradle group·rootProject, `spring.application.name`, docker-compose, Swagger 타이틀, DB `bungae`→`tuk`(ALTER DATABASE, 데이터 유지) |
+
+### 4. 핵심 결정 (왜)
+| 결정 | 이유 |
+|---|---|
+| v2의 `loginWithKakao(context)` 브릿지 시트 미사용 | 카카오가 그린 바텀시트라 툭 디자인과 안 맞음. `isKakaoTalkInstalled()` → 톡/계정 고전 패턴으로 우리 랜딩 유지 |
+| 톡 로그인 실패 시 계정 로그인 폴백 (취소는 폴백 안 함) | 카톡은 깔렸는데 로그인 안 된 상태 등 구제. 사용자가 스스로 나간 건 재시도 강요 X |
+| 취소는 토스트 없음 | `error == null` 로 구분. 취소 신호가 3갈래(`ClientErrorCause.cancelled`·`PlatformException('CANCELED')`·`AuthErrorCause.accessDenied`)라 모두 취소로 처리 |
+| 로그아웃 시 `UserApi.logout()` 도 호출 | 안 하면 다음 로그인이 계정 선택 없이 통과해 계정 전환 테스트 불가 |
+| 네이티브 앱 키를 소스에 둠 | 배포 APK에 어차피 포함되는 값이라 비밀키가 아님. 실제 보호는 콘솔에 등록한 **키 해시(Android)/번들 ID(iOS)** |
+| dev 로그인(로고 롱프레스) 유지 | 멀티계정 에뮬 테스트에 계속 필요 |
+| 한글 "번개"는 그대로 | 제품명이 아니라 **기능 이름(Flash)**. 바꾼 건 코드네임 `bungae` 뿐 |
+| applicationId `com.tuk.app` | `com.tuk.tuk` 보다 읽기 좋고 스토어 선점 위험도 낮음 |
+
+### 5. 검증
+- 서버 `./gradlew test` **78개 통과**, 앱 `flutter analyze`(변경분 에러 0)·`flutter test`·`build apk` 성공, APK 패키지명 `com.tuk.app` 확인
+- DB rename 후 데이터 유지 확인 (users 13 · friendships 5 · flashes 7)
+- **에뮬 E2E**: 카카오 버튼 → (카톡 미설치) 카카오계정 웹 로그인 → 실계정 로그인 → 앱 복귀 → 홈 진입.
+  로그로 리다이렉트 확인: `dat=kakaoe0a9…://oauth cmp=com.tuk.app/com.kakao.sdk.flutter.auth.AuthCodeHandlerActivity`.
+  DB에서 기존 카카오 유저(id 339, providerId 5004466861) 재매칭 — 중복 생성 없음.
+
+### 6. Git
+```
+1c793a1  chore: 프로젝트 이름 bungae → tuk 통일 (com.tuk.app)
+a743f7a  카카오 로그인: 네이티브 SDK 연동
+```
+백엔드(tuk-server): `8038704  chore: 프로젝트 이름 bungae → tuk 통일`
+
+### 7. 의도적 미연결 / 한계
+- **카카오톡 앱 로그인 경로는 에뮬에서 검증 불가**(카톡 미설치) — 실기기에서 한 번 확인 필요
+- 카카오 버튼 아이콘은 아직 자리표시자(공식 로고 에셋 미적용)
+- 카카오 프로필(닉네임·사진)은 최초 가입 시에만 반영 — 재로그인 시 갱신 안 함
+- 로컬 폴더명은 아직 `bungae-*` — `C:\Users\A\rename-to-tuk.ps1` 로 별도 진행(IDE·세션 종료 후)
+
+### 8. 다음
+`GET /users/me`(모임방 '나' 표시·프로필 아바타), 배포 전 체크리스트(Flyway·CORS·Swagger 차단).
