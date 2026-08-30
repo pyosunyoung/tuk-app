@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 
+import 'core/config.dart';
 import 'core/theme.dart';
 import 'repositories/auth_repository.dart';
 import 'repositories/flash_repository.dart';
@@ -15,8 +17,15 @@ import 'viewmodels/friend_view_model.dart';
 import 'viewmodels/presence_view_model.dart';
 import 'views/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 카카오 SDK — 키가 없으면 초기화를 건너뛴다(다른 기능은 그대로 동작).
+  if (KakaoConfig.isConfigured) {
+    await KakaoSdk.init(nativeAppKey: KakaoConfig.nativeAppKey);
+  } else {
+    debugPrint('[tuk] 카카오 네이티브 앱 키 미설정 — 카카오 로그인 비활성 (KakaoConfig 참고)');
+  }
 
   // --- 의존성 조립 ----------------------------------------------------
   final tokens = TokenStorage();

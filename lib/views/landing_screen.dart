@@ -127,7 +127,7 @@ class LandingScreen extends StatelessWidget {
   }
 }
 
-/// 카카오 로그인 버튼 — 지금은 dev 로그인으로 배선(카카오 SDK는 이후).
+/// 카카오 로그인 버튼 — 카카오톡(설치 시) 또는 카카오계정으로 로그인.
 class _KakaoLoginButton extends StatelessWidget {
   const _KakaoLoginButton({required this.label, required this.onDone});
 
@@ -142,13 +142,13 @@ class _KakaoLoginButton extends StatelessWidget {
       loading: auth.busy,
       leading: const _KakaoMark(),
       onPressed: () async {
-        final ok = await auth.login(provider: 'dev', token: 'tuk_dev');
+        final ok = await auth.loginWithKakao();
         if (!context.mounted) return;
         if (ok) {
           onDone();
-        } else {
-          showTukToast(
-              context, auth.error ?? '로그인에 실패했어요. 잠시 후 다시 시도해 주세요.');
+        } else if (auth.error != null) {
+          // error == null 이면 사용자가 취소한 것 — 아무 말도 하지 않는다
+          showTukToast(context, auth.error!);
         }
       },
     );

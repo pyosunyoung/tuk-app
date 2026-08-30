@@ -25,6 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- 카카오 로그인 리다이렉트 수신 (kakao{네이티브앱키}://oauth).
+             액티비티 본체는 kakao_flutter_sdk_auth 플러그인이 선언하고,
+             여기서는 우리 앱 스킴만 얹는다. 키를 바꾸면 core/config.dart·Info.plist 도 같이. -->
+        <activity
+            android:name="com.kakao.sdk.flutter.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaoe0a9fa462f80243f11b982ca83b15bf8" />
+            </intent-filter>
+        </activity>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
