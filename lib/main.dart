@@ -8,6 +8,7 @@ import 'repositories/auth_repository.dart';
 import 'repositories/flash_repository.dart';
 import 'repositories/friend_repository.dart';
 import 'repositories/presence_repository.dart';
+import 'repositories/user_repository.dart';
 import 'services/api_client.dart';
 import 'services/stomp_service.dart';
 import 'services/token_storage.dart';
@@ -36,7 +37,11 @@ Future<void> main() async {
     tokens,
     onSessionExpired: () async => authVM.onSessionExpired(),
   );
-  authVM = AuthViewModel(tokens: tokens, auth: AuthRepository(api));
+  authVM = AuthViewModel(
+    tokens: tokens,
+    auth: AuthRepository(api),
+    user: UserRepository(api),
+  );
 
   final friendRepo = FriendRepository(api);
   final presenceVM = PresenceViewModel(

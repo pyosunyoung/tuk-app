@@ -8,6 +8,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/meetup_room.dart';
 import '../services/api_client.dart';
+import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/flash_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/primitives.dart';
@@ -306,6 +307,7 @@ class _MemberCard extends StatelessWidget {
   final RoomMember member;
   @override
   Widget build(BuildContext context) {
+    final isMe = context.watch<AuthViewModel>().me?.userId == member.userId;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpace.x16, vertical: 14),
       decoration: BoxDecoration(
@@ -317,8 +319,18 @@ class _MemberCard extends StatelessWidget {
         children: [
           InitialAvatar(nickname: member.nickname, imageUrl: member.profileImage),
           const SizedBox(width: AppSpace.x12),
-          Expanded(child: Text(member.nickname, overflow: TextOverflow.ellipsis,
-              style: AppText.label15.copyWith(fontWeight: FontWeight.w600))),
+          Expanded(
+            child: Row(children: [
+              Flexible(
+                child: Text(member.nickname, overflow: TextOverflow.ellipsis,
+                    style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+              ),
+              if (isMe) ...[
+                const SizedBox(width: AppSpace.x4),
+                Text('· 나', style: AppText.label15.copyWith(color: AppColors.textSub)),
+              ],
+            ]),
+          ),
           if (member.sender)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: AppSpace.x8, vertical: 2),

@@ -6,6 +6,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/activity.dart';
 import '../models/flash.dart';
+import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/flash_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
@@ -462,15 +463,11 @@ class _ProfileAvatarButton extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Container(
-          width: 36,
-          height: 36,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-              color: AppColors.primaryTint, shape: BoxShape.circle),
-          child: Text('나',
-              style: AppText.label14.copyWith(
-                  color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
+        // 내 정보가 아직 안 왔으면 이니셜 '나'로 버틴다(빈 원보다 낫다)
+        InitialAvatar(
+          nickname: context.watch<AuthViewModel>().me?.nickname ?? '나',
+          imageUrl: context.watch<AuthViewModel>().me?.profileImage,
+          size: 36,
         ),
         if (requestCount > 0)
           Positioned(

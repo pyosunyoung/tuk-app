@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import '../models/me.dart';
 import '../repositories/auth_repository.dart';
+import '../repositories/user_repository.dart';
 import '../services/api_client.dart';
 import '../services/kakao_auth_service.dart';
 import '../services/token_storage.dart';
@@ -14,14 +16,21 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel({
     required TokenStorage tokens,
     required AuthRepository auth,
+    required UserRepository user,
     KakaoAuthService kakao = const KakaoAuthService(),
   })  : _tokens = tokens,
         _auth = auth,
+        _user = user,
         _kakao = kakao;
 
   final TokenStorage _tokens;
   final AuthRepository _auth;
+  final UserRepository _user;
   final KakaoAuthService _kakao;
+
+  /// 내 정보. 로그인 상태에서만 채워진다(로드 전에는 null).
+  Me? _me;
+  Me? get me => _me;
 
   AuthStatus _status = AuthStatus.unknown;
   AuthStatus get status => _status;
@@ -37,6 +46,22 @@ class AuthViewModel extends ChangeNotifier {
     await _tokens.load();
     _status = _tokens.hasSession ? AuthStatus.loggedIn : AuthStatus.loggedOut;
     notifyListeners();
+    if (_status == AuthStatus.loggedIn) await _loadMe();
+  }
+
+  /// 내 정보 로드. 실패해도 세션은 유지한다(아바타만 이니셜로 나올 뿐).
+  /// 단 404(탈퇴·DB 초기화)면 유효한 세션이 아니므로 정리한다.
+  Future<void> _loadMe() async {
+    try {
+      _me = await _user.me();
+      notifyListeners();
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) {
+        await _finishLogout();
+      }
+    } catch (_) {
+      // 네트워크 일시 실패 — 다음 로그인/재시작 때 다시 시도된다
+    }
   }
 
   /// 카카오 로그인. SDK로 카카오 토큰을 받아 백엔드 세션으로 바꾼다.
@@ -83,6 +108,7 @@ class AuthViewModel extends ChangeNotifier {
         refreshToken: tokens.refreshToken,
       );
       _status = AuthStatus.loggedIn;
+      await _loadMe();
       return true;
     } on ApiException catch (e) {
       _error = e.message;
@@ -109,6 +135,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> _finishLogout() async {
+    _me = null;
     await _tokens.clear();
     _status = AuthStatus.loggedOut;
     notifyListeners();
