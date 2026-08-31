@@ -282,3 +282,64 @@ a743f7a  카카오 로그인: 네이티브 SDK 연동
 
 ### 8. 다음
 `GET /users/me`(모임방 '나' 표시·프로필 아바타), 배포 전 체크리스트(Flyway·CORS·Swagger 차단).
+
+---
+
+## 내 정보 (GET /users/me) — 2026-08-31
+
+### 1. 개요
+앱이 **"이게 나"를 판단할 근거**가 없어서 미뤄둔 것들을 닫았다.
+홈 프로필 아바타가 하드코딩 '나'였고, 모임방 참여자 목록에서 내가 누군지 표시할 수 없었다.
+
+### 2. 개발 방식
+백엔드 먼저(엔드포인트 + 테스트 + 계약서) → 앱에서 소비. `user` 패키지는 그동안 domain/repository만
+있고 controller/service 자리가 `.gitkeep`으로 비어 있었는데, 이번에 채웠다.
+
+### 3. 구현 내용
+**백엔드** (`tuk-server`)
+| 파일 | 내용 |
+|---|---|
+| `user/dto/MeResponse` | `{ userId, nickname, profileImage }` |
+| `user/service/UserService` | `getMe(userId)` — 없으면 404 |
+| `user/controller/UserController` | `GET /api/users/me` (`@AuthenticationPrincipal Long userId`) |
+| `global/auth/AuthService` | 기본 닉네임 `"번개유저"` → `"툭유저"` (이름 통일 때 놓친 사용자 노출 문자열) |
+| `docs/API_FOR_APP.md`·`CLAUDE.md` | 계약서·엔드포인트 목록 갱신 |
+
+**앱** (`tuk-app`)
+| 파일 | 내용 |
+|---|---|
+| `models/me.dart` | `Me` 모델 |
+| `repositories/user_repository.dart` | `GET /api/users/me` |
+| `viewmodels/auth_view_model.dart` | `me` 보유. 로그인 성공·부트스트랩 후 로드, 로그아웃 시 null |
+| `views/home_screen.dart` | 프로필 아바타 하드코딩 '나' → 내 닉네임 이니셜/프로필 이미지 |
+| `views/room_screen.dart` | 참여자 목록에서 내 행에 `· 나` 표시 |
+
+### 4. 핵심 결정 (왜)
+| 결정 | 이유 |
+|---|---|
+| `me` 를 AuthViewModel이 소유 | 세션 스코프 정체성이라 로그인/로그아웃 lifecycle과 정확히 일치. 별도 VM을 두면 두 곳에서 비우는 걸 잊기 쉽다 |
+| `/users/me` 실패해도 세션 유지 | 네트워크 일시 실패로 로그아웃시키면 과잉. 아바타가 이니셜 '나'로 나올 뿐 |
+| 단, 404면 세션 정리 | 토큰은 유효한데 유저가 없다 = 탈퇴/DB 초기화. 계속 두면 이후 요청이 전부 깨진다 |
+| 아바타 fallback을 '나'로 유지 | 로드 전 빈 원보다 낫다 |
+| `inviteCode`는 응답에 미포함 | 이미 `GET /api/friendships/invite-code` 가 있다. 화면 하나에서만 쓰는 값을 공용 응답에 얹지 않음 |
+
+### 5. 검증
+- 백엔드 테스트 **80개 통과**(UserServiceTest 2개 추가). 실서버: `GET /api/users/me` → `{"userId":364,...}`, 무인증 401
+- **에뮬 E2E**: dev alice 로그인 → 홈 아바타가 하드코딩 '나' → **'d'**(dev-alice_dev)로 바뀜
+- REST로 alice 번개 발송 + bob 합류 → 홈 "내가 띄운 번개 · 1명 모였어요" 배너(STOMP 실시간) → 모임방에서
+  **`dev-alice_dev · 나` + '띄운 사람'**, bob은 '합류'만
+
+### 6. Git
+```
+5c1d3c5  내 정보: GET /users/me 연동 (홈 아바타 · 모임방 '나')
+```
+백엔드(tuk-server): `9af85ad  feat: 내 정보 조회 (GET /api/users/me)`
+
+### 7. 의도적 미연결 / 한계
+- **"장소 정한 사람"은 여전히 못 함** — `/users/me` 만으론 부족하고 백엔드가 모임방 응답에
+  `placeSetBy` 같은 필드를 줘야 한다. 별도 작업
+- 카카오 프로필(닉네임·사진)은 최초 가입 시에만 반영 — 재로그인해도 갱신 안 함
+- `me` 는 세션 중 갱신 없음(프로필 변경 기능이 아직 없어 문제되지 않음)
+
+### 8. 다음
+카카오톡 앱 로그인 실기기 검증, 배포 전 체크리스트(Flyway·CORS·Swagger 차단).
