@@ -343,3 +343,58 @@ a743f7a  카카오 로그인: 네이티브 SDK 연동
 
 ### 8. 다음
 카카오톡 앱 로그인 실기기 검증, 배포 전 체크리스트(Flyway·CORS·Swagger 차단).
+
+---
+
+## 모임방 "장소 정한 사람" — 2026-09-01
+
+### 1. 개요
+장소만 보이고 **누가 정했는지** 알 수 없던 것을 닫았다. `/users/me` 때 "백엔드 필드가 필요하다"고
+남겨둔 항목.
+
+### 2. 개발 방식
+백엔드에 필드 추가 → 응답 확장 → 앱에서 한 줄 문구로. 두 갈래(내가/남이)를 각각 실검증.
+
+### 3. 구현 내용
+**백엔드** (`tuk-server`)
+| 파일 | 내용 |
+|---|---|
+| `flash/domain/MeetupRoom` | `@ManyToOne(LAZY) User placeSetBy` + `setPlace(..., User setter)` |
+| `flash/dto/MeetupRoomResponse` | `placeSetById`, `placeSetByNickname` 추가 |
+| `flash/service/FlashService` | `setPlace` 가 설정자를 함께 기록. 응답의 닉네임은 **members 에서 찾아** 추가 조회 없음 |
+| 테스트 | 보낸이가 정한 경우 / 합류자가 정한 경우 / 아무도 안 정한 경우 (3개 추가, 총 82개) |
+
+**앱** (`tuk-app`)
+| 파일 | 내용 |
+|---|---|
+| `models/meetup_room.dart` | `placeSetById`, `placeSetByNickname` |
+| `views/room_screen.dart` | 장소 밑 문구: `내가 정했어요` / `OO님이 정했어요` / (모르면) `장소가 정해졌어요` |
+| `viewmodels/auth_view_model.dart` | `/users/me` 실패를 조용히 삼키지 않고 `debugPrint` (아래 §7) |
+
+### 4. 핵심 결정 (왜)
+| 결정 | 이유 |
+|---|---|
+| 닉네임을 members 에서 조회 | 장소를 정한 사람은 **항상 멤버**다. 이미 만든 members 리스트에서 찾으면 추가 쿼리 0 |
+| `getReferenceById` 로 FK 만 기록 | 설정자 User 를 select 할 이유가 없다(닉네임은 위에서 해결) |
+| 마지막에 바꾼 사람으로 덮음 | 장소는 멤버 누구나 다시 정할 수 있다. "처음 정한 사람"을 남기면 현재 상태와 어긋난다 |
+| 못 찾으면 `장소가 정해졌어요` | 이 필드가 없던 시절의 방(placeSetBy = null)도 깨지지 않게 |
+
+### 5. 검증
+- 백엔드 테스트 **82개 통과**. REST: bob 이 장소 변경 → `placeSetById:365, placeSetByNickname:"dev-bob_dev"`
+- **에뮬 E2E**: alice 가 앱에서 장소 설정 → `Cafe / 내가 정했어요` →
+  bob 이 REST 로 변경 → 방 재진입 시 `Student Hall / dev-bob_dev님이 정했어요`
+
+### 6. Git
+```
+eb7a96d  모임방: 장소를 정한 사람 표시
+```
+백엔드(tuk-server): `4a10440  feat: 모임방 장소를 정한 사람 (placeSetBy)`
+
+### 7. 의도적 미연결 / 한계
+- **장소 변경은 실시간 반영 안 됨** — MEMBER_JOINED 같은 이벤트가 없어 방을 다시 열어야 보인다
+- **한 번 관측된 미해결 이슈**: 어제 발급된 카카오 세션으로 앱을 켰을 때 홈 아바타가 `나`(fallback)로 남았다.
+  = `/users/me` 가 실패했다는 뜻인데, 재시작·재로그인으로 **재현되지 않음**. 원인 미상.
+  실패를 삼키던 catch 에 `debugPrint` 를 넣어 다음에 잡을 수 있게만 해뒀다.
+
+### 8. 다음
+카카오톡 앱 로그인 실기기 검증, 배포 전 체크리스트(Flyway·CORS·Swagger 차단).
