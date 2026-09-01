@@ -58,9 +58,13 @@ class AuthViewModel extends ChangeNotifier {
     } on ApiException catch (e) {
       if (e.statusCode == 404) {
         await _finishLogout();
+        return;
       }
-    } catch (_) {
+      // 세션은 살아있는데 내 정보만 못 받은 상태. 아바타가 이니셜 '나'로 나온다.
+      debugPrint('[tuk] /users/me 실패 (${e.statusCode}): ${e.message}');
+    } catch (e) {
       // 네트워크 일시 실패 — 다음 로그인/재시작 때 다시 시도된다
+      debugPrint('[tuk] /users/me 실패: $e');
     }
   }
 

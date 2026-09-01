@@ -232,7 +232,7 @@ class _RoomScreenState extends State<RoomScreen> {
                         color: set ? AppColors.text : AppColors.textSub,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 3),
-                Text(set ? '장소가 정해졌어요' : '아직 안 정했어요',
+                Text(set ? _placeSetByLabel(context, room) : '아직 안 정했어요',
                     style: AppText.caption13),
               ],
             ),
@@ -276,6 +276,15 @@ class _ActivityBadge extends StatelessWidget {
           color: ended ? AppColors.textSub : AppColors.primaryPress)),
     );
   }
+}
+
+/// 장소 밑 한 줄 — 누가 정했는지. 서버가 정한 사람을 안 주는 옛 방이면 담백하게 넘어간다.
+String _placeSetByLabel(BuildContext context, MeetupRoom room) {
+  final setterId = room.placeSetById;
+  if (setterId == null) return '장소가 정해졌어요';
+  if (setterId == context.watch<AuthViewModel>().me?.userId) return '내가 정했어요';
+  final name = room.placeSetByNickname;
+  return name == null ? '장소가 정해졌어요' : '$name님이 정했어요';
 }
 
 class _PlaceButton extends StatelessWidget {

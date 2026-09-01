@@ -9,6 +9,8 @@ class MeetupRoom {
     this.placeName,
     this.placeLat,
     this.placeLng,
+    this.placeSetById,
+    this.placeSetByNickname,
     required this.status,
     required this.members,
   });
@@ -19,6 +21,11 @@ class MeetupRoom {
   final String? placeName;
   final double? placeLat;
   final double? placeLng;
+
+  /// 장소를 정한 멤버. 아무도 안 정했으면 null.
+  /// 장소는 멤버 누구나 다시 정할 수 있고, 마지막으로 바꾼 사람으로 덮인다.
+  final int? placeSetById;
+  final String? placeSetByNickname;
 
   /// OPEN | CLOSED
   final String status;
@@ -33,6 +40,8 @@ class MeetupRoom {
         placeName: json['placeName'] as String?,
         placeLat: (json['placeLat'] as num?)?.toDouble(),
         placeLng: (json['placeLng'] as num?)?.toDouble(),
+        placeSetById: json['placeSetById'] as int?,
+        placeSetByNickname: json['placeSetByNickname'] as String?,
         status: json['status'] as String? ?? 'OPEN',
         members: (json['members'] as List<dynamic>? ?? [])
             .map((e) => RoomMember.fromJson(e as Map<String, dynamic>))
