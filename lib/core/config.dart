@@ -7,7 +7,13 @@ import 'dart:io' show Platform;
 class AppConfig {
   const AppConfig._();
 
+  /// 실기기 테스트용 오버라이드. 실기기는 10.0.2.2(에뮬레이터 전용 별칭)에 닿지 못하므로
+  /// 개발 PC 의 LAN IP 를 넣어준다:
+  ///   flutter run --dart-define=API_HOST=192.168.0.10
+  static const String _hostOverride = String.fromEnvironment('API_HOST');
+
   static String get _host {
+    if (_hostOverride.isNotEmpty) return _hostOverride;
     if (kIsWeb) return 'localhost';
     try {
       if (Platform.isAndroid) return '10.0.2.2';

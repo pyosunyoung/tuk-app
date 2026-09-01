@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../viewmodels/auth_view_model.dart';
+import '../widgets/avatar.dart';
 import '../widgets/logo.dart';
 import '../widgets/primitives.dart';
 import 'friend_add_sheet.dart';
@@ -104,16 +107,11 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
           GestureDetector(
             onTap: _openFriends,
             behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  color: AppColors.primaryTint, shape: BoxShape.circle),
-              child: Text('나',
-                  style: AppText.label14.copyWith(
-                      color: AppColors.primaryPress,
-                      fontWeight: FontWeight.w600)),
+            // 내 정보가 아직 안 왔으면 이니셜 '나'로 버틴다(홈과 동일)
+            child: InitialAvatar(
+              nickname: context.watch<AuthViewModel>().me?.nickname ?? '나',
+              imageUrl: context.watch<AuthViewModel>().me?.profileImage,
+              size: 36,
             ),
           ),
         ],
