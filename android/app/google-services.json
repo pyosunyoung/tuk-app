@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "769800703019",
+    "project_id": "tuk-app-3d69a",
+    "storage_bucket": "tuk-app-3d69a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769800703019:android:9b0d6b578fc44237dc2e6e",
+        "android_client_info": {
+          "package_name": "com.tuk.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA61DboE4cJQV212U_-6J_Oo5SomzYwQgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

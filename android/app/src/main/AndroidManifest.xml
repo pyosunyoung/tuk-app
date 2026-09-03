@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 13+ 는 알림도 런타임 권한이다. 거절해도 앱은 그대로 쓸 수 있다(앱 안 배너는 STOMP). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:label="툭"
         android:name="${applicationName}"
@@ -40,6 +43,12 @@
                     android:scheme="kakaoe0a9fa462f80243f11b982ca83b15bf8" />
             </intent-filter>
         </activity>
+
+        <!-- 백그라운드 알림이 쓸 기본 채널. 지정 안 하면 FCM 이 '기타' 채널로 띄운다.
+             채널 자체는 PushService 가 만든다(id 가 같아야 함). -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="tuk_flash" />
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
