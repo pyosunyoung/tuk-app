@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"><style>@import url('https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap');@font-face{font-family:'SUIT';src:url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}body{margin:0;background:#F3EFE8;font-family:Pretendard,-apple-system,system-ui,sans-serif}a{color:#FF7A5C}a:hover{color:#E85D3D}.dv-turn{padding:40px 44px 32px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#2B2926;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 Pretendard,system-ui,sans-serif;color:#2B2926}.dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(43,41,38,.09);color:#2B2926;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 Pretendard,system-ui,sans-serif;color:rgba(43,41,38,.55)}.dv-opt:target .dv-oid{background:#FF7A5C;color:#fff}.dv-next{margin:24px 0 0;font:12px/1.5 Pretendard,system-ui,sans-serif;color:rgba(43,41,38,.5)}</style></helmet>
+
+<section class="dv-turn" id="t10" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t10">10</a><span class="dv-tname">친구 — 초대코드 · 받은 신청 · 친구 목록</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="10a">
+<div class="dv-olabel"><a class="dv-oid" href="#10a">10a</a>친구 화면 — 받은 신청 2건 + 친구 4명</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;gap:12px;padding:8px 20px 12px">
+<div style="width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#2B2926;flex:none">←</div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">친구</div>
+</div>
+
+<div style="flex:1;overflow:hidden;padding:0 20px 120px">
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:12px 0 12px;padding:0 4px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">받은 신청</div>
+<div style="font-size:16px;font-weight:600;color:#FF7A5C">2</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #FFD4C6;border-radius:16px;padding:12px 12px 12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">서</div>
+<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:#2B2926">서연</div></div>
+<div style="padding:10px 20px;border-radius:999px;background:#FF7A5C;font-size:14px;font-weight:600;color:#fff;flex:none">수락</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #FFD4C6;border-radius:16px;padding:12px 12px 12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">태</div>
+<div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:#2B2926">태윤</div></div>
+<div style="padding:10px 20px;border-radius:999px;background:#FF7A5C;font-size:14px;font-weight:600;color:#fff;flex:none">수락</div>
+</div>
+</div>
+
+<div style="margin-top:12px;text-align:center;font-size:12px;font-weight:400;color:#8A857E">그냥 둬도 괜찮아요. 상대에겐 아무것도 안 보여요</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">내 절친</div>
+<div style="font-size:16px;font-weight:600;color:#FF7A5C">4</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:14px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;font-size:15px;font-weight:600;color:#2B2926">민수</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:14px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">지</div>
+<div style="flex:1;font-size:15px;font-weight:600;color:#2B2926">지호</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:14px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">유</div>
+<div style="flex:1;font-size:15px;font-weight:600;color:#2B2926">유진</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:14px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">현</div>
+<div style="flex:1;font-size:15px;font-weight:600;color:#2B2926">현우</div>
+</div>
+</div>
+
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">친구 추가</div>
+</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="10b">
+<div class="dv-olabel"><a class="dv-oid" href="#10b">10b</a>친구 화면 — 신청 0건 · 친구 0명 (빈 상태)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;gap:12px;padding:8px 20px 12px">
+<div style="width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;color:#2B2926;flex:none">←</div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">친구</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;padding:0 20px 120px">
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:12px 0 12px;padding:0 4px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">내 절친</div>
+<div style="font-size:16px;font-weight:600;color:#FF7A5C">0</div>
+</div>
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="display:flex;align-items:center">
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF"></div>
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF;margin-left:-10px"></div>
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF;margin-left:-10px"></div>
+</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926;text-align:center;margin-top:4px">아직 절친이 없어요</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;text-align:center;line-height:1.55;text-wrap:pretty;max-width:250px">코드를 주고받으면 바로 친구가 돼요. 검색으로는 아무도 찾을 수 없어요.</div>
+</div>
+
+<div style="flex:1"></div>
+
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E">낯선 사람은 들어올 수 없어요</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">친구 추가</div>
+</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="10c">
+<div class="dv-olabel"><a class="dv-oid" href="#10c">10c</a>친구 추가 시트 → 내 코드 / 코드 입력</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">어떻게 추가할까요?</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="display:flex;align-items:center;gap:14px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:18px 16px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">코드</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">내 코드 알려주기</div>
+<div style="font-size:13px;font-weight:400;color:#8A857E">친구가 입력하면 바로 연결돼요</div>
+</div>
+<div style="font-size:18px;font-weight:400;color:#8A857E;flex:none">›</div>
+</div>
+<div style="display:flex;align-items:center;gap:14px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:18px 16px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#E85D3D;flex:none">＋</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">친구 코드 입력하기</div>
+<div style="font-size:13px;font-weight:400;color:#8A857E">받은 8자 코드를 넣어보세요</div>
+</div>
+<div style="font-size:18px;font-weight:400;color:#8A857E;flex:none">›</div>
+</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:20px">코드로만 친구가 돼요 · 검색으로는 찾을 수 없어요</div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">내 초대 코드</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;margin-top:8px">이 코드를 친구에게 알려주세요</div>
+<div style="background:#FFEAE2;border:1px solid #FFD4C6;border-radius:16px;padding:28px 16px;margin-top:20px;display:flex;align-items:center;justify-content:center">
+<div style="font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:600;color:#E85D3D;letter-spacing:6px;text-align:center">AB3K9XQ2</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:16px">
+<div style="flex:1;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;color:#8A857E">복사</div>
+<div style="flex:1;height:52px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#fff;box-shadow:0 4px 16px rgba(255,122,92,.28)">공유하기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:16px">코드를 아는 사람만 신청할 수 있어요</div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">친구 코드 입력</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;margin-top:8px">친구에게 받은 8자 코드를 넣어주세요</div>
+<div style="background:#FBF7F1;border:1px solid #FF7A5C;border-radius:16px;padding:22px 16px;margin-top:20px;display:flex;align-items:center;justify-content:center">
+<div style="font-family:ui-monospace,Menlo,monospace;font-size:28px;font-weight:600;color:#2B2926;letter-spacing:5px">K7M2</div>
+<div style="width:2px;height:32px;background:#FF7A5C;margin-left:4px"></div>
+<div style="font-family:ui-monospace,Menlo,monospace;font-size:28px;font-weight:600;color:#ECE7DF;letter-spacing:5px;margin-left:5px">····</div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FBF7F1;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;margin-top:16px">
+<div style="font-size:16px;font-weight:600;color:#8A857E">확인</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:16px">상대가 수락해야 친구가 돼요</div>
+</div>
+</div>
+</x-import>
+
+</div>
+</div>
+
+<div class="dv-opt" id="10d">
+<div class="dv-olabel"><a class="dv-oid" href="#10d">10d</a>결과 피드백 — 즉시 친구(ACCEPTED) / 신청 보냄(PENDING) / 실패</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px;width:520px">
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;font-weight:500;color:#8A857E">ACCEPTED — 상대도 내 코드를 이미 입력한 경우</div>
+<div style="display:flex;justify-content:center"><div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">서연과 친구가 됐어요</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="font-size:12px;font-weight:500;color:#8A857E">PENDING — 신청이 전달됨</div>
+<div style="display:flex;justify-content:center"><div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">신청을 보냈어요 · 수락하면 알려줄게요</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="font-size:12px;font-weight:500;color:#8A857E">없는 코드</div>
+<div style="display:flex;justify-content:center"><div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">코드를 못 찾았어요. 다시 확인해 주세요</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="font-size:12px;font-weight:500;color:#8A857E">본인 코드</div>
+<div style="display:flex;justify-content:center"><div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">내 코드예요. 친구에게 알려주세요</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+<div style="font-size:12px;font-weight:500;color:#8A857E">이미 친구</div>
+<div style="display:flex;justify-content:center"><div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">이미 친구예요</div></div>
+</div>
+
+<div style="font-size:12px;font-weight:400;color:#8A857E;line-height:1.6;margin-top:20px;text-wrap:pretty">모든 결과는 같은 다크 pill 토스트 1.8초. 실패도 빨강·경고 아이콘 없이 같은 톤으로 처리합니다. 성공 시에만 시트가 닫히고, 실패 시에는 시트를 유지해 바로 고쳐 넣을 수 있게 합니다.</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="10e">
+<div class="dv-olabel"><a class="dv-oid" href="#10e">10e</a>진입점 — 홈 우상단 아바타에 신청 배지</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="position:relative;width:36px;height:36px;flex:none">
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+<div style="position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:999px;background:#FF7A5C;border:2px solid #FBF7F1;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0 4px">
+<div style="font-size:11px;font-weight:600;color:#fff;line-height:1">2</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1;padding:0 20px 120px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 콜 켜짐 · 카페</div></div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">1시간 32분 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none"><div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div></div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">2</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">민수</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div></div>
+<div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">2시간 10분 남음</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">지</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">지호</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">카페</div></div>
+<div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">1시간 5분 남음</div>
+</div>
+</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">툭 띄우기</div></div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">하단 탭 대신 프로필 아바타에서 여는 화면으로 제안했습니다. 근거와 전체 스펙은 <code style="font:400 11px ui-monospace,Menlo,monospace">design_handoff_tuk_friends/README.md</code>에 있습니다.</p>
+</section>
+
+<section class="dv-turn" id="t9" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t9">9</a><span class="dv-tname">프레즌스 — 홈 상태 3종 · 콜 켜기 · 친구 카드 탭</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="9a">
+<div class="dv-olabel"><a class="dv-oid" href="#9a">9a</a>홈 · 친구 있음 (1a 확장 — 남은시간 · 정렬 · 실시간)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;overflow:hidden;padding:0 20px 120px">
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 콜 켜짐 · 카페</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">1시간 32분 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">4</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">민수</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">2시간 10분 남음</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">지</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">지호</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">카페</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">1시간 5분 남음</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">유</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">유진</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">아무거나</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">40분 남음</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">현</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">현우</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">노래방</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">곧 꺼져요</div>
+</div>
+
+</div>
+
+<div style="margin-top:24px;text-align:center;font-size:12px;font-weight:400;color:#8A857E">무시해도 상대에겐 아무것도 안 보여요</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">툭 띄우기</div>
+</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="9b">
+<div class="dv-olabel"><a class="dv-oid" href="#9b">9b</a>홈 · 내 콜 꺼짐 (친구는 한가함)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;overflow:hidden;padding:0 20px 120px">
+
+<div style="background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#ECE7DF"></div>
+<div style="font-size:20px;font-weight:600;color:#8A857E;letter-spacing:-0.3px">지금 콜 꺼짐</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">켜두면 한가할 때 친구에게만 보여요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#ECE7DF;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-start;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">2</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">민수</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">2시간 10분 남음</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">지</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">지호</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">카페</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">1시간 5분 남음</div>
+</div>
+</div>
+
+<div style="margin-top:16px;display:flex;align-items:center;gap:10px;background:#FFEAE2;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:14px;font-weight:500;color:#E85D3D">나도 켜두면 친구가 먼저 부를 수 있어요</div>
+</div>
+
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">지금 콜 켜기</div>
+</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="9c">
+<div class="dv-olabel"><a class="dv-oid" href="#9c">9c</a>홈 · 한가한 친구 0명 (내 콜은 켜짐)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;padding:0 20px 120px">
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 콜 켜짐 · 아무거나</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">1시간 32분 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">0</div>
+</div>
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="display:flex;align-items:center;gap:-6px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF"></div>
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF;margin-left:-10px"></div>
+<div style="width:38px;height:38px;border-radius:999px;background:#FBF7F1;border:1px dashed #ECE7DF;margin-left:-10px"></div>
+</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926;text-align:center;margin-top:4px">아직 아무도 안 켰어요</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;text-align:center;line-height:1.55;text-wrap:pretty;max-width:240px">켜져 있으니 괜찮아요. 친구가 한가해지면 바로 알려줄게요.</div>
+</div>
+
+<div style="flex:1"></div>
+
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E">먼저 툭 던져두면 친구가 볼 때 뜰 수도 있어요</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">툭 띄우기</div>
+</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="9d">
+<div class="dv-olabel"><a class="dv-oid" href="#9d">9d</a>콜 켜기 바텀시트 · 켠 직후 피드백</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 뭐 하고 싶어요?</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">밥</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">술</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FFEAE2;color:#E85D3D;border:1px solid #FFD4C6">카페</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">산책</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">영화</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">노래방</div>
+<div style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">아무거나</div>
+</div>
+<div style="font-size:14px;font-weight:500;color:#8A857E;margin:24px 0 12px">얼마나 열어둘까요?</div>
+<div style="display:flex;gap:8px">
+<div style="flex:1;padding:12px 0;border-radius:12px;text-align:center;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">1시간</div>
+<div style="flex:1;padding:12px 0;border-radius:12px;text-align:center;font-size:16px;font-weight:500;background:#FFEAE2;color:#E85D3D;border:1px solid #FFD4C6">2시간</div>
+<div style="flex:1;padding:12px 0;border-radius:12px;text-align:center;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">4시간</div>
+<div style="flex:1;padding:12px 0;border-radius:12px;text-align:center;font-size:16px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">직접</div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;margin-top:24px;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff">2시간 동안 콜 켜기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:12px">절친 5명에게만 보여요 · 2시간 뒤 자동으로 꺼져요</div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;padding:0 20px 120px">
+<div style="background:#FFFFFF;border:1px solid #FFD4C6;border-radius:16px;padding:20px;box-shadow:0 4px 16px rgba(255,122,92,.14)">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 콜 켜짐 · 카페</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">2시간 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">2</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">민수</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div></div>
+<div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">2시간 10분 남음</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D;flex:none">지</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">지호</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">카페</div></div>
+<div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div>
+</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E;flex:none">1시간 5분 남음</div>
+</div>
+</div>
+</div>
+
+<div style="position:absolute;left:20px;right:20px;bottom:120px;display:flex;justify-content:center">
+<div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">지금 콜을 켰어요 · 카페</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">툭 띄우기</div>
+</div>
+</div>
+
+</div>
+</x-import>
+
+</div>
+</div>
+
+<div class="dv-opt" id="9e">
+<div class="dv-olabel"><a class="dv-oid" href="#9e">9e</a>친구 카드 탭 → 미리보기 시트 (발송 상세는 범위 밖)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:52px;height:52px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#E85D3D;flex:none">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">민수</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+<div style="font-size:12px;font-weight:400;color:#8A857E">· 2시간 10분 남음</div>
+</div>
+</div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;margin-top:24px;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff">민수에게 툭 던지기</div>
+</div>
+<div style="height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;margin-top:12px">
+<div style="font-size:16px;font-weight:500;color:#8A857E">절친 모두에게 던지기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:12px">무시해도 상대에겐 아무것도 안 보여요</div>
+</div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">정렬은 남은 시간이 많은 순, 남은 시간은 카드 우측 Caption. 실시간 등장/사라짐 규칙과 데이터 매핑은 <code style="font:400 11px ui-monospace,Menlo,monospace">design_handoff_tuk_presence/README.md</code>에 정리했습니다.</p>
+</section>
+
+<section class="dv-turn" id="t8" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t8">8</a><span class="dv-tname">헤드라인 서체 비교 — 본문은 Pretendard 고정</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="8a">
+<div class="dv-olabel"><a class="dv-oid" href="#8a">8a</a>같은 헤드라인 · 같은 크기(28px/600)로 4종 비교</div>
+<div style="display:flex;flex-direction:column;gap:16px;width:1000px">
+
+<div style="display:flex;gap:16px;align-items:stretch;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:24px">
+<div style="width:150px;flex:none;display:flex;flex-direction:column;gap:4px;padding-top:2px"><div style="font-size:14px;font-weight:600;color:#2B2926">Pretendard</div><div style="font-size:12px;font-weight:400;color:#8A857E">현재 · 중립적</div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<div style="font-family:Pretendard,sans-serif;font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55">약속이 취소됐거나 오늘 일정이 없을 때.</div>
+</div>
+<div style="width:88px;height:88px;flex:none;border-radius:22px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 10px 12px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="88" height="88" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"></path><circle cx="96" cy="36" r="8.5" fill="#FFC24B"></circle></svg>
+<div style="font-family:Pretendard,sans-serif;font-size:38px;font-weight:600;color:#fff;letter-spacing:-2.2px;line-height:.9">툭</div>
+</div>
+</div>
+
+<div style="display:flex;gap:16px;align-items:stretch;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:24px">
+<div style="width:150px;flex:none;display:flex;flex-direction:column;gap:4px;padding-top:2px"><div style="font-size:14px;font-weight:600;color:#2B2926">고운돋움 (Gowun Dodum)</div><div style="font-size:12px;font-weight:400;color:#8A857E">부드럽고 얌전함</div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'Gowun Dodum',Pretendard,sans-serif;font-size:28px;font-weight:400;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55">약속이 취소됐거나 오늘 일정이 없을 때.</div>
+</div>
+<div style="width:88px;height:88px;flex:none;border-radius:22px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 10px 12px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="88" height="88" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"></path><circle cx="96" cy="36" r="8.5" fill="#FFC24B"></circle></svg>
+<div style="font-family:'Gowun Dodum',Pretendard,sans-serif;font-size:38px;font-weight:400;color:#fff;letter-spacing:-2px;line-height:.9">툭</div>
+</div>
+</div>
+
+<div style="display:flex;gap:16px;align-items:stretch;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:24px">
+<div style="width:150px;flex:none;display:flex;flex-direction:column;gap:4px;padding-top:2px"><div style="font-size:14px;font-weight:600;color:#2B2926">주아 (Jua)</div><div style="font-size:12px;font-weight:400;color:#8A857E">통통하고 경쾌함</div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'Jua',Pretendard,sans-serif;font-size:28px;font-weight:400;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55">약속이 취소됐거나 오늘 일정이 없을 때.</div>
+</div>
+<div style="width:88px;height:88px;flex:none;border-radius:22px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 10px 12px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="88" height="88" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"></path><circle cx="96" cy="36" r="8.5" fill="#FFC24B"></circle></svg>
+<div style="font-family:'Jua',Pretendard,sans-serif;font-size:38px;font-weight:400;color:#fff;letter-spacing:-2px;line-height:.9">툭</div>
+</div>
+</div>
+
+<div style="display:flex;gap:16px;align-items:stretch;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:24px">
+<div style="width:150px;flex:none;display:flex;flex-direction:column;gap:4px;padding-top:2px"><div style="font-size:14px;font-weight:600;color:#2B2926">SUIT</div><div style="font-size:12px;font-weight:400;color:#8A857E">기하학적 · 중간</div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<div style="font-family:SUIT,Pretendard,sans-serif;font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55">약속이 취소됐거나 오늘 일정이 없을 때.</div>
+</div>
+<div style="width:88px;height:88px;flex:none;border-radius:22px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 10px 12px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="88" height="88" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"></path><circle cx="96" cy="36" r="8.5" fill="#FFC24B"></circle></svg>
+<div style="font-family:SUIT,Pretendard,sans-serif;font-size:38px;font-weight:600;color:#fff;letter-spacing:-2.2px;line-height:.9">툭</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="8b">
+<div class="dv-olabel"><a class="dv-oid" href="#8b">8b</a>실제 인트로 화면에 적용 — 고운돋움 / 주아</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E">건너뛰기</div></div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="font-size:13px;font-weight:500;color:#8A857E">단톡방 · 우리들</div>
+<div style="align-self:flex-end;max-width:80%;background:#FFEAE2;border-radius:16px 16px 4px 16px;padding:12px 14px;font-size:15px;font-weight:400;color:#2B2926">오늘 저녁에 누구 시간 돼?</div>
+<div style="align-self:flex-end;font-size:12px;font-weight:400;color:#8A857E">오후 6:12</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-top:4px"><div style="width:56%;height:14px;border-radius:8px;background:#F4F0EA"></div><div style="width:38%;height:14px;border-radius:8px;background:#F7F4EF"></div></div>
+<div style="align-self:center;font-size:13px;font-weight:400;color:#8A857E;padding-top:4px">…답장 없음</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Gowun Dodum',Pretendard,sans-serif;font-size:28px;font-weight:400;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">약속이 취소됐거나 오늘 일정이 없을 때. 단톡방에 던지자니 읽씹이 무섭고, 개인톡은 거절시키는 것 같아 미안하죠.</div>
+</div>
+</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px"><div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div></div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E">건너뛰기</div></div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="font-size:13px;font-weight:500;color:#8A857E">단톡방 · 우리들</div>
+<div style="align-self:flex-end;max-width:80%;background:#FFEAE2;border-radius:16px 16px 4px 16px;padding:12px 14px;font-size:15px;font-weight:400;color:#2B2926">오늘 저녁에 누구 시간 돼?</div>
+<div style="align-self:flex-end;font-size:12px;font-weight:400;color:#8A857E">오후 6:12</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-top:4px"><div style="width:56%;height:14px;border-radius:8px;background:#F4F0EA"></div><div style="width:38%;height:14px;border-radius:8px;background:#F7F4EF"></div></div>
+<div style="align-self:center;font-size:13px;font-weight:400;color:#8A857E;padding-top:4px">…답장 없음</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Jua',Pretendard,sans-serif;font-size:28px;font-weight:400;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">약속이 취소됐거나 오늘 일정이 없을 때. 단톡방에 던지자니 읽씹이 무섭고, 개인톡은 거절시키는 것 같아 미안하죠.</div>
+</div>
+</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px"><div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div><div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div></div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">고르면 인트로 헤드라인과 워드마크에만 적용하고, 본문·라벨·숫자는 Pretendard로 유지합니다.</p>
+</section>
+
+<section class="dv-turn" id="t7" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t7">7</a><span class="dv-tname">첫 진입 — 스플래시 · 랜딩(인트로는 선택)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="7a">
+<div class="dv-olabel"><a class="dv-oid" href="#7a">7a</a>스플래시 → 랜딩. 바로 시작하거나, 둘러보기로 인트로 진입</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#FF7A5C">
+<div style="width:96px;height:96px;border-radius:24px;background:rgba(255,255,255,.14);display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 11px 13px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="96" height="96" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".45" stroke-width="7" stroke-linecap="round"></path><circle cx="96" cy="36" r="8" fill="#FFC24B"></circle></svg>
+<div style="font-size:42px;font-weight:600;color:#fff;letter-spacing:-2.4px;line-height:.9">툭</div>
+</div>
+<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.8);letter-spacing:-0.2px">지금 볼래?</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="width:80px;height:80px;border-radius:20px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 9px 11px;box-sizing:border-box;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(255,122,92,.22)">
+<svg width="80" height="80" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8" stroke-linecap="round"></path><circle cx="96" cy="36" r="8.5" fill="#FFC24B"></circle></svg>
+<div style="font-size:36px;font-weight:600;color:#fff;letter-spacing:-2px;line-height:.9">툭</div>
+</div>
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">시간 비었을 때<br>툭 던지면 끝</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">단톡방에 묻지 않아도 돼요. 지금 한가한 절친만 보고, 한 탭으로 부르세요.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">한가한 친구가 먼저 보여요</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">거절은 아무에게도 안 보여요</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">시간 지나면 알아서 꺼져요</div>
+</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:12px">
+<div style="height:56px;border-radius:999px;background:#FEE500;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+<div style="width:22px;height:22px;border-radius:6px;background:rgba(43,41,38,.12);display:flex;align-items:center;justify-content:center;font:500 8px ui-monospace,Menlo,monospace;color:#2B2926">logo</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">카카오로 3초 만에 시작</div>
+</div>
+<div style="height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<div style="font-size:15px;font-weight:500;color:#8A857E;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#ECE7DF">툭이 뭔가요? 30초만 둘러보기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;line-height:1.6">계속하면 <span style="text-decoration:underline;text-underline-offset:2px">이용약관</span>·<span style="text-decoration:underline;text-underline-offset:2px">개인정보 처리방침</span>에 동의합니다</div>
+</div>
+</div>
+</x-import>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">둘러보기를 누르면 <a class="dv-oid" href="#6b">6b</a> 인트로 5컷으로, 건너뛰면 이 화면으로 돌아옵니다.</p>
+</section>
+
+<section class="dv-turn" id="t6" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t6">6</a><span class="dv-tname">인트로 — 실제 화면 목업 방식 (3컷 / 4컷)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="6a">
+<div class="dv-olabel"><a class="dv-oid" href="#6a">6a</a>던진다 → 거절이 안 보인다 → 알아서 꺼진다 → 카카오 로그인</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="font-size:16px;font-weight:600;color:#2B2926">뭐 하고 놀까?</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<div style="padding:9px 14px;border-radius:999px;font-size:14px;font-weight:500;background:#FFEAE2;color:#E85D3D;border:1px solid #FFD4C6">술</div>
+<div style="padding:9px 14px;border-radius:999px;font-size:14px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">카페</div>
+<div style="padding:9px 14px;border-radius:999px;font-size:14px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">밥</div>
+<div style="padding:9px 14px;border-radius:999px;font-size:14px;font-weight:500;background:#FBF7F1;color:#8A857E;border:1px solid #ECE7DF">아무거나</div>
+</div>
+<div style="height:48px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(255,122,92,.28)"><div style="font-size:15px;font-weight:600;color:#fff">절친 5명에게 툭 던지기</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">한 탭이면 끝</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">약속 잡느라 톡 주고받지 말고, 지금 뭐 할지만 골라서 절친들에게 툭 던지세요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">술 · 지금</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px">
+<div style="display:flex">
+<div style="width:34px;height:34px;border-radius:999px;background:#FFEAE2;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#E85D3D">민</div>
+<div style="width:34px;height:34px;border-radius:999px;background:#FFEAE2;border:2px solid #fff;margin-left:-10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#E85D3D">지</div>
+<div style="width:34px;height:34px;border-radius:999px;background:#FFEAE2;border:2px solid #fff;margin-left:-10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#E85D3D">유</div>
+</div>
+<div style="font-size:14px;font-weight:500;color:#3DBE8B">3명 합류</div>
+</div>
+</div>
+<div style="align-self:flex-start;display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px dashed #ECE7DF;border-radius:12px;padding:10px 14px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="font-size:13px;font-weight:400;color:#8A857E">지나친 사람은 아무 데도 안 나와요</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">거절은 보이지 않아요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">몇 명이 지나쳤는지는 보낸 사람도 알 수 없어요. 합류한 친구만 보여주니까 편하게 던지세요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:16px;font-weight:600;color:#2B2926">지금 콜 켜짐 · 카페</div></div>
+<div style="font-size:13px;font-weight:400;color:#8A857E;padding-left:16px">1시간 32분 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:46px;height:28px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none"><div style="width:22px;height:22px;border-radius:999px;background:#fff"></div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div style="font-size:20px;font-weight:500;color:#8A857E;line-height:1">↓</div><div style="font-size:13px;font-weight:500;color:#8A857E">시간이 지나면</div></div>
+<div style="background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;opacity:.75">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:999px;background:#ECE7DF"></div><div style="font-size:16px;font-weight:500;color:#8A857E">지금 콜 꺼짐</div></div>
+<div style="width:46px;height:28px;border-radius:999px;background:#ECE7DF;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-start;flex:none"><div style="width:22px;height:22px;border-radius:999px;background:#fff"></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">시간 지나면 알아서 꺼져요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">지금 콜도 번개도 정해둔 시간이 지나면 사라져요. 끄는 걸 잊어도 부담이 남지 않아요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FEE500;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+<div style="width:22px;height:22px;border-radius:6px;background:rgba(43,41,38,.12);display:flex;align-items:center;justify-content:center;font:500 8px ui-monospace,Menlo,monospace;color:#2B2926">logo</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">카카오로 시작하기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;line-height:1.6">가입만으로는 아무에게도 알림이 가지 않아요</div>
+</div>
+</div>
+</x-import>
+
+</div>
+</div>
+
+<div class="dv-opt" id="6b">
+<div class="dv-olabel"><a class="dv-oid" href="#6b">6b</a>상황부터 — 시간 비는 날 → 한가한 친구가 보임 → 툭 → 알아서 꺼짐</div>
+<div style="display:flex;gap:20px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="font-size:13px;font-weight:500;color:#8A857E">단톡방 · 우리들</div>
+<div style="align-self:flex-end;max-width:80%;background:#FFEAE2;border-radius:16px 16px 4px 16px;padding:12px 14px;font-size:15px;font-weight:400;color:#2B2926">오늘 저녁에 누구 시간 돼?</div>
+<div style="align-self:flex-end;font-size:12px;font-weight:400;color:#8A857E">오후 6:12</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-top:4px">
+<div style="width:56%;height:14px;border-radius:8px;background:#F4F0EA"></div>
+<div style="width:38%;height:14px;border-radius:8px;background:#F7F4EF"></div>
+</div>
+<div style="align-self:center;font-size:13px;font-weight:400;color:#8A857E;padding-top:4px">…답장 없음</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">갑자기 시간이 비는 날</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">약속이 취소됐거나 오늘 일정이 없을 때. 단톡방에 던지자니 읽씹이 무섭고, 개인톡은 거절시키는 것 같아 미안하죠.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:baseline;gap:8px;padding-left:4px;padding-bottom:4px"><div style="font-size:16px;font-weight:600;color:#2B2926">지금 한가한 친구</div><div style="font-size:16px;font-weight:600;color:#FF7A5C">3</div></div>
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D">민</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">민수</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">술</div></div><div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div></div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D">지</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">지호</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">카페</div></div><div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div></div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;opacity:.6">
+<div style="width:38px;height:38px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#E85D3D">유</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:600;color:#2B2926">유진</div><div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">아무거나</div></div><div style="display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">누가 한가한지<br>먼저 보여요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">개인톡으로 하나하나 물어볼 필요 없어요. 지금 콜을 켜둔 친구만 목록에 떠요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="background:#FFFFFF;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.08)">
+<div style="width:36px;height:36px;border-radius:10px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px 5px;box-sizing:border-box;position:relative;overflow:hidden;flex:none">
+<svg width="36" height="36" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-.9px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:13px;font-weight:600;color:#2B2926">툭</div><div style="font-size:12px;font-weight:400;color:#8A857E">지금</div></div>
+<div style="font-size:14px;font-weight:400;color:#2B2926">민수가 툭 던졌어요 · 술</div>
+</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:15px;font-weight:600;color:#2B2926">지금 볼래? · 술</div>
+<div style="display:flex;gap:8px">
+<div style="flex:1;height:44px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#fff">나도</div>
+<div style="flex:1;height:44px;border-radius:999px;background:#FBF7F1;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:#8A857E">다음에</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E">'다음에'는 상대에게 보이지 않아요</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">툭 던지면 알림이 딱</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">한 탭이면 절친들에게 바로 닿아요. 지나쳐도 보낸 사람에겐 아무것도 안 보여서 서로 부담이 없어요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(43,41,38,.05)">
+<div style="display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div><div style="font-size:16px;font-weight:600;color:#2B2926">지금 콜 켜짐 · 카페</div></div>
+<div style="font-size:13px;font-weight:400;color:#8A857E;padding-left:16px">1시간 32분 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:46px;height:28px;border-radius:999px;background:#FF7A5C;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-end;flex:none"><div style="width:22px;height:22px;border-radius:999px;background:#fff"></div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px"><div style="font-size:20px;font-weight:500;color:#8A857E;line-height:1">↓</div><div style="font-size:13px;font-weight:500;color:#8A857E">시간이 지나면</div></div>
+<div style="background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;opacity:.75">
+<div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:999px;background:#ECE7DF"></div><div style="font-size:16px;font-weight:500;color:#8A857E">지금 콜 꺼짐</div></div>
+<div style="width:46px;height:28px;border-radius:999px;background:#ECE7DF;padding:3px;box-sizing:border-box;display:flex;justify-content:flex-start;flex:none"><div style="width:22px;height:22px;border-radius:999px;background:#fff"></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">그리고 알아서 꺼져요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">지금 콜도 번개도 시간이 지나면 사라져요. 끄는 걸 잊어도 부담이 남지 않아요.</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="height:46px"></div>
+
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:0 24px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="width:72px;height:72px;border-radius:18px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 8px 10px;box-sizing:border-box;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(255,122,92,.22)">
+<svg width="72" height="72" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8.5" stroke-linecap="round"></path><circle cx="96" cy="36" r="9" fill="#FFC24B"></circle></svg>
+<div style="font-size:32px;font-weight:600;color:#fff;letter-spacing:-1.8px;line-height:.9">툭</div>
+</div>
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">이제 툭 던져볼까요?</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">절친 몇 명만 모으면 바로 쓸 수 있어요.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">한가한 친구가 먼저 보여요</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">거절은 아무에게도 안 보여요</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:12px;padding:14px 16px">
+<div style="width:6px;height:6px;border-radius:999px;background:#FF7A5C;flex:none"></div>
+<div style="font-size:15px;font-weight:500;color:#2B2926">시간 지나면 알아서 꺼져요</div>
+</div>
+</div>
+</div>
+
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:6px;padding-left:4px">
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+</div>
+<div style="height:56px;border-radius:999px;background:#FEE500;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+<div style="width:22px;height:22px;border-radius:6px;background:rgba(43,41,38,.12);display:flex;align-items:center;justify-content:center;font:500 8px ui-monospace,Menlo,monospace;color:#2B2926">logo</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">카카오로 시작하기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;line-height:1.6">가입만으로는 아무에게도 알림이 가지 않아요</div>
+</div>
+</div>
+</x-import>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">이어서: "로그인 후 절친 그룹 만들기 화면" · "<a class="dv-oid" href="#6b">6b</a>를 스와이프 동작으로 묶기" · "받은 번개 · 합류 현황 화면"</p>
+</section>
+
+<section class="dv-turn" id="t5" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">'툭 던지는' 모션 로고 변주 (4a-5 계열)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="5a">
+<div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>던지는 느낌 6종</div>
+<div style="display:grid;grid-template-columns:repeat(3,180px);gap:24px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px">
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:flex-end;padding-right:16px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><rect x="6" y="46" width="26" height="5" rx="2.5" fill="#fff" fill-opacity=".28"></rect><rect x="14" y="58" width="20" height="5" rx="2.5" fill="#fff" fill-opacity=".45"></rect><rect x="6" y="70" width="30" height="5" rx="2.5" fill="#fff" fill-opacity=".2"></rect></svg>
+<div style="font-size:50px;font-weight:600;color:#fff;letter-spacing:-2.8px;line-height:1;position:relative">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">1 · 스피드 라인</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><circle cx="82" cy="30" r="3" fill="#fff" fill-opacity=".35"></circle><circle cx="94" cy="24" r="4" fill="#fff" fill-opacity=".55"></circle><circle cx="106" cy="18" r="7" fill="#FFC24B"></circle></svg>
+<div style="font-size:50px;font-weight:600;color:#fff;letter-spacing:-2.8px;line-height:1;transform:rotate(-8deg);margin-top:10px">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">2 · 기울임 + 튀어나감</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<div style="font-size:48px;font-weight:600;color:#fff;letter-spacing:-2.8px;line-height:1;margin-bottom:16px;position:relative">툭</div>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M22 96C42 78 78 78 98 96" stroke="#fff" stroke-opacity=".38" stroke-width="3.5" stroke-linecap="round"></path><circle cx="98" cy="96" r="5" fill="#FFC24B"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">3 · 아래 포물선</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M24 88c6-10 14-10 20 0s14 8 18 0" stroke="#FF7A5C" stroke-opacity=".45" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="0.1 11"></path><path d="M26 86c8-12 16-12 22 0" stroke="#FF7A5C" stroke-opacity=".3" stroke-width="3"></path><path d="M52 86c8-9 15-9 21 0" stroke="#FF7A5C" stroke-opacity=".22" stroke-width="3"></path><circle cx="80" cy="84" r="6" fill="#FF7A5C"></circle></svg>
+<div style="font-size:46px;font-weight:600;color:#FF7A5C;letter-spacing:-2.6px;line-height:1;margin-bottom:34px;position:relative">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">4 · 통통 튀기</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:flex-start;justify-content:flex-end;padding:14px 16px 0 0;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M22 96C30 68 54 54 84 52" stroke="#fff" stroke-opacity=".38" stroke-width="3.5" stroke-linecap="round"></path><circle cx="22" cy="96" r="6" fill="#FFC24B"></circle></svg>
+<div style="font-size:48px;font-weight:600;color:#fff;letter-spacing:-2.8px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">5 · 아래서 위로 던짐</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 14px 16px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="7" stroke-linecap="round"></path><path d="M40 36c18-8 36-8 52-2" stroke="#fff" stroke-opacity=".22" stroke-width="3" stroke-linecap="round"></path><circle cx="96" cy="36" r="8" fill="#FFC24B"></circle></svg>
+<div style="font-size:52px;font-weight:600;color:#fff;letter-spacing:-3px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">6 · 두꺼운 스윙(4a-5 강화)</div>
+</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="5b">
+<div class="dv-olabel"><a class="dv-oid" href="#5b">5b</a>현재 채택안(4a-5) — 비교용</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 14px 16px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M20 46C36 26 66 20 96 30" stroke="#fff" stroke-opacity=".4" stroke-width="3.5" stroke-linecap="round"></path><circle cx="98" cy="30" r="5" fill="#FFC24B"></circle></svg>
+<div style="font-size:52px;font-weight:600;color:#fff;letter-spacing:-3px;line-height:.9">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">4a-5 (이전안)</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">번호로 골라주시면 인트로·홈에 교체 반영하겠습니다.</p>
+</section>
+
+<section class="dv-turn" id="t4" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">'툭' 글자 기반 로고 — 세련된 방향</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>앱 아이콘 6종 — 전부 '툭' 글자에서 출발</div>
+<div style="display:grid;grid-template-columns:repeat(3,180px);gap:24px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px">
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<div style="font-size:54px;font-weight:600;color:#FFF;letter-spacing:-3px;line-height:1;margin-left:-4px">툭</div>
+<div style="position:absolute;right:16px;top:16px;width:10px;height:10px;border-radius:999px;background:#FFC24B"></div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">1 · 툭 + 튀는 점</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<div style="position:absolute;left:0;right:0;top:34px;display:flex;align-items:center;gap:5px;padding-left:14px;opacity:.9">
+<div style="width:4px;height:4px;border-radius:999px;background:#FFD4C6"></div>
+<div style="width:5px;height:5px;border-radius:999px;background:#FFC4AF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#FFAF93"></div>
+</div>
+<div style="font-size:50px;font-weight:600;color:#FF7A5C;letter-spacing:-3px;line-height:1;margin-top:14px">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">2 · 날아온 궤적 + 툭</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><circle cx="60" cy="60" r="40" stroke="#FFEAE2" stroke-width="3"></circle><circle cx="60" cy="60" r="52" stroke="#FBF3EE" stroke-width="3"></circle></svg>
+<div style="font-size:44px;font-weight:600;color:#FF7A5C;letter-spacing:-2.5px;line-height:1;position:relative">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">3 · 파문 속 툭</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#2B2926;display:flex;align-items:center;justify-content:center">
+<div style="font-size:54px;font-weight:600;color:#FF7A5C;letter-spacing:-3px;line-height:1">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">4 · 다크 · 코랄 툭</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 14px 16px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M20 46C36 26 66 20 96 30" stroke="#fff" stroke-opacity=".4" stroke-width="3.5" stroke-linecap="round"></path><circle cx="98" cy="30" r="5" fill="#FFC24B"></circle></svg>
+<div style="font-size:52px;font-weight:600;color:#fff;letter-spacing:-3px;line-height:.9">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">5 · 왼쪽 정렬 + 스윙</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FBF7F1;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<div style="display:flex;align-items:flex-end;gap:3px">
+<div style="font-size:46px;font-weight:600;color:#2B2926;letter-spacing:-2.5px;line-height:1">툭</div>
+<div style="width:9px;height:9px;border-radius:999px;background:#FF7A5C"></div>
+</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">6 · 툭. 마침표</div>
+</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>가로 락업 + 크기별 확인</div>
+<div style="display:flex;flex-direction:column;gap:24px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px;width:560px">
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:28px 32px;display:flex;align-items:center;gap:16px">
+<div style="width:56px;height:56px;border-radius:16px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 7px 8px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="56" height="56" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="9" stroke-linecap="round"></path><circle cx="96" cy="36" r="9.5" fill="#FFC24B"></circle></svg>
+<div style="font-size:25px;font-weight:600;color:#fff;letter-spacing:-1.4px;line-height:.9;position:relative">툭</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-1px;line-height:1.1">툭</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E;letter-spacing:1.5px">TUK</div>
+</div>
+</div>
+
+<div style="display:flex;align-items:flex-end;gap:24px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:28px 32px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="width:64px;height:64px;border-radius:16px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 8px 9px;box-sizing:border-box;position:relative;overflow:hidden"><svg width="64" height="64" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="9" stroke-linecap="round"></path><circle cx="96" cy="36" r="9.5" fill="#FFC24B"></circle></svg><div style="font-size:28px;font-weight:600;color:#fff;letter-spacing:-1.6px;line-height:.9;position:relative">툭</div></div>
+<div style="font-size:12px;color:#8A857E">64</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="width:40px;height:40px;border-radius:11px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden"><svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg><div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9;position:relative">툭</div></div>
+<div style="font-size:12px;color:#8A857E">40</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="width:24px;height:24px;border-radius:7px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 3px 4px;box-sizing:border-box;position:relative;overflow:hidden"><svg width="24" height="24" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="12" stroke-linecap="round"></path><circle cx="96" cy="36" r="11" fill="#FFC24B"></circle></svg><div style="font-size:11px;font-weight:600;color:#fff;letter-spacing:-.6px;line-height:.9;position:relative">툭</div></div>
+<div style="font-size:12px;color:#8A857E">24</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="width:16px;height:16px;border-radius:5px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 2px 2px;box-sizing:border-box;position:relative;overflow:hidden"><svg width="16" height="16" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="14" stroke-linecap="round"></path><circle cx="96" cy="36" r="12" fill="#FFC24B"></circle></svg><div style="font-size:8px;font-weight:600;color:#fff;letter-spacing:-.4px;line-height:.9;position:relative">툭</div></div>
+<div style="font-size:12px;color:#8A857E">16</div>
+</div>
+</div>
+
+<div style="font-size:12px;font-weight:400;color:#8A857E;line-height:1.6">지금은 Pretendard SemiBold를 자간만 좁혀 쓴 상태입니다. 방향을 고르시면 ㅌ·ㅜ·ㄱ 획 두께와 끝단 라운드를 손봐 전용 글자꼴로 다듬겠습니다.</div>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">번호로 골라주세요 — 고른 마크를 <a class="dv-oid" href="#2a">2a</a> 인트로와 홈 헤더에 반영하겠습니다.</p>
+</section>
+
+<section class="dv-turn" id="t3" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">로고 후보 · 추상 그래픽 (SVG, 이미지 생성 아님)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>앱 심볼 6종 — 앱 아이콘 크기(120px)로 확인</div>
+<div style="display:grid;grid-template-columns:repeat(3,180px);gap:24px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px">
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(43,41,38,.05)">
+<div style="font-size:52px;font-weight:600;color:#fff;letter-spacing:-2px;line-height:1">툭</div>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">1 · 워드마크</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFEAE2;display:flex;align-items:center;justify-content:center">
+<svg width="72" height="72" viewBox="0 0 72 72" fill="none"><path d="M8 52C18 22 44 12 62 14" stroke="#FF7A5C" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12"></path><circle cx="60" cy="48" r="11" fill="#FF7A5C"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">2 · 던지는 궤적</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<svg width="76" height="76" viewBox="0 0 76 76" fill="none"><circle cx="38" cy="38" r="34" stroke="#FFEAE2" stroke-width="4"></circle><circle cx="38" cy="38" r="22" stroke="#FFD4C6" stroke-width="4"></circle><circle cx="38" cy="38" r="10" fill="#FF7A5C"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">3 · 파문(닿는 순간)</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FF7A5C;display:flex;align-items:center;justify-content:center">
+<svg width="68" height="68" viewBox="0 0 68 68" fill="none"><path d="M34 8C19.6 8 8 17.8 8 29.9c0 7.8 4.9 14.6 12.2 18.5l-3 11.2c-.3 1.1.9 2 1.9 1.4l13.4-8.4c.5 0 1 .1 1.5.1 14.4 0 26-9.8 26-21.9C60 17.8 48.4 8 34 8Z" fill="#fff"></path><circle cx="34" cy="30" r="5.5" fill="#FF7A5C"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">4 · 말풍선 + 점</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<svg width="80" height="60" viewBox="0 0 80 60" fill="none"><circle cx="26" cy="30" r="20" fill="#FF7A5C" fill-opacity=".9"></circle><circle cx="54" cy="30" r="20" fill="#FFC24B" fill-opacity=".85"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">5 · 겹치는 둘</div>
+</div>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+<div style="width:120px;height:120px;border-radius:28px;background:#FFEAE2;display:flex;align-items:center;justify-content:center">
+<svg width="70" height="70" viewBox="0 0 70 70" fill="none"><rect x="10" y="14" width="8" height="42" rx="4" fill="#FF7A5C"></rect><rect x="10" y="14" width="42" height="8" rx="4" fill="#FF7A5C"></rect><rect x="10" y="48" width="42" height="8" rx="4" fill="#FF7A5C"></rect><circle cx="58" cy="35" r="7" fill="#FFC24B"></circle></svg>
+</div>
+<div style="font-size:12px;font-weight:500;color:#8A857E">6 · ㅌ 모노그램</div>
+</div>
+
+</div>
+</div>
+
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>인트로 3컷용 추상 그래픽 — 일러스트 대체안</div>
+<div style="display:flex;gap:20px;background:#FBF7F1;border:1px solid #ECE7DF;border-radius:16px;padding:32px">
+
+<div style="width:260px;display:flex;flex-direction:column;gap:16px">
+<div style="width:260px;height:195px;border-radius:16px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<svg width="200" height="130" viewBox="0 0 200 130" fill="none"><path d="M24 100C48 36 128 20 176 40" stroke="#FFD4C6" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14"></path><circle cx="24" cy="100" r="14" fill="#FFEAE2"></circle><circle cx="176" cy="44" r="18" fill="#FF7A5C"></circle></svg>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:16px;font-weight:600;color:#2B2926">1컷 · 툭 던지면 끝</div><div style="font-size:14px;font-weight:400;color:#8A857E;line-height:1.5">한 탭이면 절친들에게 닿아요</div></div>
+</div>
+
+<div style="width:260px;display:flex;flex-direction:column;gap:16px">
+<div style="width:260px;height:195px;border-radius:16px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<svg width="200" height="130" viewBox="0 0 200 130" fill="none"><circle cx="100" cy="65" r="20" fill="#FF7A5C"></circle><circle cx="100" cy="65" r="38" stroke="#FFD4C6" stroke-width="4"></circle><circle cx="100" cy="65" r="56" stroke="#FFEAE2" stroke-width="4"></circle><circle cx="156" cy="65" r="9" fill="#3DBE8B"></circle><circle cx="44" cy="65" r="9" fill="#3DBE8B"></circle><circle cx="100" cy="9" r="9" fill="#ECE7DF"></circle></svg>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:16px;font-weight:600;color:#2B2926">2컷 · 거절이 안 보여요</div><div style="font-size:14px;font-weight:400;color:#8A857E;line-height:1.5">합류한 친구만 초록으로 켜져요</div></div>
+</div>
+
+<div style="width:260px;display:flex;flex-direction:column;gap:16px">
+<div style="width:260px;height:195px;border-radius:16px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center">
+<svg width="200" height="130" viewBox="0 0 200 130" fill="none"><circle cx="100" cy="65" r="52" stroke="#ECE7DF" stroke-width="8"></circle><path d="M100 13a52 52 0 0 1 45 78" stroke="#FF7A5C" stroke-width="8" stroke-linecap="round"></path><rect x="76" y="55" width="48" height="8" rx="4" fill="#FFD4C6"></rect><rect x="76" y="71" width="30" height="8" rx="4" fill="#FFEAE2"></rect></svg>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:16px;font-weight:600;color:#2B2926">3컷 · 시간 지나면 꺼져요</div><div style="font-size:14px;font-weight:400;color:#8A857E;line-height:1.5">남겨두는 부담이 없어요</div></div>
+</div>
+
+</div>
+</div>
+
+</div>
+<p class="dv-next">번호로 골라주세요 (예: "3a의 2번으로 <a class="dv-oid" href="#2a">2a</a>·홈에 반영"). 카카오 로고는 공식 에셋을 올려주시면 넣겠습니다.</p>
+</section>
+
+<section class="dv-turn" id="t2" style="border-bottom:1px solid rgba(43,41,38,.08)">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">인트로 · 로그인 (카카오)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>인트로 + 로그인 한 화면 — 첫 실행에 바로 카카오 로그인</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:0 32px">
+<div style="width:104px;height:104px;border-radius:26px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 12px 14px;box-sizing:border-box;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(255,122,92,.22)">
+<svg width="104" height="104" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="7" stroke-linecap="round"></path><path d="M40 36c18-8 36-8 52-2" stroke="#fff" stroke-opacity=".22" stroke-width="3" stroke-linecap="round"></path><circle cx="96" cy="36" r="8" fill="#FFC24B"></circle></svg>
+<div style="font-size:46px;font-weight:600;color:#fff;letter-spacing:-2.6px;line-height:.9">툭</div>
+</div>
+<div style="font-size:28px;font-weight:600;color:#2B2926;text-align:center;letter-spacing:-0.6px;line-height:1.35;margin-top:8px;text-wrap:pretty">지금 볼래?<br>툭 던지면 끝</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;text-align:center;line-height:1.55;text-wrap:pretty;max-width:260px">절친 몇 명에게만 가볍게. 무시해도<br>상대에겐 아무것도 안 보여요.</div>
+</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:12px">
+<div style="height:56px;border-radius:999px;background:#FEE500;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+<div style="width:22px;height:22px;border-radius:6px;background:rgba(43,41,38,.12);display:flex;align-items:center;justify-content:center;font:500 8px ui-monospace,Menlo,monospace;color:#2B2926">logo</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">카카오로 3초 만에 시작</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;line-height:1.6;margin-top:4px">계속하면 <span style="text-decoration:underline;text-underline-offset:2px">이용약관</span>·<span style="text-decoration:underline;text-underline-offset:2px">개인정보 처리방침</span>에 동의합니다</div>
+</div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>인트로 3컷 → 로그인 (가치 먼저 설명)</div>
+<div style="display:flex;gap:20px">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="display:flex;justify-content:flex-end;padding:12px 20px"><div style="font-size:14px;font-weight:500;color:#8A857E;cursor:pointer">건너뛰기</div></div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:0 32px">
+<div style="width:100%;aspect-ratio:4/3;border-radius:16px;border:1px dashed #ECE7DF;background:repeating-linear-gradient(135deg,#FFF 0 8px,#FBF7F1 8px 16px);display:flex;align-items:center;justify-content:center"><div style="font:500 11px ui-monospace,Menlo,monospace;color:#8A857E">일러스트 — 툭 던지는 순간</div></div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">거절이 안 보여요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">몇 명이 지나쳤는지는 아무도 몰라요. 합류한 친구만 보여줄게요.</div>
+</div>
+<div style="display:flex;gap:6px">
+<div style="width:20px;height:6px;border-radius:999px;background:#FF7A5C"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+<div style="width:6px;height:6px;border-radius:999px;background:#ECE7DF"></div>
+</div>
+</div>
+<div style="padding:0 20px">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)"><div style="font-size:16px;font-weight:600;color:#fff">다음</div></div>
+</div>
+</div>
+</x-import>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;padding-bottom:46px">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;padding:0 32px 40px">
+<div style="width:72px;height:72px;border-radius:18px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 8px 10px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="72" height="72" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="8.5" stroke-linecap="round"></path><circle cx="96" cy="36" r="9" fill="#FFC24B"></circle></svg>
+<div style="font-size:32px;font-weight:600;color:#fff;letter-spacing:-1.8px;line-height:.9">툭</div>
+</div>
+<div style="font-size:28px;font-weight:600;color:#2B2926;letter-spacing:-0.6px;line-height:1.35">시작해볼까요?</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;line-height:1.55;text-wrap:pretty">카카오 계정으로 로그인하면 이미 아는 친구들만 골라 초대할 수 있어요.</div>
+</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:12px">
+<div style="height:56px;border-radius:999px;background:#FEE500;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer">
+<div style="width:22px;height:22px;border-radius:6px;background:rgba(43,41,38,.12);display:flex;align-items:center;justify-content:center;font:500 8px ui-monospace,Menlo,monospace;color:#2B2926">logo</div>
+<div style="font-size:16px;font-weight:600;color:#2B2926">카카오 로그인</div>
+</div>
+<div style="height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;cursor:pointer"><div style="font-size:16px;font-weight:500;color:#8A857E">다른 방법으로 로그인</div></div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;line-height:1.6;margin-top:4px">가입만으로는 아무에게도 알림이 가지 않아요</div>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+
+</div>
+<p class="dv-next">이어서: "<a class="dv-oid" href="#2b">2b</a> 인트로 3컷 전부 보여줘" · "로그인 후 절친 그룹 만들기 화면" · "<a class="dv-oid" href="#2a">2a</a>에 카카오 로고 실제 에셋 넣기(에셋 주면 반영)"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">툭 · 홈 화면</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>지금 콜 켜짐 · 친구 3명 (토글·툭 던지기 동작)</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative;overflow:hidden">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;overflow:auto;padding:0 20px 120px">
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(43,41,38,.03)">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:{{ dotColor }}"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">{{ callTitle }}</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">{{ callSub }}</div>
+</div>
+<div onClick="{{ toggleCall }}" style="width:52px;height:32px;border-radius:999px;background:{{ trackColor }};padding:3px;display:flex;justify-content:{{ knobAlign }};cursor:pointer;transition:background .2s;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16);transition:all .2s"></div>
+</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:16px">
+<sc-for list="{{ tags }}" as="t" hint-placeholder-count="4">
+<div onClick="{{ t.pick }}" style="padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }};border:1px solid {{ t.bd }}">{{ t.label }}</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:8px;margin:32px 0 12px;padding:0 4px">
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 한가한 친구</div>
+<div style="font-size:20px;font-weight:600;color:#FF7A5C">{{ freeCount }}</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ friends }}" as="f" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:12px 12px 12px 16px">
+<div style="width:44px;height:44px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#E85D3D;flex:none">{{ f.initial }}</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:16px;font-weight:600;color:#2B2926">{{ f.name }}</div>
+<div style="padding:2px 8px;border-radius:8px;background:#FBF7F1;border:1px solid #ECE7DF;font-size:12px;font-weight:500;color:#8A857E">{{ f.tag }}</div>
+</div>
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:6px;height:6px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:12px;font-weight:500;color:#3DBE8B">지금 가능</div>
+</div>
+</div>
+<div onClick="{{ f.tuk }}" style="padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;flex:none;background:{{ f.btnBg }};color:{{ f.btnFg }};border:1px solid {{ f.btnBd }}">{{ f.btnLabel }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="margin-top:24px;text-align:center;font-size:12px;font-weight:400;color:#8A857E">무시해도 상대에겐 아무것도 안 보여요</div>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;padding:16px 20px 46px;background:linear-gradient(to top,#FBF7F1 60%,rgba(251,247,241,0))">
+<div onClick="{{ openSheet }}" style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">툭 띄우기</div>
+</div>
+</div>
+
+<div style="position:absolute;inset:0;background:rgba(43,41,38,.28);opacity:{{ sheetOpacity }};pointer-events:{{ sheetPointer }};transition:opacity .22s" onClick="{{ closeSheet }}"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;padding:24px 20px 40px;transform:{{ sheetTransform }};transition:transform .26s cubic-bezier(.32,.72,0,1);box-shadow:0 -4px 24px rgba(43,41,38,.08)">
+<div style="width:40px;height:4px;border-radius:999px;background:#ECE7DF;margin:0 auto 20px"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">뭐 하고 놀까?</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+<sc-for list="{{ sheetTags }}" as="s" hint-placeholder-count="4">
+<div onClick="{{ s.pick }}" style="padding:12px 18px;border-radius:999px;font-size:16px;font-weight:500;cursor:pointer;background:{{ s.bg }};color:{{ s.fg }};border:1px solid {{ s.bd }}">{{ s.label }}</div>
+</sc-for>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;margin:24px 0 12px">얼마나 열어둘까?</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{ durations }}" as="d" hint-placeholder-count="3">
+<div onClick="{{ d.pick }}" style="flex:1;padding:12px 0;border-radius:12px;text-align:center;font-size:16px;font-weight:500;cursor:pointer;background:{{ d.bg }};color:{{ d.fg }};border:1px solid {{ d.bd }}">{{ d.label }}</div>
+</sc-for>
+</div>
+<div onClick="{{ sendTuk }}" style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;margin-top:24px;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff">절친 5명에게 툭 던지기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:12px">무시해도 상대에겐 아무것도 안 보여요 · {{ expireCopy }}</div>
+</div>
+
+<div style="position:absolute;left:20px;right:20px;bottom:120px;display:flex;justify-content:center;opacity:{{ toastOpacity }};transition:opacity .2s;pointer-events:none">
+<div style="background:#2B2926;color:#fff;font-size:14px;font-weight:500;padding:12px 20px;border-radius:999px">{{ toastText }}</div>
+</div>
+
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>콜드스타트 · 친구 0명</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;box-sizing:border-box;font-family:Pretendard,-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;background:#FBF7F1;padding-top:56px;position:relative">
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 12px">
+<div style="width:40px;height:40px;border-radius:12px;background:#FF7A5C;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 5px 6px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="40" height="40" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="10" stroke-linecap="round"></path><circle cx="96" cy="36" r="10" fill="#FFC24B"></circle></svg>
+<div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:-1px;line-height:.9">툭</div>
+</div>
+<div style="width:36px;height:36px;border-radius:999px;background:#FFEAE2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#E85D3D">나</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;padding:0 20px 46px">
+
+<div style="background:#FFFFFF;border:1px solid #ECE7DF;border-radius:16px;padding:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:8px;height:8px;border-radius:999px;background:#3DBE8B"></div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;letter-spacing:-0.3px">지금 콜 켜짐 · 아무거나</div>
+</div>
+<div style="font-size:14px;font-weight:400;color:#8A857E;padding-left:16px">2시간 뒤 자동으로 꺼져요</div>
+</div>
+<div style="width:52px;height:32px;border-radius:999px;background:#FF7A5C;padding:3px;display:flex;justify-content:flex-end;flex:none">
+<div style="width:26px;height:26px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(43,41,38,.16)"></div>
+</div>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px 8px">
+<div style="width:96px;height:96px;border-radius:24px;background:#FFEAE2;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 11px 13px;box-sizing:border-box;position:relative;overflow:hidden">
+<svg width="96" height="96" viewBox="0 0 120 120" fill="none" style="position:absolute;inset:0"><path d="M28 44c22-16 46-18 66-8" stroke="#FF7A5C" stroke-opacity=".45" stroke-width="7" stroke-linecap="round"></path><path d="M40 36c18-8 36-8 52-2" stroke="#FF7A5C" stroke-opacity=".18" stroke-width="3" stroke-linecap="round"></path><circle cx="96" cy="36" r="8" fill="#FFC24B"></circle></svg>
+<div style="font-size:42px;font-weight:600;color:#FF7A5C;letter-spacing:-2.4px;line-height:.9">툭</div>
+</div>
+<div style="font-size:20px;font-weight:600;color:#2B2926;text-align:center;letter-spacing:-0.3px;margin-top:8px">아직 절친이 없어요</div>
+<div style="font-size:16px;font-weight:400;color:#8A857E;text-align:center;line-height:1.5;text-wrap:pretty;max-width:260px">먼저 켜두면 친구가 한가해질 때<br>알려줄게요</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="height:56px;border-radius:999px;background:#FF7A5C;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(255,122,92,.28)">
+<div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:-0.2px">친구 초대하기</div>
+</div>
+<div style="height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #ECE7DF;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<div style="font-size:16px;font-weight:500;color:#8A857E">연락처에서 찾기</div>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:400;color:#8A857E;margin-top:4px">초대해도 상대에겐 부담 없어요 · 링크 하나면 끝</div>
+</div>
+
+</div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">이어서: "<a class="dv-oid" href="#1a">1a</a>에 받은 번개 카드 추가" · "<a class="dv-oid" href="#1a">1a</a> 친구 목록을 가로 스크롤 아바타로" · "툭 던진 뒤 합류 현황 화면"</p>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;remainingLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;1시간 32분 뒤 자동으로 꺼져요&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;카피&quot;}}">
+const TAGS = ['카페', '술', '밥', '아무거나'];
+const DURS = [
+  { label: '1시간', copy: '1시간 뒤 자동으로 꺼져요' },
+  { label: '2시간', copy: '2시간 뒤 자동으로 꺼져요' },
+  { label: '오늘 밤까지', copy: '자정에 자동으로 꺼져요' },
+];
+
+class Component extends DCLogic {
+  state = {
+    callOn: true, tag: '카페', sheet: false, sheetTag: '술', dur: 1,
+    tossed: [], toast: '',
+  };
+
+  toast(text) {
+    clearTimeout(this._t);
+    this.setState({ toast: text });
+    this._t = setTimeout(() => this.setState({ toast: '' }), 1800);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const on = s.callOn;
+    const chip = (active) => active
+      ? { bg: '#FFEAE2', fg: '#E85D3D', bd: '#FFD4C6' }
+      : { bg: '#FBF7F1', fg: '#8A857E', bd: '#ECE7DF' };
+
+    const friends = [
+      { name: '민수', initial: '민', tag: '술' },
+      { name: '지호', initial: '지', tag: '카페' },
+      { name: '유진', initial: '유', tag: '아무거나' },
+    ].map(f => {
+      const sent = s.tossed.includes(f.name);
+      return {
+        ...f,
+        btnLabel: sent ? '보냈어요' : '툭',
+        btnBg: sent ? '#FBF7F1' : '#FFEAE2',
+        btnFg: sent ? '#8A857E' : '#E85D3D',
+        btnBd: sent ? '#ECE7DF' : '#FFEAE2',
+        tuk: () => {
+          if (sent) return;
+          this.setState(p => ({ tossed: [...p.tossed, f.name] }));
+          this.toast(f.name + '에게 툭 보냈어요');
+        },
+      };
+    });
+
+    return {
+      callTitle: on ? '지금 콜 켜짐 · ' + s.tag : '지금 콜 꺼짐',
+      callSub: on ? (this.props.remainingLabel ?? '1시간 32분 뒤 자동으로 꺼져요') : '켜두면 한가할 때 친구에게만 보여요',
+      dotColor: on ? '#3DBE8B' : '#ECE7DF',
+      trackColor: on ? '#FF7A5C' : '#ECE7DF',
+      knobAlign: on ? 'flex-end' : 'flex-start',
+      toggleCall: () => this.setState(p => ({ callOn: !p.callOn })),
+      tags: TAGS.map(t => ({ label: t, ...chip(on && s.tag === t), pick: () => this.setState({ tag: t, callOn: true }) })),
+      freeCount: friends.length,
+      friends,
+      openSheet: () => this.setState({ sheet: true }),
+      closeSheet: () => this.setState({ sheet: false }),
+      sheetOpacity: s.sheet ? 1 : 0,
+      sheetPointer: s.sheet ? 'auto' : 'none',
+      sheetTransform: s.sheet ? 'translateY(0)' : 'translateY(110%)',
+      sheetTags: TAGS.map(t => ({ label: t, ...chip(s.sheetTag === t), pick: () => this.setState({ sheetTag: t }) })),
+      durations: DURS.map((d, i) => ({ label: d.label, ...chip(s.dur === i), pick: () => this.setState({ dur: i }) })),
+      expireCopy: DURS[s.dur].copy,
+      sendTuk: () => {
+        this.setState({ sheet: false, callOn: true, tag: this.state.sheetTag });
+        this.toast('툭 던졌어요 · 합류하면 알려줄게요');
+      },
+      toastText: s.toast || ' ',
+      toastOpacity: s.toast ? 1 : 0,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

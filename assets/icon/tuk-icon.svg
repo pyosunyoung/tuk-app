@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 120 120">
+<defs><clipPath id="c"><rect width="120" height="120" rx="30"></rect></clipPath></defs>
+<g clip-path="url(#c)">
+<rect width="120" height="120" fill="#FF7A5C"></rect>
+<path d="M28 44c22-16 46-18 66-8" stroke="#fff" stroke-opacity=".5" stroke-width="7" stroke-linecap="round" fill="none"></path>
+<path d="M40 36c18-8 36-8 52-2" stroke="#fff" stroke-opacity=".22" stroke-width="3" stroke-linecap="round" fill="none"></path>
+<circle cx="96" cy="36" r="8" fill="#FFC24B"></circle>
+<text x="16" y="106" font-family="Pretendard, -apple-system, sans-serif" font-weight="600" font-size="52" letter-spacing="-3" fill="#FFFFFF">툭</text>
+</g>
+</svg>
