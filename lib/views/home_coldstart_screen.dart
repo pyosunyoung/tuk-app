@@ -1,20 +1,24 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../viewmodels/auth_view_model.dart';
+import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/logo.dart';
+import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
+import '../widgets/toast.dart';
+import 'call_on_sheet.dart';
 import 'friend_add_sheet.dart';
 import 'friends_screen.dart';
 
-/// 홈 — 콜드스타트 (1b). 로그인 직후, 친구 0명 상태.
-/// 지금 콜은 기본 ON, 친구 초대를 유도한다.
-/// 라이브 프레즌스(실제 콜 API·친구 목록)는 프레즌스 기능에서 연결한다.
+/// 홈 — 콜드스타트 (1b). 로그인 직후, 친구 0명 상태. 친구 초대를 유도한다.
+///
+/// 내 콜 상태는 홈과 똑같이 [PresenceViewModel](=서버)을 따른다.
+/// 예전엔 화면 로컬 상태로 '기본 ON'을 그렸는데, 서버엔 꺼져 있어서
+/// 신규 가입자에게 켜지지도 않은 콜이 켜진 것처럼 보였다(운영 E2E 에서 발견).
 class HomeColdstartScreen extends StatefulWidget {
   const HomeColdstartScreen({super.key});
 
@@ -23,50 +27,18 @@ class HomeColdstartScreen extends StatefulWidget {
 }
 
 class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
-  // 신규 사용자 기본값: 콜 ON, 활동 "아무거나", 2시간 뒤 만료.
-  bool _callOn = true;
-  DateTime _expiresAt = DateTime.now().add(const Duration(hours: 2));
-  Timer? _ticker;
-
-  @override
-  void initState() {
-    super.initState();
-    // 만료 문구를 1분마다 갱신.
-    _ticker = Timer.periodic(const Duration(minutes: 1), (_) {
-      if (mounted) setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _ticker?.cancel();
-    super.dispose();
-  }
-
-  /// 남은 시간 → 부담 덜어주는 만료 문구.
-  String get _expiryText {
-    final diff = _expiresAt.difference(DateTime.now());
-    if (diff.inSeconds <= 0) return '곧 자동으로 꺼져요';
-    if (_expiresAt.hour == 0 && _expiresAt.minute == 0) {
-      return '자정에 자동으로 꺼져요';
+  /// 홈(_PresenceHome._onToggle)과 같은 동작: 켜져 있으면 끄고, 꺼져 있으면 켜기 시트.
+  Future<void> _toggleCall() async {
+    final vm = context.read<PresenceViewModel>();
+    if (vm.myOn) {
+      final err = await vm.turnOff();
+      if (err != null && mounted) showTukToast(context, err);
+      return;
     }
-    final m = diff.inMinutes;
-    if (m >= 60) {
-      final h = m ~/ 60;
-      final r = m % 60;
-      return r == 0
-          ? '$h시간 뒤 자동으로 꺼져요'
-          : '$h시간 $r분 뒤 자동으로 꺼져요';
+    final turnedOn = await showCallOnSheet(context);
+    if (turnedOn != null && mounted) {
+      showTukToast(context, '지금 콜을 켰어요 · ${turnedOn.label}');
     }
-    return '$m분 뒤 자동으로 꺼져요';
-  }
-
-  void _toggleCall() {
-    setState(() {
-      _callOn = !_callOn;
-      if (_callOn) _expiresAt = DateTime.now().add(const Duration(hours: 2));
-    });
-    // TODO(프레즌스 기능): 실제 콜 on/off API 연결.
   }
 
   void _openFriends() {
@@ -120,10 +92,14 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
   }
 
   Widget _nowCallCard() {
+    // 만료 문구는 vm 의 1분 tick 이 notify 하므로 따로 타이머가 필요 없다.
+    final vm = context.watch<PresenceViewModel>();
+    final callOn = vm.myOn;
+    final expiresAt = vm.myExpiresAt;
     return Container(
       padding: const EdgeInsets.all(AppSpace.x20),
       decoration: BoxDecoration(
-        color: _callOn ? AppColors.surface : AppColors.background,
+        color: callOn ? AppColors.surface : AppColors.background,
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: AppColors.border),
       ),
@@ -140,31 +116,40 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: _callOn ? AppColors.success : AppColors.border,
+                        color: callOn ? AppColors.success : AppColors.border,
                         shape: BoxShape.circle,
                       ),
                     ),
                     const SizedBox(width: AppSpace.x8),
-                    Text(
-                      _callOn ? '지금 콜 켜짐 · 아무거나' : '지금 콜 꺼짐',
-                      style: AppText.title20.copyWith(
-                        color: _callOn ? AppColors.text : AppColors.textSub,
-                        fontWeight:
-                            _callOn ? FontWeight.w600 : FontWeight.w500,
+                    Flexible(
+                      child: Text(
+                        callOn
+                            ? '지금 콜 켜짐 · ${vm.myActivity?.label ?? '아무거나'}'
+                            : '지금 콜 꺼짐',
+                        overflow: TextOverflow.ellipsis,
+                        style: AppText.title20.copyWith(
+                          color: callOn ? AppColors.text : AppColors.textSub,
+                          fontWeight:
+                              callOn ? FontWeight.w600 : FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                if (_callOn)
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: AppSpace.x16, top: AppSpace.x4),
-                    child: Text(_expiryText, style: AppText.label14),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: AppSpace.x16, top: AppSpace.x4),
+                  child: Text(
+                    callOn
+                        ? (expiresAt != null ? callExpiryText(expiresAt) : '')
+                        : '켜두면 한가할 때 친구에게만 보여요',
+                    style: AppText.label14,
                   ),
+                ),
               ],
             ),
           ),
-          _CallToggle(on: _callOn, onTap: _toggleCall),
+          _CallToggle(on: callOn, onTap: _toggleCall),
         ],
       ),
     );
