@@ -36,7 +36,12 @@ class ApiClient {
     // refresh 전용 — 인터셉터 재귀 방지용 별도 인스턴스
     _refreshDio = Dio(BaseOptions(
       baseUrl: AppConfig.baseUrl,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 15),
       contentType: Headers.jsonContentType,
+      // ⚠️ 여기도 필수. 기본값(2xx 만 정상)이면 refresh 401 이 DioException 으로 던져져
+      // 아래 '네트워크 오류' 분기로 빠지고, 세션 만료 처리가 영영 안 된다(좀비 세션).
+      validateStatus: (_) => true,
     ));
 
     _dio.interceptors.add(InterceptorsWrapper(
@@ -128,6 +133,8 @@ class ApiClient {
         );
         return true;
       }
+      // 5xx 는 서버 사정 — 토큰이 무효라는 뜻이 아니므로 세션 유지
+      if ((res.statusCode ?? 0) >= 500) return false;
     } on DioException catch (_) {
       // 네트워크/서버 오류 — 세션 유지, 아래에서 만료 처리 안 함
       return false;
