@@ -12,6 +12,12 @@ class AppConfig {
   ///   flutter run --dart-define=API_HOST=192.168.0.10
   static const String _hostOverride = String.fromEnvironment('API_HOST');
 
+  /// 배포 서버용 오버라이드. 스킴까지 포함한 전체 origin 을 넣는다(포트 8080 을 붙이지 않음).
+  /// 운영은 Caddy 가 443 에서 HTTPS 를 종단하므로 API_HOST 방식(http://host:8080)으론 못 붙는다.
+  ///   flutter run --dart-define=API_BASE_URL=https://tuk.158-247-230-36.sslip.io
+  /// 지정하면 API_HOST 보다 우선하고, 웹소켓은 https→wss 로 유도한다.
+  static const String _baseUrlOverride = String.fromEnvironment('API_BASE_URL');
+
   static String get _host {
     if (_hostOverride.isNotEmpty) return _hostOverride;
     if (kIsWeb) return 'localhost';
@@ -23,10 +29,13 @@ class AppConfig {
     return 'localhost';
   }
 
-  static String get baseUrl => 'http://$_host:8080';
+  static String get baseUrl =>
+      _baseUrlOverride.isNotEmpty ? _baseUrlOverride : 'http://$_host:8080';
 
   /// STOMP 웹소켓 엔드포인트 (SockJS 아님 — 네이티브 ws)
-  static String get wsUrl => 'ws://$_host:8080/ws';
+  static String get wsUrl => _baseUrlOverride.isNotEmpty
+      ? '${_baseUrlOverride.replaceFirst(RegExp(r'^http'), 'ws')}/ws'
+      : 'ws://$_host:8080/ws';
 
   static const String apiPrefix = '/api';
 }
