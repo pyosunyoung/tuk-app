@@ -1,0 +1,40 @@
+# 툭 앱 CI — push / PR 마다 정적 분석 + 테스트.
+# (릴리스 APK 빌드·배포는 아직 없음 — 실사용 시작할 때 추가)
+name: app-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: app-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analyze-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.8   # 로컬 개발 버전과 맞춘다
+          cache: true
+
+      - name: Pub get
+        run: flutter pub get
+
+      # 에러·경고는 실패, 스타일 제안(info)은 보고만 한다
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test
