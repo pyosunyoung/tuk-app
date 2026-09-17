@@ -9,7 +9,6 @@ import '../repositories/friend_repository.dart';
 import '../repositories/presence_repository.dart';
 import '../services/api_client.dart';
 import '../services/stomp_service.dart';
-import '../services/token_storage.dart';
 
 /// 화면용 한가한 친구. remainingSeconds 대신 절대 만료시각을 들고
 /// 로컬에서 카운트다운한다(서버 재폴링 의존 X).
@@ -36,16 +35,16 @@ class PresenceViewModel extends ChangeNotifier {
     required PresenceRepository presence,
     required FriendRepository friend,
     required StompService stomp,
-    required TokenStorage tokens,
+    required AccessTokenProvider accessToken,
   })  : _presence = presence,
         _friend = friend,
         _stomp = stomp,
-        _tokens = tokens;
+        _accessToken = accessToken;
 
   final PresenceRepository _presence;
   final FriendRepository _friend;
   final StompService _stomp;
-  final TokenStorage _tokens;
+  final AccessTokenProvider _accessToken;
 
   StreamSubscription<PresenceEvent>? _sub;
   Timer? _ticker;
@@ -84,9 +83,8 @@ class PresenceViewModel extends ChangeNotifier {
 
   /// 로그인 상태일 때 호출. STOMP 연결 + 구독 + 데이터 로드.
   void start() {
-    final token = _tokens.accessToken;
-    if (token == null) return;
-    _stomp.connect(token);
+    // 토큰 문자열이 아니라 '받아오는 방법'을 넘긴다 — 재연결마다 유효한 토큰을 새로 받게
+    _stomp.connect(_accessToken);
     _sub ??= _stomp.presenceEvents.listen(_onEvent);
     _ticker ??= Timer.periodic(const Duration(minutes: 1), (_) => _tick());
     _started = true;

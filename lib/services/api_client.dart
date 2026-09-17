@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import '../core/config.dart';
+import '../core/jwt.dart';
 import '../models/auth_tokens.dart';
 import 'token_storage.dart';
 
@@ -110,6 +111,23 @@ class ApiClient {
     }
 
     return _unwrap(res);
+  }
+
+  /// HTTP 가 아닌 곳(STOMP CONNECT)에 실을 access token.
+  ///
+  /// HTTP 요청은 401 을 받은 뒤 갱신하면 되지만, STOMP 는 거부되면 같은 헤더로 재연결만 반복한다.
+  /// 그래서 연결 직전에 만료(또는 1분 내 만료)를 미리 확인하고 갱신한다.
+  /// 갱신은 HTTP 와 같은 single-flight 를 공유 → 동시에 불려도 refresh rotation 이 한 번만 일어난다.
+  /// 세션이 끝났으면(refresh 실패) null.
+  ///
+  /// [forceRefresh]: 만료 판단은 기기 시계로 하므로, 기기 시계가 틀리면 "아직 유효"로 오판할 수 있다.
+  /// 서버가 이미 거부한 뒤라면 시계를 믿지 말고 갱신한다.
+  Future<String?> validAccessToken({bool forceRefresh = false}) async {
+    final token = _tokens.accessToken;
+    if (!forceRefresh && token != null && !jwtExpiresSoon(token)) return token;
+    if (_tokens.refreshToken == null) return null;
+    final ok = await _ensureRefreshed();
+    return ok ? _tokens.accessToken : null;
   }
 
   /// single-flight refresh. 이미 진행 중이면 그 결과를 기다린다.

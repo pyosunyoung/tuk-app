@@ -684,3 +684,43 @@ P1 지도 링크 · P2 "카톡으로 이야기하기" (2026-09-16 예정)
 
 ### 7. 다음
 STOMP 토큰 만료 버그 → P2 "카톡으로 이야기하기"
+
+## 버그: 앱을 한동안 안 쓰다 켜면 실시간이 영영 안 붙음 — 2026-09-17
+
+### 1. 증상
+운영에서 앱을 켜면 `[stomp] error: null` 이 3초마다 끝없이 찍히고, 받은 번개·친구 등장이 실시간으로 안 뜸. 로그아웃 전까지 회복되지 않음.
+
+### 2. 원인
+- `PresenceViewModel.start()` 가 **그 순간의 access token 문자열**을 `StompService.connect()` 에 넘기고, 그 값으로 CONNECT 헤더를 한 번 만들었다.
+- access token 은 30분이면 만료. 마지막 사용 후 30분이 지나 앱을 켜면 서버 `StompAuthChannelInterceptor` 가 CONNECT 거부.
+- HTTP 는 401 → 인터셉터가 refresh 해 회복되지만, **STOMP 클라이언트는 같은 헤더로 3초마다 재연결만** 반복.
+- 막 로그인한 직후(새 토큰)에만 테스트해서 그동안 안 드러났다.
+
+### 3. 수정
+| 파일 | 내용 |
+|---|---|
+| `core/jwt.dart` | JWT payload 의 `exp` 읽기 + "60초 안에 만료?" 판단(서명 검증 X — 미리 갱신할지 판단용) |
+| `services/api_client.dart` | `validAccessToken({forceRefresh})` — 만료 임박이면 HTTP 와 **같은 single-flight** 로 refresh |
+| `services/stomp_service.dart` | 토큰 문자열 대신 `AccessTokenProvider` 를 받음. `beforeConnect`(재연결마다 호출)에서 같은 헤더 맵을 새 토큰으로 채움. 서버 ERROR 프레임을 받으면 다음 연결은 강제 갱신 |
+| `presence_view_model.dart` · `main.dart` | `TokenStorage` 대신 `api.validAccessToken` 주입 |
+| `test/jwt_test.dart` | exp 파싱(패딩 없는 base64 포함)·만료 임박·깨진 토큰 6케이스 |
+
+### 4. 핵심 결정 (왜)
+| 결정 | 이유 |
+|---|---|
+| 거부당한 뒤가 아니라 **연결 전에** 확인 | 거부 → 갱신 → 재연결은 매번 3초 손해 + 서버에 실패 기록 |
+| 갱신을 HTTP 와 같은 single-flight 로 | 앱 시작 시 REST 여러 개와 STOMP 가 동시에 갱신을 시도 → refresh rotation 이 한 번만 일어나야 함(두 번 돌면 먼저 받은 토큰이 무효) |
+| 헤더 맵 객체를 재사용 | `stomp_dart_client` 가 재연결마다 `beforeConnect` 호출 후 CONNECT 전송 시점에 맵을 읽음(라이브러리 소스로 확인) |
+| 서버 거부 후엔 강제 갱신 | 만료 판단이 **기기 시계** 기준이라 시계가 틀리면 만료 토큰을 유효로 오판 — 검증 중 노트북 시계가 4분 빨라 실제로 겪음 |
+| 갱신 실패(null)여도 연결을 끊지 않음 | 세션 종료면 로그아웃 흐름이 끊고, 일시적 네트워크 문제면 다음 재연결에서 회복 |
+
+### 5. 검증 (실기기 + 로컬 서버를 access token 2분으로)
+`JWT_ACCESS_TOKEN_VALIDITY=2m` 로 띄워 30분 대기 없이 재현.
+- 로그인 → 앱 강제 종료 → 2분 50초 대기(토큰 만료) → 재실행: **stomp error 0회**, 서버 `WS 연결 userId=364`
+- (수정 초기판·노트북 시계 4분 빠름) 거부 1회 → 회복 — 이 경험으로 '거부 후 강제 갱신' 추가
+- 실시간 동작: bob 이 REST 로 콜 켜기 → alice 홈 "지금 한가한 친구 0 → 1" 2초 내
+- 전체 테스트 15개 통과
+- 한계: '기기 시계가 틀린 상태에서 강제 갱신' 경로는 기기 시계를 바꿔야 해서 실기기로 따로 재현하지 않음
+
+### 6. 다음
+바텀시트 하단 문구가 내비게이션 바에 가리는 문제(시트 6곳) → P2 "카톡으로 이야기하기"

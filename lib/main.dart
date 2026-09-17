@@ -61,7 +61,7 @@ Future<void> main() async {
     presence: PresenceRepository(api),
     friend: friendRepo,
     stomp: stomp,
-    tokens: tokens,
+    accessToken: api.validAccessToken,
   );
   final friendVM = FriendViewModel(friendRepo);
   final flashVM = FlashViewModel(flash: FlashRepository(api), stomp: stomp);
