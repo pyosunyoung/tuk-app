@@ -6,6 +6,7 @@ import '../core/typography.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
+import '../widgets/sheet.dart';
 import 'flash_compose_screen.dart';
 
 /// 친구 카드 탭 → 미리보기 시트 (9e).
@@ -46,7 +47,7 @@ class _FriendPreviewSheet extends StatelessWidget {
               color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, -4)),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 40),
+      padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

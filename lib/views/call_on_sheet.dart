@@ -6,6 +6,7 @@ import '../core/typography.dart';
 import '../models/activity.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
+import '../widgets/sheet.dart';
 
 /// 콜 켜기 바텀시트 (9d). 성공 시 켠 Activity 를 반환, 취소/실패 시 null.
 Future<Activity?> showCallOnSheet(
@@ -90,8 +91,8 @@ class _CallOnSheetState extends State<_CallOnSheet> {
               color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, -4)),
         ],
       ),
-      padding: const EdgeInsets.fromLTRB(
-          AppSpace.x20, 0, AppSpace.x20, 40),
+      padding: EdgeInsets.fromLTRB(
+          AppSpace.x20, 0, AppSpace.x20, sheetBottomPadding(context)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,7 +270,7 @@ class _DurationWheelState extends State<_DurationWheel> {
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 40),
+      padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

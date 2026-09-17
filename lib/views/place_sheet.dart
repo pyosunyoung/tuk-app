@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../widgets/primitives.dart';
+import '../widgets/sheet.dart';
 
 /// 장소 정하기 시트 (11e). 저장한 placeName 을 반환, 취소 시 null.
 /// 지도·검색은 범위 밖 — placeName 자유 입력만.
@@ -64,7 +65,7 @@ class _PlaceSheetState extends State<_PlaceSheet> {
             BoxShadow(color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, -4)),
           ],
         ),
-        padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 40),
+        padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

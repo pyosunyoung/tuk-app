@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/map_links.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../widgets/sheet.dart';
 
 /// 지도 앱 고르기 시트. 고른 앱을 반환, 닫으면 null.
 /// 마지막으로 쓴 앱을 위에 두고 '최근' 표시 — 매번 같은 앱을 쓰는 사람은 한 번에 누른다.
@@ -37,9 +38,7 @@ class _MapAppSheet extends StatelessWidget {
           BoxShadow(color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, -4)),
         ],
       ),
-      // 안드로이드 edge-to-edge: 시스템 내비게이션 바 높이만큼 더 띄워야 마지막 줄이 가리지 않는다
-      padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20,
-          24 + MediaQuery.viewPaddingOf(context).bottom),
+      padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

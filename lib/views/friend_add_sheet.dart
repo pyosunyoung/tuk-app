@@ -9,6 +9,7 @@ import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
+import '../widgets/sheet.dart';
 
 const _mono = 'monospace';
 
@@ -52,7 +53,7 @@ class _FriendAddSheetState extends State<_FriendAddSheet> {
                 color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, -4)),
           ],
         ),
-        padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 40),
+        padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

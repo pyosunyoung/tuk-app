@@ -11,6 +11,7 @@ import '../viewmodels/friend_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
+import '../widgets/sheet.dart';
 import 'friend_add_sheet.dart';
 import 'room_screen.dart';
 
@@ -599,7 +600,7 @@ class _DurationWheelState extends State<_DurationWheel> {
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 40),
+      padding: EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, sheetBottomPadding(context)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
