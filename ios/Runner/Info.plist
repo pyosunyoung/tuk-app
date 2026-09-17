@@ -29,6 +29,9 @@
 		<!-- 카카오톡으로 로그인 / 카카오톡 공유 가능 여부 조회 -->
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
+		<!-- 모임방 '지도에서 보기' -->
+		<string>kakaomap</string>
+		<string>nmap</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>

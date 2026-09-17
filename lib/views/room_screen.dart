@@ -8,12 +8,14 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/meetup_room.dart';
 import '../services/api_client.dart';
+import '../services/map_launcher.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/flash_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'flash_compose_screen.dart';
+import 'map_app_sheet.dart';
 import 'place_sheet.dart';
 
 /// 모임방 (11c) — 합류한 사람이 모여 언제·어디서 만날지 맞춘다.
@@ -88,6 +90,26 @@ class _RoomScreenState extends State<RoomScreen> {
     } on ApiException catch (e) {
       if (mounted) showTukToast(context, e.message);
     }
+  }
+
+  /// 정해진 장소를 외부 지도 앱으로 연다 (P1). 길찾기는 지도 앱에 맡긴다.
+  Future<void> _openMap(MeetupRoom room) async {
+    const launcher = MapLauncher();
+    final lastUsed = await launcher.lastUsed();
+    if (!mounted) return;
+    final app = await showMapAppSheet(
+      context,
+      placeName: room.placeName!,
+      lastUsed: lastUsed,
+    );
+    if (app == null || !mounted) return;
+    final opened = await launcher.open(
+      app,
+      placeName: room.placeName!,
+      lat: room.placeLat,
+      lng: room.placeLng,
+    );
+    if (!opened && mounted) showTukToast(context, '지도를 열지 못했어요');
   }
 
   void _resend() {
@@ -221,23 +243,33 @@ class _RoomScreenState extends State<RoomScreen> {
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: AppColors.border),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(set ? room.placeName! : '어디서 볼까요?',
-                    style: AppText.label15.copyWith(
-                        color: set ? AppColors.text : AppColors.textSub,
-                        fontWeight: FontWeight.w600)),
-                const SizedBox(height: 3),
-                Text(set ? _placeSetByLabel(context, room) : '아직 안 정했어요',
-                    style: AppText.caption13),
-              ],
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(set ? room.placeName! : '어디서 볼까요?',
+                        style: AppText.label15.copyWith(
+                            color: set ? AppColors.text : AppColors.textSub,
+                            fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 3),
+                    Text(set ? _placeSetByLabel(context, room) : '아직 안 정했어요',
+                        style: AppText.caption13),
+                  ],
+                ),
+              ),
+              _PlaceButton(set: set, onTap: _editPlace),
+            ],
           ),
-          _PlaceButton(set: set, onTap: _editPlace),
+          if (set) ...[
+            const SizedBox(height: AppSpace.x12),
+            const Divider(height: 1, thickness: 1, color: AppColors.border),
+            _MapButton(onTap: () => _openMap(room)),
+          ],
         ],
       ),
     );
@@ -306,6 +338,33 @@ class _PlaceButton extends StatelessWidget {
         child: Text(set ? '변경' : '정하기', style: AppText.label14.copyWith(
             fontWeight: FontWeight.w600,
             color: set ? AppColors.textSub : AppColors.primaryPress)),
+      ),
+    );
+  }
+}
+
+/// 장소 카드 하단 '지도에서 보기' 줄. 카드 안쪽 여백까지 눌리도록 세로 패딩을 크게.
+class _MapButton extends StatelessWidget {
+  const _MapButton({required this.onTap});
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.only(top: AppSpace.x12),
+        child: Row(
+          children: [
+            const Icon(Icons.map_outlined, size: 18, color: AppColors.primaryPress),
+            const SizedBox(width: AppSpace.x8),
+            Expanded(
+              child: Text('지도에서 보기', style: AppText.label14.copyWith(
+                  fontWeight: FontWeight.w600, color: AppColors.primaryPress)),
+            ),
+            const Icon(Icons.chevron_right, size: 20, color: AppColors.textSub),
+          ],
+        ),
       ),
     );
   }
