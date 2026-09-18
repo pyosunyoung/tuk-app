@@ -8,7 +8,9 @@ import '../models/activity.dart';
 import '../services/api_client.dart';
 import '../viewmodels/flash_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
+import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
+import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import '../widgets/sheet.dart';
@@ -54,6 +56,10 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
   int _minutes = 60;
   bool _custom = false;
   bool _sending = false;
+
+  /// 친구 목록 순서 — '지금 한가한' 친구를 위로. 화면을 연 순간 한 번만 정한다.
+  /// 실시간으로 다시 정렬하면 누르려던 친구가 움직여 엉뚱한 사람을 누르게 된다(홈과 같은 원칙).
+  List<int>? _order;
 
   static const _presets = [60, 120, 240];
 
@@ -188,6 +194,10 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
   Widget build(BuildContext context) {
     final friends = context.watch<FriendViewModel>().friends;
     final canSend = _canSend(friends);
+    // 지금 콜을 켠(한가한) 친구 — 홈과 같은 실시간 데이터. 표시는 바뀌어도 순서는 고정.
+    final available = {
+      for (final f in context.watch<PresenceViewModel>().friends) f.userId: f,
+    };
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -227,7 +237,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
                       const SizedBox(height: AppSpace.x24),
                       _label('누구에게 던질까요?'),
                       const SizedBox(height: AppSpace.x12),
-                      if (friends.isEmpty) _noFriends() else _targetSection(friends),
+                      if (friends.isEmpty) _noFriends() else _targetSection(friends, available),
                       const SizedBox(height: AppSpace.x24),
                       _label('언제 · 얼마나'),
                       const SizedBox(height: AppSpace.x12),
@@ -322,7 +332,24 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
     );
   }
 
-  Widget _targetSection(List friends) {
+  /// [_order] 기준으로 친구를 늘어놓는다. 처음 한 번만 순서를 정하고(한가한 친구 먼저),
+  /// 그 뒤에 새로 생긴 친구는 맨 뒤에 붙인다.
+  List _ordered(List friends, Map<int, AvailableFriend> available) {
+    _order ??= [
+      ...friends.where((f) => available.containsKey(f.userId)).map<int>((f) => f.userId as int),
+      ...friends.where((f) => !available.containsKey(f.userId)).map<int>((f) => f.userId as int),
+    ];
+    final byId = {for (final f in friends) f.userId as int: f};
+    return [
+      for (final id in _order!)
+        if (byId.containsKey(id)) byId[id],
+      ...friends.where((f) => !_order!.contains(f.userId)),
+    ];
+  }
+
+  Widget _targetSection(List friends, Map<int, AvailableFriend> available) {
+    // '절친 모두'일 때 몇 명이 지금 한가한지 — 보내기 전 안심용(꺼진 친구 수는 말하지 않는다)
+    final availableCount = friends.where((f) => available.containsKey(f.userId)).length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -339,18 +366,31 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
             children: [
               _AvatarStack(friends: friends),
               const SizedBox(width: AppSpace.x10),
-              Text('절친 ${friends.length}명에게 갈 거예요', style: AppText.caption13),
+              Flexible(
+                child: Text.rich(
+                  TextSpan(style: AppText.caption13, children: [
+                    TextSpan(text: '절친 ${friends.length}명에게 갈 거예요'),
+                    if (availableCount > 0)
+                      TextSpan(
+                        text: ' · $availableCount명은 지금 한가해요',
+                        style: AppText.caption13.copyWith(
+                            color: AppColors.success, fontWeight: FontWeight.w600),
+                      ),
+                  ]),
+                ),
+              ),
             ],
           )
         else
           Column(
-            children: friends.map<Widget>((f) {
+            children: _ordered(friends, available).map<Widget>((f) {
               final on = _selected.contains(f.userId);
               return Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.x8),
                 child: _FriendPick(
                   nickname: f.nickname,
                   imageUrl: f.profileImage,
+                  available: available[f.userId],
                   selected: on,
                   onTap: () => setState(() {
                     if (on) {
@@ -529,9 +569,18 @@ class _AvatarStack extends StatelessWidget {
 }
 
 class _FriendPick extends StatelessWidget {
-  const _FriendPick({required this.nickname, this.imageUrl, required this.selected, required this.onTap});
+  const _FriendPick({
+    required this.nickname,
+    this.imageUrl,
+    this.available,
+    required this.selected,
+    required this.onTap,
+  });
   final String nickname;
   final String? imageUrl;
+
+  /// 지금 콜을 켠 친구면 그 콜 정보. 꺼진 친구는 null — 아무 표시도 하지 않는다("바쁨" 같은 표시 X).
+  final AvailableFriend? available;
   final bool selected;
   final VoidCallback onTap;
   @override
@@ -550,8 +599,19 @@ class _FriendPick extends StatelessWidget {
           children: [
             InitialAvatar(nickname: nickname, imageUrl: imageUrl),
             const SizedBox(width: AppSpace.x12),
-            Expanded(child: Text(nickname, overflow: TextOverflow.ellipsis,
-                style: AppText.label15.copyWith(fontWeight: FontWeight.w600))),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(nickname, overflow: TextOverflow.ellipsis,
+                      style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+                  if (available != null) ...[
+                    const SizedBox(height: 3),
+                    _AvailableLine(friend: available!),
+                  ],
+                ],
+              ),
+            ),
             Container(
               width: 24, height: 24, alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -630,6 +690,35 @@ class _DurationWheelState extends State<_DurationWheel> {
               onPressed: () => Navigator.of(context).pop(_values[_index])),
         ],
       ),
+    );
+  }
+}
+
+/// "● 지금 한가함 · 밥 · 40분 남음" — 홈 친구 카드의 "지금 가능"과 같은 색·점.
+class _AvailableLine extends StatelessWidget {
+  const _AvailableLine({required this.friend});
+  final AvailableFriend friend;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            '지금 한가함 · ${friend.activity.label} · ${friendRemainingText(friend.expiresAt)}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppText.caption12.copyWith(
+                color: AppColors.success, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }
