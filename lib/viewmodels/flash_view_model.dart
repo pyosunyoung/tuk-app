@@ -5,21 +5,28 @@ import 'package:flutter/foundation.dart';
 import '../models/activity.dart';
 import '../models/flash.dart';
 import '../models/meetup_room.dart';
+import '../models/place.dart';
 import '../models/realtime_event.dart';
 import '../repositories/flash_repository.dart';
+import '../repositories/place_repository.dart';
 import '../services/api_client.dart';
 import '../services/stomp_service.dart';
 
 /// 번개 상태 — 발송·모임방·장소·합류 + 받은/내가띄운 목록 + 실시간.
 class FlashViewModel extends ChangeNotifier {
-  FlashViewModel({required FlashRepository flash, required StompService stomp})
-      : _repo = flash,
+  FlashViewModel({
+    required FlashRepository flash,
+    required PlaceRepository place,
+    required StompService stomp,
+  })  : _repo = flash,
+        _places = place,
         _stomp = stomp {
     _sub = _stomp.flashEvents.listen(_onEvent);
     _ticker = Timer.periodic(const Duration(minutes: 1), (_) => _tick());
   }
 
   final FlashRepository _repo;
+  final PlaceRepository _places;
   final StompService _stomp;
   StreamSubscription<FlashPushEvent>? _sub;
   Timer? _ticker;
@@ -142,8 +149,10 @@ class FlashViewModel extends ChangeNotifier {
         myStatus: 'JOINED',
       );
 
-  Future<MeetupRoom> setPlace(int flashId, String placeName) =>
-      _repo.setPlace(flashId, placeName: placeName);
+  Future<MeetupRoom> setPlace(int flashId, Place place) => _repo.setPlace(flashId, place);
+
+  /// 모임방 장소 검색(카카오 로컬 API 를 서버가 대신 호출).
+  Future<List<Place>> searchPlaces(String query) => _places.search(query);
 
   bool isEnded(Object e) =>
       e is ApiException && (e.statusCode == 400 || e.statusCode == 404);

@@ -59,6 +59,27 @@ void main() {
     });
   });
 
+  group('검색으로 고른 장소(카카오 장소 ID)', () {
+    test('카카오맵: 가게 페이지를 바로 연다', () {
+      final link = buildMapLink(MapApp.kakao,
+          placeName: '스타벅스 강남R점', lat: 37.4979, lng: 127.028, kakaoPlaceId: '26338954');
+      expect(link.app.toString(), 'kakaomap://place?id=26338954');
+      expect(link.web.toString(), 'https://place.map.kakao.com/26338954');
+    });
+
+    test('네이버 지도는 카카오 ID 를 모르니 좌표 + 이름으로 연다', () {
+      final link = buildMapLink(MapApp.naver,
+          placeName: '스타벅스 강남R점', lat: 37.4979, lng: 127.028, kakaoPlaceId: '26338954');
+      expect(link.app.host, 'place');
+      expect(link.app.queryParameters['name'], '스타벅스 강남R점');
+    });
+
+    test('빈 ID 는 없는 것으로 본다', () {
+      final link = buildMapLink(MapApp.kakao, placeName: '툭카페', kakaoPlaceId: '');
+      expect(link.app.host, 'search');
+    });
+  });
+
   test('저장 키 왕복', () {
     for (final app in MapApp.values) {
       expect(MapApp.fromStorageKey(app.storageKey), app);

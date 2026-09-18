@@ -1,6 +1,7 @@
 import '../core/config.dart';
 import '../models/flash.dart';
 import '../models/meetup_room.dart';
+import '../models/place.dart';
 import '../services/api_client.dart';
 
 class FlashRepository {
@@ -54,17 +55,15 @@ class FlashRepository {
     return MeetupRoom.fromJson((data as Map).cast<String, dynamic>());
   }
 
-  /// 장소 설정.
-  Future<MeetupRoom> setPlace(
-    int flashId, {
-    required String placeName,
-    double? placeLat,
-    double? placeLng,
-  }) async {
+  /// 장소 설정. 직접 입력이면 이름만, 검색 장소면 좌표·카카오 ID·주소까지.
+  /// 항상 전부 보낸다 — 서버는 통째로 교체하므로 직접 입력으로 바꾸면 이전 가게 정보가 지워진다.
+  Future<MeetupRoom> setPlace(int flashId, Place place) async {
     final data = await _api.patch('$_base/$flashId/room/place', body: {
-      'placeName': placeName,
-      'placeLat': placeLat,
-      'placeLng': placeLng,
+      'placeName': place.name,
+      'placeLat': place.lat,
+      'placeLng': place.lng,
+      'kakaoPlaceId': place.kakaoPlaceId,
+      'placeAddress': place.address,
     });
     return MeetupRoom.fromJson((data as Map).cast<String, dynamic>());
   }

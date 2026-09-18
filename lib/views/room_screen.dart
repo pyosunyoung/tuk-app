@@ -79,11 +79,15 @@ class _RoomScreenState extends State<RoomScreen> {
   }
 
   Future<void> _editPlace() async {
-    final name = await showPlaceSheet(context, current: _room?.placeName);
-    if (name == null || name.isEmpty || !mounted) return;
+    final place = await showPlaceSheet(
+      context,
+      current: _room?.placeName,
+      search: _vm.searchPlaces,
+    );
+    if (place == null || place.name.isEmpty || !mounted) return;
     final had = _room?.hasPlace ?? false;
     try {
-      final updated = await _vm.setPlace(widget.flashId, name);
+      final updated = await _vm.setPlace(widget.flashId, place);
       if (!mounted) return;
       setState(() => _room = updated);
       showTukToast(context, had ? '장소를 바꿨어요' : '장소를 정했어요');
@@ -108,6 +112,7 @@ class _RoomScreenState extends State<RoomScreen> {
       placeName: room.placeName!,
       lat: room.placeLat,
       lng: room.placeLng,
+      kakaoPlaceId: room.placeKakaoId,
     );
     if (!opened && mounted) showTukToast(context, '지도를 열지 못했어요');
   }
@@ -256,6 +261,14 @@ class _RoomScreenState extends State<RoomScreen> {
                         style: AppText.label15.copyWith(
                             color: set ? AppColors.text : AppColors.textSub,
                             fontWeight: FontWeight.w600)),
+                    // 검색으로 고른 장소면 주소 — 같은 이름의 다른 지점과 헷갈리지 않게
+                    if (set && room.placeAddress != null) ...[
+                      const SizedBox(height: 2),
+                      Text(room.placeAddress!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppText.caption13),
+                    ],
                     const SizedBox(height: 3),
                     Text(set ? _placeSetByLabel(context, room) : '아직 안 정했어요',
                         style: AppText.caption13),

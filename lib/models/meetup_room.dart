@@ -9,6 +9,8 @@ class MeetupRoom {
     this.placeName,
     this.placeLat,
     this.placeLng,
+    this.placeKakaoId,
+    this.placeAddress,
     this.placeSetById,
     this.placeSetByNickname,
     required this.status,
@@ -21,6 +23,10 @@ class MeetupRoom {
   final String? placeName;
   final double? placeLat;
   final double? placeLng;
+
+  /// 검색으로 고른 장소일 때만 값이 있다(직접 입력이면 null).
+  final String? placeKakaoId;
+  final String? placeAddress;
 
   /// 장소를 정한 멤버. 아무도 안 정했으면 null.
   /// 장소는 멤버 누구나 다시 정할 수 있고, 마지막으로 바꾼 사람으로 덮인다.
@@ -40,6 +46,8 @@ class MeetupRoom {
         placeName: json['placeName'] as String?,
         placeLat: (json['placeLat'] as num?)?.toDouble(),
         placeLng: (json['placeLng'] as num?)?.toDouble(),
+        placeKakaoId: json['placeKakaoId'] as String?,
+        placeAddress: json['placeAddress'] as String?,
         placeSetById: json['placeSetById'] as int?,
         placeSetByNickname: json['placeSetByNickname'] as String?,
         status: json['status'] as String? ?? 'OPEN',

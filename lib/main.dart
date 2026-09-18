@@ -8,6 +8,7 @@ import 'core/config.dart';
 import 'core/theme.dart';
 import 'repositories/auth_repository.dart';
 import 'repositories/flash_repository.dart';
+import 'repositories/place_repository.dart';
 import 'repositories/friend_repository.dart';
 import 'repositories/presence_repository.dart';
 import 'repositories/user_repository.dart';
@@ -64,7 +65,11 @@ Future<void> main() async {
     accessToken: api.validAccessToken,
   );
   final friendVM = FriendViewModel(friendRepo);
-  final flashVM = FlashViewModel(flash: FlashRepository(api), stomp: stomp);
+  final flashVM = FlashViewModel(
+    flash: FlashRepository(api),
+    place: PlaceRepository(api),
+    stomp: stomp,
+  );
   final pushVM = PushService(DeviceTokenRepository(api));
 
   // 인증 상태 → 실시간(프레즌스)·친구 lifecycle. 상태가 실제로 바뀔 때만.

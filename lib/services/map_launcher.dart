@@ -26,8 +26,10 @@ class MapLauncher {
     required String placeName,
     double? lat,
     double? lng,
+    String? kakaoPlaceId,
   }) async {
-    final link = buildMapLink(app, placeName: placeName, lat: lat, lng: lng);
+    final link = buildMapLink(app,
+        placeName: placeName, lat: lat, lng: lng, kakaoPlaceId: kakaoPlaceId);
 
     final opened = await _tryLaunch(link.app) || await _tryLaunch(link.web);
     if (opened) {
