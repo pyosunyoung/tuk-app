@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../services/kakao_share_service.dart';
+import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
@@ -17,20 +18,27 @@ enum _Page { chooser, myCode, codeInput }
 
 /// 친구 추가 시트 (10c). 선택 → 내 코드 / 코드 입력을 같은 시트 안에서 전환.
 /// [startAtMyCode] = true 면 콜드스타트의 "내 코드 알려주기"처럼 바로 내 코드로.
-Future<void> showFriendAddSheet(BuildContext context, {bool startAtMyCode = false}) {
+/// [initialCode] 가 있으면 초대 카드로 들어온 것 — 코드가 채워진 입력 화면으로 바로.
+Future<void> showFriendAddSheet(BuildContext context,
+    {bool startAtMyCode = false, String? initialCode}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: const Color(0x472B2926),
-    builder: (_) =>
-        _FriendAddSheet(initial: startAtMyCode ? _Page.myCode : _Page.chooser),
+    builder: (_) => _FriendAddSheet(
+      initial: initialCode != null
+          ? _Page.codeInput
+          : (startAtMyCode ? _Page.myCode : _Page.chooser),
+      initialCode: initialCode,
+    ),
   );
 }
 
 class _FriendAddSheet extends StatefulWidget {
-  const _FriendAddSheet({required this.initial});
+  const _FriendAddSheet({required this.initial, this.initialCode});
   final _Page initial;
+  final String? initialCode;
 
   @override
   State<_FriendAddSheet> createState() => _FriendAddSheetState();
@@ -78,7 +86,7 @@ class _FriendAddSheetState extends State<_FriendAddSheet> {
                   child: switch (_page) {
                     _Page.chooser => _Chooser(onPick: (p) => setState(() => _page = p)),
                     _Page.myCode => const _MyCode(),
-                    _Page.codeInput => const _CodeInput(),
+                    _Page.codeInput => _CodeInput(initialCode: widget.initialCode),
                   },
                 ),
               ),
@@ -274,22 +282,27 @@ class _MyCodeState extends State<_MyCode> {
     showTukToast(context, '코드를 복사했어요');
   }
 
+  /// 카카오톡 초대 카드 — 받은 친구가 누르면 툭이 열리고 코드가 채워진다(카톡이 없으면 글자 공유)
   void _share(String code) {
-    SharePlus.instance.share(ShareParams(text: '툭에서 친구하자! 내 코드: $code'));
+    const KakaoShareService().shareInvite(
+      code: code,
+      inviterName: context.read<AuthViewModel>().me?.nickname,
+    );
   }
 }
 
 // ─────────────────────────────────────────── 코드 입력
 
 class _CodeInput extends StatefulWidget {
-  const _CodeInput();
+  const _CodeInput({this.initialCode});
+  final String? initialCode;
 
   @override
   State<_CodeInput> createState() => _CodeInputState();
 }
 
 class _CodeInputState extends State<_CodeInput> {
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController(text: widget.initialCode ?? '');
   final _focus = FocusNode();
   bool _busy = false;
 
@@ -297,7 +310,10 @@ class _CodeInputState extends State<_CodeInput> {
   void initState() {
     super.initState();
     _controller.addListener(() => setState(() {}));
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+    // 초대 카드로 들어와 코드가 이미 있으면 키보드를 띄우지 않는다 — 확인만 누르면 된다
+    if (widget.initialCode == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+    }
   }
 
   @override

@@ -40,15 +40,40 @@ class AppConfig {
   static const String apiPrefix = '/api';
 }
 
+/// 카카오톡 공유 카드에 들어가는 웹 주소(카드 이미지, 앱이 없을 때 여는 안내 페이지).
+///
+/// 카드는 실제 친구에게 가므로 로컬 개발 중에도 **운영 주소**를 쓴다.
+/// 이 도메인은 카카오 개발자 콘솔(툭 앱)의 사이트 도메인에 등록돼 있어야 카드 링크가 동작한다.
+class ShareConfig {
+  const ShareConfig._();
+
+  static const String webBase = String.fromEnvironment(
+    'SHARE_WEB_BASE',
+    defaultValue: 'https://tuk.158-247-230-36.sslip.io',
+  );
+
+  /// 카드 대표 이미지 (서버 Caddy 가 public/share/ 에서 제공). 카카오 권장 비율 2:1.
+  static Uri get cardImage => Uri.parse('$webBase/share/tuk-card.png');
+  static const int cardImageWidth = 800;
+  static const int cardImageHeight = 400;
+
+  /// 앱이 없는 사람이 모임방 카드를 눌렀을 때
+  static Uri get appPage => Uri.parse('$webBase/app');
+
+  /// 앱이 없는 사람이 초대 카드를 눌렀을 때 — 코드를 보여주고 설치를 안내
+  static Uri invitePage(String code) =>
+      Uri.parse('$webBase/invite').replace(queryParameters: {'code': code});
+}
+
 /// 카카오 로그인 설정.
 ///
 /// 네이티브 앱 키는 **비밀키가 아니다** — 어차피 배포된 앱 바이너리에 들어간다.
 /// 실제 보호는 카카오 콘솔에 등록한 **키 해시(Android) / 번들 ID(iOS)** 가 한다.
 /// (다른 앱이 키를 베껴도 키 해시가 달라 로그인 안 됨)
 ///
-/// 키를 바꾸면 아래 세 곳을 같이 바꿔야 한다:
+/// 키를 바꾸면 아래 곳들을 같이 바꿔야 한다:
 ///  1. 이 파일 — Dart SDK 초기화
-///  2. `android/app/src/main/AndroidManifest.xml` — `kakao{키}://oauth` 리다이렉트
+///  2. `android/app/src/main/AndroidManifest.xml` — `kakao{키}://oauth`(로그인)·`kakao{키}://kakaolink`(공유 카드) 두 군데
 ///  3. `ios/Runner/Info.plist` — `CFBundleURLSchemes`
 class KakaoConfig {
   const KakaoConfig._();

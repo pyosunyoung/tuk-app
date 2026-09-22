@@ -11,6 +11,7 @@ import '../viewmodels/flash_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
+import '../widgets/deep_link_handler.dart';
 import '../widgets/logo.dart';
 import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
@@ -37,9 +38,11 @@ class HomeScreen extends StatelessWidget {
         body: Center(child: CircularProgressIndicator(color: AppColors.primary)),
       );
     }
+    // 공유 카드 링크(모임방·초대)는 로그인 후 홈이 자리 잡은 뒤 이 위로 연다.
     // 친구가 한 명도 없으면 콜드스타트(초대 유도).
-    if (!vm.hasFriends) return const HomeColdstartScreen();
-    return const _PresenceHome();
+    return DeepLinkHandler(
+      child: vm.hasFriends ? const _PresenceHome() : const HomeColdstartScreen(),
+    );
   }
 }
 

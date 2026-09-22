@@ -8,6 +8,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/meetup_room.dart';
 import '../services/api_client.dart';
+import '../services/kakao_share_service.dart';
 import '../services/map_launcher.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/flash_view_model.dart';
@@ -19,7 +20,9 @@ import 'map_app_sheet.dart';
 import 'place_sheet.dart';
 
 /// 모임방 (11c) — 합류한 사람이 모여 언제·어디서 만날지 맞춘다.
-/// expiresAt 은 방 응답에 없어 선행(발송/받은번개) 응답에서 받아 전달한다.
+/// 만료 시각은 방 응답에 들어 있다. 생성자의 [expiresAt] 은 방을 불러오기 전에도 남은 시간을
+/// 보여주기 위한 선행(발송/받은번개) 값일 뿐이라, 방이 오면 방 쪽 값이 이긴다.
+/// 공유 링크로 바로 들어오면 선행 값이 없으므로 이 구분이 중요하다.
 class RoomScreen extends StatefulWidget {
   const RoomScreen({
     super.key,
@@ -65,9 +68,12 @@ class _RoomScreenState extends State<RoomScreen> {
     super.dispose();
   }
 
+  /// 방 응답의 만료 시각이 진짜. 아직 안 불러왔으면 넘겨받은 값으로 버틴다.
+  DateTime? get _expiresAt => _room?.expiresAt ?? widget.expiresAt;
+
   bool get _ended =>
       (_room?.status == 'CLOSED') ||
-      (widget.expiresAt != null && flashEnded(widget.expiresAt!));
+      (_expiresAt != null && flashEnded(_expiresAt!));
 
   Future<void> _load() async {
     try {
@@ -116,6 +122,16 @@ class _RoomScreenState extends State<RoomScreen> {
     );
     if (!opened && mounted) showTukToast(context, '지도를 열지 못했어요');
   }
+
+  /// 모임 정보를 카카오톡 공유 카드로 — 받은 사람이 누르면 툭의 이 모임방이 열린다.
+  Future<void> _shareToKakao(MeetupRoom room) => const KakaoShareService().shareRoom(
+        flashId: widget.flashId,
+        activity: room.activity,
+        placeName: room.placeName,
+        placeAddress: room.placeAddress,
+        kakaoPlaceId: room.placeKakaoId,
+        expiresAt: _expiresAt,
+      );
 
   void _resend() {
     Navigator.of(context).push(flashComposeRoute(prefillActivity: _room?.activity));
@@ -172,6 +188,15 @@ class _RoomScreenState extends State<RoomScreen> {
           _infoCard(room, ended),
           const SizedBox(height: AppSpace.x8),
           _placeCard(room, ended),
+          if (!ended) ...[
+            const SizedBox(height: AppSpace.x12),
+            // 채팅은 만들지 않는다 — 대화는 카톡으로. 모임 정보를 카드로 넘긴다.
+            PillButton.kakao(
+              '카톡으로 이야기하기',
+              leading: const Icon(Icons.chat_bubble, size: 18, color: Color(0xFF191600)),
+              onPressed: () => _shareToKakao(room),
+            ),
+          ],
           const SizedBox(height: AppSpace.x32),
           _sectionHeader(ended ? '모였던 사람' : '모인 사람', members.length, ended),
           const SizedBox(height: AppSpace.x12),
@@ -214,7 +239,7 @@ class _RoomScreenState extends State<RoomScreen> {
             child: Text(
               ended
                   ? '끝났어요 · 곧 사라져요'
-                  : (widget.expiresAt != null ? flashExpiryText(widget.expiresAt!) : ''),
+                  : (_expiresAt != null ? flashExpiryText(_expiresAt!) : ''),
               style: AppText.label14.copyWith(color: AppColors.textSub),
             ),
           ),

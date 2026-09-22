@@ -27,6 +27,15 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- 카카오톡 공유 카드 → 앱 열기 (kakao{네이티브앱키}://kakaolink?room=… / ?invite=…) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="kakaolink"
+                    android:scheme="kakaoe0a9fa462f80243f11b982ca83b15bf8" />
+            </intent-filter>
         </activity>
         <!-- 카카오 로그인 리다이렉트 수신 (kakao{네이티브앱키}://oauth).
              액티비티 본체는 kakao_flutter_sdk_auth 플러그인이 선언하고,

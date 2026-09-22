@@ -13,6 +13,7 @@ import 'repositories/friend_repository.dart';
 import 'repositories/presence_repository.dart';
 import 'repositories/user_repository.dart';
 import 'services/api_client.dart';
+import 'services/deep_link_service.dart';
 import 'services/push_service.dart';
 import 'services/stomp_service.dart';
 import 'services/token_storage.dart';
@@ -41,6 +42,10 @@ Future<void> main() async {
   } else {
     debugPrint('[tuk] 카카오 네이티브 앱 키 미설정 — 카카오 로그인 비활성 (KakaoConfig 참고)');
   }
+
+  // 카카오톡 공유 카드로 켜졌으면 그 링크를 먼저 받아 둔다(처리는 로그인 후 홈에서)
+  final deepLinks = DeepLinkService();
+  await deepLinks.start();
 
   // --- 의존성 조립 ----------------------------------------------------
   final tokens = TokenStorage();
@@ -97,6 +102,7 @@ Future<void> main() async {
     friendVM: friendVM,
     flashVM: flashVM,
     push: pushVM,
+    deepLinks: deepLinks,
   ));
 }
 
@@ -108,6 +114,7 @@ class TukApp extends StatefulWidget {
     required this.friendVM,
     required this.flashVM,
     required this.push,
+    required this.deepLinks,
   });
 
   final AuthViewModel authVM;
@@ -115,6 +122,7 @@ class TukApp extends StatefulWidget {
   final FriendViewModel friendVM;
   final FlashViewModel flashVM;
   final PushService push;
+  final DeepLinkService deepLinks;
 
   @override
   State<TukApp> createState() => _TukAppState();
@@ -160,6 +168,7 @@ class _TukAppState extends State<TukApp> {
         ChangeNotifierProvider.value(value: widget.presenceVM),
         ChangeNotifierProvider.value(value: widget.friendVM),
         ChangeNotifierProvider.value(value: widget.flashVM),
+        Provider.value(value: widget.deepLinks),
       ],
       child: MaterialApp(
         title: '툭',

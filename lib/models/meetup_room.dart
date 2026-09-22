@@ -14,6 +14,7 @@ class MeetupRoom {
     this.placeSetById,
     this.placeSetByNickname,
     required this.status,
+    this.expiresAt,
     required this.members,
   });
 
@@ -35,6 +36,10 @@ class MeetupRoom {
 
   /// OPEN | CLOSED
   final String status;
+
+  /// 번개 만료 시각. 공유 링크로 방에 바로 들어오는 경로가 있어 방 응답에 함께 온다.
+  final DateTime? expiresAt;
+
   final List<RoomMember> members;
 
   bool get hasPlace => placeName != null;
@@ -51,6 +56,9 @@ class MeetupRoom {
         placeSetById: json['placeSetById'] as int?,
         placeSetByNickname: json['placeSetByNickname'] as String?,
         status: json['status'] as String? ?? 'OPEN',
+        expiresAt: json['expiresAt'] == null
+            ? null
+            : DateTime.tryParse(json['expiresAt'] as String),
         members: (json['members'] as List<dynamic>? ?? [])
             .map((e) => RoomMember.fromJson(e as Map<String, dynamic>))
             .toList(),
