@@ -55,6 +55,13 @@ class PushService {
 
       if (!_handlersAttached) {
         _handlersAttached = true;
+        // 앱이 떠 있을 때 iOS 가 알림을 직접 띄우면 _showForeground 와 겹쳐 두 번 뜬다.
+        // 표시는 아래 onMessage 한 곳에서만 — 안드로이드와 같은 경로로 맞춘다.
+        await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+          alert: false,
+          badge: false,
+          sound: false,
+        );
         // 토큰은 앱 재설치·데이터 삭제 등으로 갱신된다 → 그때마다 다시 등록
         FirebaseMessaging.instance.onTokenRefresh.listen(_register);
         FirebaseMessaging.onMessage.listen(_showForeground);
@@ -113,6 +120,10 @@ class PushService {
           importance: Importance.high,
           priority: Priority.high,
         ),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentSound: true,
+        ),
       ),
       payload: message.data['flashId'],
     );
@@ -122,6 +133,13 @@ class PushService {
     await _local.initialize(
       settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        // iOS 설정이 없으면 앱이 떠 있을 때 알림이 아예 안 뜬다.
+        // 권한은 바로 뒤에서 FirebaseMessaging 이 물어보므로 여기서는 묻지 않는다(팝업 두 번 방지).
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestSoundPermission: false,
+          requestBadgePermission: false,
+        ),
       ),
     );
     await _local
