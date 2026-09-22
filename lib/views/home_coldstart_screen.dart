@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
-import '../viewmodels/auth_view_model.dart';
+import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
-import '../widgets/avatar.dart';
+import '../widgets/friends_entry.dart';
 import '../widgets/logo.dart';
 import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
@@ -75,16 +75,10 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
         children: [
           const TukLogo(size: 40),
           const Spacer(),
-          // 프로필 아바타 — 친구 화면 진입 (/users/me 붙기 전 임시 이니셜).
-          GestureDetector(
+          FriendsEntryChip(
             onTap: _openFriends,
-            behavior: HitTestBehavior.opaque,
-            // 내 정보가 아직 안 왔으면 이니셜 '나'로 버틴다(홈과 동일)
-            child: InitialAvatar(
-              nickname: context.watch<AuthViewModel>().me?.nickname ?? '나',
-              imageUrl: context.watch<AuthViewModel>().me?.profileImage,
-              size: 36,
-            ),
+            requestCount:
+                context.select<FriendViewModel, int>((f) => f.requestCount),
           ),
         ],
       ),

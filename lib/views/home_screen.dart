@@ -6,11 +6,11 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/activity.dart';
 import '../models/flash.dart';
-import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/flash_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
+import '../widgets/friends_entry.dart';
 import '../widgets/deep_link_handler.dart';
 import '../widgets/logo.dart';
 import '../widgets/presence.dart';
@@ -193,13 +193,10 @@ class _PresenceHomeState extends State<_PresenceHome> {
         children: [
           const TukLogo(size: 40),
           const Spacer(),
-          GestureDetector(
+          FriendsEntryChip(
             onTap: _openFriends,
-            behavior: HitTestBehavior.opaque,
-            child: _ProfileAvatarButton(
-              requestCount: context.select<FriendViewModel, int>(
-                  (f) => f.requestCount),
-            ),
+            requestCount:
+                context.select<FriendViewModel, int>((f) => f.requestCount),
           ),
         ],
       ),
@@ -456,52 +453,6 @@ class _ReceivedBanner extends StatelessWidget {
   }
 }
 
-/// 프로필 아바타(나) + 받은 신청 배지. 탭하면 친구 화면으로.
-class _ProfileAvatarButton extends StatelessWidget {
-  const _ProfileAvatarButton({required this.requestCount});
-  final int requestCount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // 내 정보가 아직 안 왔으면 이니셜 '나'로 버틴다(빈 원보다 낫다)
-        InitialAvatar(
-          nickname: context.watch<AuthViewModel>().me?.nickname ?? '나',
-          imageUrl: context.watch<AuthViewModel>().me?.profileImage,
-          size: 36,
-        ),
-        if (requestCount > 0)
-          Positioned(
-            top: -4,
-            right: -4,
-            child: Container(
-              constraints: const BoxConstraints(minWidth: 18),
-              height: 18,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(AppRadius.pill),
-                border: Border.all(color: AppColors.background, width: 2),
-              ),
-              child: Text(
-                requestCount > 9 ? '9+' : '$requestCount',
-                style: const TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 1,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
 
 /// 새 친구가 목록에 나타날 때 페이드+확장(240ms). userId 키라 기존 항목은
 /// 상태를 유지해 재애니메이션되지 않고, 텍스트만 매 tick 갱신된다.
