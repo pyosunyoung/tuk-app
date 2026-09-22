@@ -79,7 +79,7 @@ class _FriendPreviewSheet extends StatelessWidget {
           else ...[
             _DisabledButton('${friend.nickname}에게 툭 던지기'),
             const SizedBox(height: AppSpace.x8),
-            Text('지금은 콜이 꺼졌어요. 그래도 던져두면 볼 수 있어요.',
+            Text('지금은 한가하지 않대요. 그래도 던져두면 나중에 봐요.',
                 textAlign: TextAlign.center, style: AppText.caption12),
           ],
           const SizedBox(height: AppSpace.x12),
@@ -140,7 +140,7 @@ class _ProfileRow extends StatelessWidget {
               ),
               const SizedBox(height: AppSpace.x4),
               if (liveExpiresAt == null)
-                Text('지금은 콜이 꺼졌어요', style: AppText.caption12)
+                Text('지금은 한가하지 않아요', style: AppText.caption12)
               else
                 Row(
                   children: [
@@ -151,7 +151,7 @@ class _ProfileRow extends StatelessWidget {
                           color: AppColors.success, shape: BoxShape.circle),
                     ),
                     const SizedBox(width: 5),
-                    Text('지금 가능',
+                    Text('지금 한가함',
                         style: AppText.caption12.copyWith(
                             color: AppColors.success,
                             fontWeight: FontWeight.w500)),

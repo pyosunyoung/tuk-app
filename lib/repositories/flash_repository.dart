@@ -36,7 +36,7 @@ class FlashRepository {
         .toList();
   }
 
-  /// 내가 띄운 활성 번개(홈 배너용).
+  /// 내가 던진 활성 툭(홈 배너용).
   Future<List<SentFlash>> sent() async {
     final data = await _api.get('$_base/sent');
     return (data as List)

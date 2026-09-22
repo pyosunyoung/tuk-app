@@ -45,7 +45,7 @@ class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen> {
       ));
     } on ApiException catch (e) {
       if (mounted) {
-        showTukToast(context, vm.isEnded(e) ? '이 번개는 끝났어요' : e.message);
+        showTukToast(context, vm.isEnded(e) ? '이 툭은 끝났어요' : e.message);
         vm.reloadReceived();
       }
     }
@@ -74,7 +74,7 @@ class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen> {
                   ),
                   const SizedBox(width: AppSpace.x12),
                   Text.rich(TextSpan(style: AppText.title20, children: [
-                    const TextSpan(text: '받은 번개 '),
+                    const TextSpan(text: '받은 툭 '),
                     TextSpan(text: '${list.length}',
                         style: const TextStyle(color: AppColors.primary)),
                   ])),
@@ -159,7 +159,7 @@ class _FlashCard extends StatelessWidget {
                             Container(width: 6, height: 6, decoration: const BoxDecoration(
                                 color: AppColors.success, shape: BoxShape.circle)),
                             const SizedBox(width: 4),
-                            Text('합류함', style: AppText.caption12.copyWith(
+                            Text('합류했어요', style: AppText.caption12.copyWith(
                                 color: AppColors.success, fontWeight: FontWeight.w500)),
                           ],
                         ],
@@ -251,7 +251,7 @@ class _EmptyReceived extends StatelessWidget {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         _placeholders(),
         const SizedBox(height: AppSpace.x12),
-        Text('받은 번개가 없어요',
+        Text('받은 툭이 없어요',
             style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: AppSpace.x4),
         ConstrainedBox(

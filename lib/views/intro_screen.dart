@@ -371,7 +371,7 @@ class _Cut2 extends StatelessWidget {
         const SizedBox(height: AppSpace.x32),
         const _Headline(
           '누가 한가한지\n먼저 보여요',
-          '개인톡으로 하나하나 물어볼 필요 없어요. 지금 콜을 켜둔 친구만 목록에 떠요.',
+          '개인톡으로 하나하나 물어볼 필요 없어요. 지금 한가하다고 알린 친구만 목록에 떠요.',
         ),
       ],
     );
@@ -432,7 +432,7 @@ class _FriendCard extends StatelessWidget {
                         color: AppColors.success, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: AppSpace.x4),
-                  Text('지금 가능',
+                  Text('지금 한가함',
                       style: AppText.caption12.copyWith(
                           color: AppColors.success,
                           fontWeight: FontWeight.w500)),
@@ -612,14 +612,14 @@ class _Cut4 extends StatelessWidget {
                               color: AppColors.success, shape: BoxShape.circle),
                         ),
                         const SizedBox(width: AppSpace.x8),
-                        Text('지금 콜 켜짐 · 카페',
+                        Text('지금 한가해요',
                             style: AppText.title16
                                 .copyWith(fontWeight: FontWeight.w600)),
                       ],
                     ),
                     const Padding(
                       padding: EdgeInsets.only(left: AppSpace.x16, top: AppSpace.x4),
-                      child: Text('1시간 32분 뒤 자동으로 꺼져요',
+                      child: Text('카페 · 1시간 32분 뒤 자동으로 꺼져요',
                           style: AppText.caption13),
                     ),
                   ],
@@ -660,7 +660,7 @@ class _Cut4 extends StatelessWidget {
                     color: AppColors.border, shape: BoxShape.circle),
               ),
               const SizedBox(width: AppSpace.x8),
-              Text('지금 콜 꺼짐',
+              Text('지금 한가해요',
                   style: AppText.title16.copyWith(
                       color: AppColors.textSub, fontWeight: FontWeight.w500)),
               const Spacer(),
@@ -671,7 +671,7 @@ class _Cut4 extends StatelessWidget {
         const SizedBox(height: AppSpace.x32),
         const _Headline(
           '그리고 알아서 꺼져요',
-          '지금 콜도 번개도 시간이 지나면 사라져요. 끄는 걸 잊어도 부담이 남지 않아요.',
+          '한가하다는 표시도, 던진 툭도 시간이 지나면 사라져요. 끄는 걸 잊어도 부담이 남지 않아요.',
         ),
       ],
     );

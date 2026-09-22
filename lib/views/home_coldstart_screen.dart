@@ -37,7 +37,7 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
     }
     final turnedOn = await showCallOnSheet(context);
     if (turnedOn != null && mounted) {
-      showTukToast(context, '지금 콜을 켰어요 · ${turnedOn.label}');
+      showTukToast(context, '한가하다고 알렸어요 · ${turnedOn.label}');
     }
   }
 
@@ -123,9 +123,8 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
                     const SizedBox(width: AppSpace.x8),
                     Flexible(
                       child: Text(
-                        callOn
-                            ? '지금 콜 켜짐 · ${vm.myActivity?.label ?? '아무거나'}'
-                            : '지금 콜 꺼짐',
+                        // 홈과 같은 규칙 — 라벨은 고정, 상태는 스위치와 아래 설명이 말한다.
+                        '지금 한가해요',
                         overflow: TextOverflow.ellipsis,
                         style: AppText.title20.copyWith(
                           color: callOn ? AppColors.text : AppColors.textSub,
@@ -141,7 +140,10 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
                       left: AppSpace.x16, top: AppSpace.x4),
                   child: Text(
                     callOn
-                        ? (expiresAt != null ? callExpiryText(expiresAt) : '')
+                        ? [
+                            vm.myActivity?.label ?? '아무거나',
+                            if (expiresAt != null) callExpiryText(expiresAt),
+                          ].join(' · ')
                         : '켜두면 한가할 때 친구에게만 보여요',
                     style: AppText.label14,
                   ),

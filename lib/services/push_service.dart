@@ -32,7 +32,7 @@ class PushService {
   /// 포그라운드 표시용 채널. Android 8+ 는 채널이 없으면 알림이 안 뜬다.
   static const _channel = AndroidNotificationChannel(
     'tuk_flash',
-    '번개 알림',
+    '툭 알림',
     description: '친구가 툭 띄웠을 때 알려줘요',
     importance: Importance.high,
   );

@@ -8,7 +8,7 @@ import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
 
-/// 콜 켜기 바텀시트 (9d). 성공 시 켠 Activity 를 반환, 취소/실패 시 null.
+/// '지금 한가해요' 켜기 바텀시트 (9d). 성공 시 켠 Activity 를 반환, 취소/실패 시 null.
 Future<Activity?> showCallOnSheet(
   BuildContext context, {
   Activity? initialActivity,
@@ -122,7 +122,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
                 .toList(),
           ),
           const SizedBox(height: AppSpace.x24),
-          Text('얼마나 열어둘까요?',
+          Text('얼마나 켜둘까요?',
               style: AppText.label14.copyWith(color: AppColors.textSub)),
           const SizedBox(height: AppSpace.x12),
           Row(
@@ -151,7 +151,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
           ),
           const SizedBox(height: AppSpace.x24),
           PillButton.primary(
-            '$_durationLabel 동안 콜 켜기',
+            '$_durationLabel 동안 한가해요',
             loading: _busy,
             onPressed: _submit,
           ),
@@ -282,7 +282,7 @@ class _DurationWheelState extends State<_DurationWheel> {
                 borderRadius: BorderRadius.circular(AppRadius.pill)),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('얼마나 열어둘까요?', style: AppText.title20),
+          Text('얼마나 켜둘까요?', style: AppText.title20),
           const SizedBox(height: AppSpace.x12),
           SizedBox(
             height: 160,

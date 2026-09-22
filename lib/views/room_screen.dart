@@ -216,7 +216,7 @@ class _RoomScreenState extends State<RoomScreen> {
             const SizedBox(height: AppSpace.x24),
             Center(child: Text('다음에 또 툭 던져보세요', style: AppText.caption12)),
             const SizedBox(height: AppSpace.x12),
-            PillButton.secondary('같은 내용으로 다시 띄우기', onPressed: _resend),
+            PillButton.secondary('같은 내용으로 다시 던지기', onPressed: _resend),
           ],
         ],
       ),
@@ -445,7 +445,7 @@ class _MemberCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.xsmall),
                 border: Border.all(color: AppColors.border),
               ),
-              child: Text('띄운 사람', style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
+              child: Text('던진 사람', style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
             )
           else
             Row(children: [

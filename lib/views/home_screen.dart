@@ -58,7 +58,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
     final vm = context.read<PresenceViewModel>();
     final turnedOn = await showCallOnSheet(context, initialActivity: prefill);
     if (turnedOn != null && mounted) {
-      showTukToast(context, '지금 콜을 켰어요 · ${turnedOn.label}');
+      showTukToast(context, '한가하다고 알렸어요 · ${turnedOn.label}');
     }
     // (vm 은 turnOn 내부에서 이미 갱신됨)
     if (vm.error != null && mounted) showTukToast(context, vm.error!);
@@ -84,7 +84,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
     );
   }
 
-  /// 홈 상단 배너 (11d): 내가 띄운 번개(위) + 받은 번개(아래). 없으면 빈 리스트.
+  /// 홈 상단 배너 (11d): 내가 던진 툭(위) + 받은 툭(아래). 없으면 빈 리스트.
   List<Widget> _flashBanners(BuildContext context) {
     final flash = context.watch<FlashViewModel>();
     final sent = flash.sent;
@@ -240,7 +240,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
         ),
         child: myOn
             ? PillButton.primary(
-                '툭 띄우기',
+                '툭 던지기',
                 onPressed: () => Navigator.of(context).push(
                   flashComposeRoute(
                     prefillActivity: context.read<PresenceViewModel>().myActivity,
@@ -248,7 +248,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
                 ),
               )
             : PillButton.primary(
-                '지금 콜 켜기',
+                '한가하다고 알리기',
                 onPressed: () => _openCallSheet(),
               ),
       ),
@@ -403,7 +403,7 @@ class _BannerAvatars extends StatelessWidget {
   }
 }
 
-/// 내가 띄운 번개 배너.
+/// 내가 던진 툭 배너.
 class _SentBanner extends StatelessWidget {
   const _SentBanner({required this.flash, required this.onTap});
   final SentFlash flash;
@@ -416,7 +416,7 @@ class _SentBanner extends StatelessWidget {
     final who = n == 0 ? '아직 아무도' : '$n명 모였어요';
     return _Banner(
       avatars: flash.joined,
-      title: '내가 띄운 번개',
+      title: '내가 던진 툭',
       summary: '${flash.activity.label} · $who · $expiry',
       onTap: onTap,
     );
@@ -449,7 +449,7 @@ class _ReceivedBanner extends StatelessWidget {
           .take(3)
           .map((f) => (nickname: f.senderNickname, profileImage: f.senderProfileImage))
           .toList(),
-      title: '받은 번개 $count',
+      title: '받은 툭 $count',
       summary: summary,
       onTap: onTap,
     );

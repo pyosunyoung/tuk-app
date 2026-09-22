@@ -77,7 +77,7 @@ DateTime? _parseDate(dynamic v) {
   return DateTime.tryParse(v as String);
 }
 
-/// GET /api/flashes/sent 항목 — 내가 띄운 활성 번개(홈 배너용).
+/// GET /api/flashes/sent 항목 — 내가 던진 활성 툭(홈 배너용).
 /// joinedMembers = 합류자만(보낸 사람 제외).
 class SentFlash {
   const SentFlash({

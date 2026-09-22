@@ -12,7 +12,7 @@ import '../repositories/place_repository.dart';
 import '../services/api_client.dart';
 import '../services/stomp_service.dart';
 
-/// 번개 상태 — 발송·모임방·장소·합류 + 받은/내가띄운 목록 + 실시간.
+/// 툭(Flash) 상태 — 발송·모임방·장소·합류 + 받은/내가 던진 목록 + 실시간.
 class FlashViewModel extends ChangeNotifier {
   FlashViewModel({
     required FlashRepository flash,
@@ -161,9 +161,9 @@ class FlashViewModel extends ChangeNotifier {
 
   void _onEvent(FlashPushEvent e) {
     if (e.isNewFlash) {
-      reloadReceived(); // 새 번개 도착 → 목록/배너 갱신
+      reloadReceived(); // 새 툭 도착 → 목록/배너 갱신
     } else if (e.isMemberJoined) {
-      reloadSent(); // 누가 합류 → 내가 띄운 번개 "N명 모였어요" 갱신
+      reloadSent(); // 누가 합류 → 홈 "내가 던진 툭" 의 "N명 모였어요" 갱신
     }
   }
 

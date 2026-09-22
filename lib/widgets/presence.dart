@@ -161,7 +161,9 @@ class NowCallCard extends StatelessWidget {
                       const SizedBox(width: AppSpace.x8),
                       Flexible(
                         child: Text(
-                          on ? '지금 콜 켜짐 · ${activityLabel ?? ''}' : '지금 콜 꺼짐',
+                          // 라벨은 켜짐/꺼짐에 따라 바뀌지 않는다 — 상태는 오른쪽 스위치가 말한다.
+                          // 무엇을 켜는 건지는 라벨이, 지금 어떤지는 스위치와 아래 설명이 맡는다.
+                          '지금 한가해요',
                           style: AppText.title20.copyWith(
                             color: on ? AppColors.text : AppColors.textSub,
                           ),
@@ -174,7 +176,10 @@ class NowCallCard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: AppSpace.x16),
                     child: Text(
                       on
-                          ? (expiresAt != null ? callExpiryText(expiresAt!) : '')
+                          ? [
+                              if (activityLabel != null && activityLabel!.isNotEmpty) activityLabel!,
+                              if (expiresAt != null) callExpiryText(expiresAt!),
+                            ].join(' · ')
                           : '켜두면 한가할 때 친구에게만 보여요',
                       style: AppText.label14.copyWith(color: AppColors.textSub),
                     ),
@@ -253,7 +258,7 @@ class FriendPresenceCard extends StatelessWidget {
                             color: AppColors.success, shape: BoxShape.circle),
                       ),
                       const SizedBox(width: 5),
-                      Text('지금 가능',
+                      Text('지금 한가함',
                           style: AppText.caption12.copyWith(
                               color: AppColors.success,
                               fontWeight: FontWeight.w500)),
