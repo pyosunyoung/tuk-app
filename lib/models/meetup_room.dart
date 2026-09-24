@@ -13,6 +13,9 @@ class MeetupRoom {
     this.placeAddress,
     this.placeSetById,
     this.placeSetByNickname,
+    this.meetAt,
+    this.meetAtSetById,
+    this.meetAtSetByNickname,
     required this.status,
     this.expiresAt,
     required this.members,
@@ -34,6 +37,14 @@ class MeetupRoom {
   final int? placeSetById;
   final String? placeSetByNickname;
 
+  /// 만나기로 한 시각. 아직 안 정했으면 null.
+  /// [expiresAt](모집 마감)과 다른 시각이다 — 약속을 정해도 만료는 늘어나지 않는다.
+  final DateTime? meetAt;
+
+  /// 약속 시간을 정한 멤버. 장소와 같이 아무나 다시 정할 수 있다.
+  final int? meetAtSetById;
+  final String? meetAtSetByNickname;
+
   /// OPEN | CLOSED
   final String status;
 
@@ -43,6 +54,7 @@ class MeetupRoom {
   final List<RoomMember> members;
 
   bool get hasPlace => placeName != null;
+  bool get hasMeetAt => meetAt != null;
 
   factory MeetupRoom.fromJson(Map<String, dynamic> json) => MeetupRoom(
         roomId: json['roomId'] as int,
@@ -55,6 +67,11 @@ class MeetupRoom {
         placeAddress: json['placeAddress'] as String?,
         placeSetById: json['placeSetById'] as int?,
         placeSetByNickname: json['placeSetByNickname'] as String?,
+        meetAt: json['meetAt'] == null
+            ? null
+            : DateTime.tryParse(json['meetAt'] as String),
+        meetAtSetById: json['meetAtSetById'] as int?,
+        meetAtSetByNickname: json['meetAtSetByNickname'] as String?,
         status: json['status'] as String? ?? 'OPEN',
         expiresAt: json['expiresAt'] == null
             ? null

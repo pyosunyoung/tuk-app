@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../core/config.dart';
 import '../models/activity.dart';
+import '../views/meet_time_sheet.dart' show meetTimeLabel;
 
 /// 카카오톡 공유 카드.
 ///
@@ -16,18 +17,24 @@ class KakaoShareService {
   const KakaoShareService();
 
   /// 모임방 → "카톡으로 이야기하기"
+  ///
+  /// 시간이 둘이다 — [meetAt](만나는 시각)과 [expiresAt](모집 마감). 둘 다 무슨 시간인지 밝힌다.
   Future<void> shareRoom({
     required int flashId,
     required Activity activity,
     String? placeName,
     String? placeAddress,
     String? kakaoPlaceId,
+    DateTime? meetAt,
     DateTime? expiresAt,
   }) {
-    final until = expiresAt == null ? null : '${_hhmm(expiresAt)}까지';
+    final when = meetAt == null ? null : '🕘 ${meetTimeLabel(meetAt)}';
+    // 만료는 부가정보. 예전엔 "21:43까지" 만 붙어서 약속 시간으로 읽혔다 — 무슨 시간인지 밝힌다.
+    final until = expiresAt == null ? null : '${_hhmm(expiresAt)}까지 합류할 수 있어요';
     final title = '툭 · ${activity.label} 모임';
     final description = [
-      if (placeName != null) '📍 $placeName' else '장소는 아직 안 정했어요',
+      ?when,
+      if (placeName != null) '📍 $placeName' else '📍 장소는 아직 안 정했어요',
       ?until,
     ].join('\n');
 
@@ -50,6 +57,7 @@ class KakaoShareService {
 
     final text = [
       title,
+      ?when,
       if (placeName != null) '📍 $placeName${placeAddress != null ? ' ($placeAddress)' : ''}',
       ?until,
       if (mapUrl != null) '지도: $mapUrl',

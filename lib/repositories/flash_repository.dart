@@ -67,4 +67,13 @@ class FlashRepository {
     });
     return MeetupRoom.fromJson((data as Map).cast<String, dynamic>());
   }
+
+  /// 모임방 약속 시간 설정. 서버는 LocalDateTime 을 받으므로 기기 로컬 시각 그대로 보낸다
+  /// (툭은 국내용이라 서버·기기 모두 KST 기준이다).
+  Future<MeetupRoom> setMeetAt(int flashId, DateTime meetAt) async {
+    final data = await _api.patch('$_base/$flashId/room/time', body: {
+      'meetAt': meetAt.toIso8601String().split('.').first,
+    });
+    return MeetupRoom.fromJson((data as Map).cast<String, dynamic>());
+  }
 }

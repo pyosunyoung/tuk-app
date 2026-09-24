@@ -17,6 +17,7 @@ import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'flash_compose_screen.dart';
 import 'map_app_sheet.dart';
+import 'meet_time_sheet.dart';
 import 'place_sheet.dart';
 
 /// 모임방 (11c) — 합류한 사람이 모여 언제·어디서 만날지 맞춘다.
@@ -84,6 +85,20 @@ class _RoomScreenState extends State<RoomScreen> {
     }
   }
 
+  Future<void> _editMeetTime() async {
+    final when = await showMeetTimeSheet(context, current: _room?.meetAt);
+    if (when == null || !mounted) return;
+    final had = _room?.hasMeetAt ?? false;
+    try {
+      final updated = await _vm.setMeetAt(widget.flashId, when);
+      if (!mounted) return;
+      setState(() => _room = updated);
+      showTukToast(context, had ? '시간을 바꿨어요' : '시간을 정했어요');
+    } on ApiException catch (e) {
+      if (mounted) showTukToast(context, e.message);
+    }
+  }
+
   Future<void> _editPlace() async {
     final place = await showPlaceSheet(
       context,
@@ -130,6 +145,7 @@ class _RoomScreenState extends State<RoomScreen> {
         placeName: room.placeName,
         placeAddress: room.placeAddress,
         kakaoPlaceId: room.placeKakaoId,
+        meetAt: room.meetAt,
         expiresAt: _expiresAt,
       );
 
@@ -187,6 +203,8 @@ class _RoomScreenState extends State<RoomScreen> {
         children: [
           _infoCard(room, ended),
           const SizedBox(height: AppSpace.x8),
+          _meetTimeCard(room, ended),
+          const SizedBox(height: AppSpace.x8),
           _placeCard(room, ended),
           if (!ended) ...[
             const SizedBox(height: AppSpace.x12),
@@ -238,11 +256,57 @@ class _RoomScreenState extends State<RoomScreen> {
           Expanded(
             child: Text(
               ended
-                  ? '끝났어요 · 곧 사라져요'
-                  : (_expiresAt != null ? flashExpiryText(_expiresAt!) : ''),
+                  ? '합류가 끝났어요 · 기록은 남아요'
+                  : (_expiresAt != null ? roomJoinDeadlineText(_expiresAt!) : ''),
               style: AppText.label14.copyWith(color: AppColors.textSub),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  /// 약속 시간 카드. 장소와 짝을 이룬다 — 아무나 정하고 아무나 바꾼다.
+  Widget _meetTimeCard(MeetupRoom room, bool ended) {
+    final set = room.hasMeetAt;
+    if (ended) {
+      // 끝난 방은 읽기 전용. 정해둔 시간이 있으면 그것만 남긴다(까먹었을 때 보는 자리).
+      if (!set) return const SizedBox.shrink();
+      return Container(
+        padding: const EdgeInsets.all(AppSpace.x16),
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Text(meetTimeLabel(room.meetAt!),
+            style: AppText.label15.copyWith(color: AppColors.textSub)),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.all(AppSpace.x16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(set ? meetTimeLabel(room.meetAt!) : '언제 만날까요?',
+                    style: AppText.label15.copyWith(
+                        color: set ? AppColors.text : AppColors.textSub,
+                        fontWeight: FontWeight.w600)),
+                const SizedBox(height: 3),
+                Text(set ? _meetAtSetByLabel(context, room) : '아직 안 정했어요',
+                    style: AppText.caption13),
+              ],
+            ),
+          ),
+          _PlaceButton(set: set, onTap: _editMeetTime),
         ],
       ),
     );
@@ -349,6 +413,14 @@ class _ActivityBadge extends StatelessWidget {
 }
 
 /// 장소 밑 한 줄 — 누가 정했는지. 서버가 정한 사람을 안 주는 옛 방이면 담백하게 넘어간다.
+String _meetAtSetByLabel(BuildContext context, MeetupRoom room) {
+  final me = context.read<AuthViewModel>().me?.userId;
+  if (room.meetAtSetById == null) return '';
+  if (room.meetAtSetById == me) return '내가 정했어요';
+  final name = room.meetAtSetByNickname;
+  return name == null ? '' : '$name님이 정했어요';
+}
+
 String _placeSetByLabel(BuildContext context, MeetupRoom room) {
   final setterId = room.placeSetById;
   if (setterId == null) return '장소가 정해졌어요';
@@ -512,19 +584,37 @@ class _EndedMembers extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: AppColors.border),
       ),
-      child: SizedBox(
-        height: 38,
-        child: Stack(children: [
-          for (var i = 0; i < members.length && i < 8; i++)
-            Positioned(
-              left: i * 28.0,
-              child: Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle,
-                    border: Border.fromBorderSide(BorderSide(color: AppColors.background, width: 2))),
-                child: InitialAvatar(nickname: members[i].nickname, imageUrl: members[i].profileImage),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 38,
+            width: members.isEmpty
+                ? 0
+                : 38 + ((members.length.clamp(1, 8)) - 1) * 28.0,
+            child: Stack(children: [
+              for (var i = 0; i < members.length && i < 8; i++)
+                Positioned(
+                  left: i * 28.0,
+                  child: Container(
+                    decoration: const BoxDecoration(shape: BoxShape.circle,
+                        border: Border.fromBorderSide(BorderSide(color: AppColors.background, width: 2))),
+                    child: InitialAvatar(nickname: members[i].nickname, imageUrl: members[i].profileImage),
+                  ),
+                ),
+            ]),
+          ),
+          // 끝난 모임은 "누구였더라"를 다시 보는 자리다 — 얼굴만으론 알 수 없어 이름도 적는다.
+          if (members.isNotEmpty) ...[
+            const SizedBox(height: AppSpace.x8),
+            Text(
+              members.map((m) => m.nickname).join(' · '),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.caption13,
             ),
-        ]),
+          ],
+        ],
       ),
     );
   }

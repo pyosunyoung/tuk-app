@@ -151,6 +151,9 @@ class FlashViewModel extends ChangeNotifier {
 
   Future<MeetupRoom> setPlace(int flashId, Place place) => _repo.setPlace(flashId, place);
 
+  Future<MeetupRoom> setMeetAt(int flashId, DateTime meetAt) =>
+      _repo.setMeetAt(flashId, meetAt);
+
   /// 모임방 장소 검색(카카오 로컬 API 를 서버가 대신 호출).
   Future<List<Place>> searchPlaces(String query) => _places.search(query);
 
