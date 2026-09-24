@@ -92,6 +92,7 @@ class SentFlash {
     this.scheduledAt,
     this.expiresAt,
     this.meetAt,
+    this.recipientIds = const [],
     required this.joined,
   });
 
@@ -103,6 +104,9 @@ class SentFlash {
 
   /// 약속 시간(아직 안 정했으면 null). expiresAt(합류 마감)과 다른 시각이다.
   final DateTime? meetAt;
+
+  /// 이 툭을 받은 절친 전부(합류 여부 무관). 같은 친구들에게 또 띄우려 할 때 알려주는 데 쓴다.
+  final List<int> recipientIds;
 
   /// 합류자 (닉네임/프로필). 수 = "N명 모였어요".
   final List<({String nickname, String? profileImage})> joined;
@@ -116,6 +120,9 @@ class SentFlash {
         scheduledAt: _parseDate(json['scheduledAt']),
         expiresAt: _parseDate(json['expiresAt']),
         meetAt: _parseDate(json['meetAt']),
+        recipientIds: (json['recipientIds'] as List<dynamic>? ?? [])
+            .map((e) => e as int)
+            .toList(),
         joined: (json['joinedMembers'] as List<dynamic>? ?? [])
             .map((e) => (
                   nickname: (e as Map)['nickname'] as String? ?? '친구',

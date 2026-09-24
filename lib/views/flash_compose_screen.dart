@@ -403,7 +403,52 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
               );
             }).toList(),
           ),
+        _alreadyInvitedNotice(friends),
       ],
+    );
+  }
+
+  /// "이 친구들에겐 이미 띄웠어요" — 막지 않고 알려만 준다.
+  ///
+  /// 같은 사람들에게 두 번 띄우면 모임방이 둘로 갈라져서, 친구는 어디로 합류할지 헷갈린다.
+  /// 그렇다고 막을 일은 아니다 — 점심 약속과 저녁 약속을 따로 잡는 건 정상이다.
+  Widget _alreadyInvitedNotice(List friends) {
+    final invited = context.watch<FlashViewModel>().alreadyInvitedIds;
+    if (invited.isEmpty) return const SizedBox.shrink();
+
+    final targets = _pickMode
+        ? _selected
+        : friends.map<int>((f) => f.userId as int).toSet();
+    final overlap = targets.where(invited.contains).toList();
+    if (overlap.isEmpty) return const SizedBox.shrink();
+
+    final byId = {for (final f in friends) f.userId as int: f};
+    final names = overlap
+        .map((id) => byId[id]?.nickname as String?)
+        .whereType<String>()
+        .toList();
+    final who = switch (names.length) {
+      0 => '이미 띄운 친구가 있어요',
+      1 => '${names.first}님에겐 이미 띄운 툭이 있어요',
+      _ => '${names.first}님 외 ${names.length - 1}명에겐 이미 띄운 툭이 있어요',
+    };
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpace.x12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 2),
+            child: Icon(Icons.info_outline, size: 15, color: AppColors.textSub),
+          ),
+          const SizedBox(width: AppSpace.x8),
+          Expanded(
+            child: Text('$who · 새로 띄우면 모임방이 따로 생겨요',
+                style: AppText.caption13.copyWith(color: AppColors.textSub)),
+          ),
+        ],
+      ),
     );
   }
 

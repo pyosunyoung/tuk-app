@@ -46,6 +46,10 @@ class FlashViewModel extends ChangeNotifier {
   /// 미합류(PENDING) 받은 번개 수 — 배너 배지.
   int get pendingReceivedCount => _received.where((f) => !f.joined).length;
 
+  /// 지금 내가 띄운 툭을 이미 받은 절친들. 같은 사람들에게 또 띄우면 모임방이 둘로 갈라진다.
+  Set<int> get alreadyInvitedIds =>
+      {for (final f in _sent) ...f.recipientIds};
+
   // ── lifecycle ────────────────────────────────────────────
 
   Future<void> load() async {

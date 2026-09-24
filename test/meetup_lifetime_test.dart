@@ -52,9 +52,11 @@ void main() {
       'activity': 'WALK',
       'expiresAt': '2026-09-24T22:20:00',
       'meetAt': '2026-09-25T01:19:00',
+      'recipientIds': [339],
       'joinedMembers': [],
     });
     expect(f.expiresAt, DateTime(2026, 9, 24, 22, 20));
     expect(f.meetAt, DateTime(2026, 9, 25, 1, 19));
+    expect(f.recipientIds, [339]);
   });
 }
