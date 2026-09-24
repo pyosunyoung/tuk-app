@@ -18,6 +18,7 @@ import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'call_on_sheet.dart';
 import 'flash_compose_screen.dart';
+import 'meet_time_sheet.dart' show meetTimeLabel;
 import 'friend_preview_sheet.dart';
 import 'friends_screen.dart';
 import 'home_coldstart_screen.dart';
@@ -54,6 +55,11 @@ class _PresenceHome extends StatefulWidget {
 }
 
 class _PresenceHomeState extends State<_PresenceHome> {
+  /// 진행 중인 모임을 홈에 몇 개까지 펼칠지. 넘치면 "+N개 더" 로 접는다 —
+  /// 모임이 쌓여도 홈의 본래 목적("지금 한가한 친구")이 화면 밖으로 밀리지 않게.
+  static const _meetupPreviewCount = 3;
+  bool _expandedMeetups = false;
+
   Future<void> _openCallSheet({Activity? prefill}) async {
     final vm = context.read<PresenceViewModel>();
     final turnedOn = await showCallOnSheet(context, initialActivity: prefill);
@@ -84,24 +90,25 @@ class _PresenceHomeState extends State<_PresenceHome> {
     );
   }
 
-  /// 홈 상단 배너 (11d): 내가 던진 툭(위) + 받은 툭(아래). 없으면 빈 리스트.
+  /// 홈 상단 (11d). 성격이 다른 둘을 나눠 보여준다.
+  ///
+  ///  - **받은 툭**: 아직 합류 안 한 것 — 내가 결정해야 하는 것들. 묶어서 한 줄.
+  ///  - **진행 중인 모임**: 내가 띄운 것 + 내가 합류한 것 — 이미 성사된 모임들.
+  ///
+  /// 예전엔 내가 띄운 툭을 `sent.first` 로 **하나만** 그려서, 두 번째 툭을 띄우면
+  /// 앞의 것이 사라진 것처럼 보였다(서버에는 다 살아 있었다).
+  /// 친구 그룹은 겹치지 않으니 동시에 여러 모임이 있는 게 정상이다.
   List<Widget> _flashBanners(BuildContext context) {
     final flash = context.watch<FlashViewModel>();
-    final sent = flash.sent;
     final pending = flash.pendingReceivedCount;
-    if (sent.isEmpty && pending == 0) return const [];
+    final meetups = _ongoingMeetups(flash);
+    if (meetups.isEmpty && pending == 0) return const [];
+
+    final shown =
+        _expandedMeetups ? meetups : meetups.take(_meetupPreviewCount).toList();
 
     return [
-      if (sent.isNotEmpty)
-        _SentBanner(
-          flash: sent.first,
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => RoomScreen(
-                flashId: sent.first.flashId, expiresAt: sent.first.expiresAt),
-          )),
-        ),
-      if (sent.isNotEmpty && pending > 0) const SizedBox(height: AppSpace.x8),
-      if (pending > 0)
+      if (pending > 0) ...[
         _ReceivedBanner(
           count: pending,
           received: flash.received,
@@ -109,8 +116,49 @@ class _PresenceHomeState extends State<_PresenceHome> {
             builder: (_) => const ReceivedFlashesScreen(),
           )),
         ),
+        const SizedBox(height: AppSpace.x8),
+      ],
+      if (meetups.isNotEmpty) ...[
+        _MeetupsHeader(count: meetups.length),
+        const SizedBox(height: AppSpace.x8),
+        for (final m in shown) ...[
+          _MeetupBanner(
+            meetup: m,
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) =>
+                  RoomScreen(flashId: m.flashId, expiresAt: m.expiresAt),
+            )),
+          ),
+          const SizedBox(height: AppSpace.x8),
+        ],
+        if (meetups.length > shown.length)
+          _MoreMeetups(
+            more: meetups.length - shown.length,
+            onTap: () => setState(() => _expandedMeetups = true),
+          ),
+      ],
       const SizedBox(height: AppSpace.x12),
     ];
+  }
+
+  /// 내가 띄운 것 + 내가 합류한 것을 한 목록으로. 임박한 순.
+  ///
+  /// 서버는 둘을 다른 엔드포인트로 준다(/sent, /received). 사용자에게는 둘 다
+  /// "내가 껴 있는 모임"이라 여기서 합치되, 누가 띄웠는지는 줄마다 표시한다.
+  List<_Meetup> _ongoingMeetups(FlashViewModel flash) {
+    final list = <_Meetup>[
+      for (final f in flash.sent) _Meetup.fromSent(f),
+      for (final f in flash.received.where((f) => f.joined)) _Meetup.fromReceived(f),
+    ];
+    // 약속 시간이 있으면 그 시각, 없으면 합류 마감 기준으로 임박한 것부터
+    list.sort((a, b) {
+      final at = a.when, bt = b.when;
+      if (at == null && bt == null) return 0;
+      if (at == null) return 1;
+      if (bt == null) return -1;
+      return at.compareTo(bt);
+    });
+    return list;
   }
 
   @override
@@ -324,11 +372,20 @@ class _AvatarPlaceholders extends StatelessWidget {
 
 /// 홈 상단 배너 공통 셸.
 class _Banner extends StatelessWidget {
-  const _Banner({required this.avatars, required this.title, required this.summary, required this.onTap});
+  const _Banner({
+    required this.avatars,
+    required this.title,
+    required this.summary,
+    required this.onTap,
+    this.badge,
+  });
   final List<({String nickname, String? profileImage})> avatars;
   final String title;
   final String summary;
   final VoidCallback onTap;
+
+  /// 있으면 제목 오른쪽에 작은 표시("내가 띄움"). 모임방의 '던진 사람' 배지와 같은 구분.
+  final String? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -344,13 +401,40 @@ class _Banner extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _BannerAvatars(avatars: avatars),
-            const SizedBox(width: AppSpace.x12),
+            if (avatars.isNotEmpty) ...[
+              _BannerAvatars(avatars: avatars),
+              const SizedBox(width: AppSpace.x12),
+            ],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.label15
+                                .copyWith(fontWeight: FontWeight.w600)),
+                      ),
+                      if (badge != null) ...[
+                        const SizedBox(width: AppSpace.x8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.pill),
+                          ),
+                          child: Text(badge!,
+                              style: AppText.caption12
+                                  .copyWith(color: AppColors.primaryPress)),
+                        ),
+                      ],
+                    ],
+                  ),
                   const SizedBox(height: 2),
                   Text(summary,
                       maxLines: 1, overflow: TextOverflow.ellipsis,
@@ -375,9 +459,8 @@ class _BannerAvatars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final show = avatars.take(3).toList();
-    if (show.isEmpty) {
-      return const SizedBox(width: 32, height: 32);
-    }
+    // 아직 아무도 안 모인 모임은 보여줄 얼굴이 없다. 빈 자리를 남기면 제목이 가운데로 밀린다.
+    if (show.isEmpty) return const SizedBox.shrink();
     return SizedBox(
       height: 32,
       width: 32 + (show.length - 1) * 23.0,
@@ -400,22 +483,127 @@ class _BannerAvatars extends StatelessWidget {
   }
 }
 
-/// 내가 던진 툭 배너.
-class _SentBanner extends StatelessWidget {
-  const _SentBanner({required this.flash, required this.onTap});
-  final SentFlash flash;
+/// 홈 "진행 중인 모임" 한 줄. /sent 와 /received(합류) 를 같은 모양으로 다룬다.
+class _Meetup {
+  const _Meetup({
+    required this.flashId,
+    required this.title,
+    required this.mine,
+    required this.avatars,
+    this.meetAt,
+    this.expiresAt,
+  });
+
+  final int flashId;
+
+  /// "밥 · 2명 모임" / "민수 · 밥" — 누구와 무엇을 하는지.
+  final String title;
+
+  /// 내가 띄운 모임인지. 남이 띄운 것과 심리적 무게가 달라서 줄마다 표시한다.
+  final bool mine;
+
+  final List<({String nickname, String? profileImage})> avatars;
+
+  /// 약속 시간(정했으면). 합류 마감보다 이게 먼저다 — 실제로 궁금한 건 몇 시에 만나느냐다.
+  final DateTime? meetAt;
+
+  /// 합류 마감.
+  final DateTime? expiresAt;
+
+  /// 정렬·표시 기준 시각.
+  DateTime? get when => meetAt ?? expiresAt;
+
+  /// 시간 한 줄. **약속 시간과 합류 마감은 다른 시각이라 둘 다 보여준다.**
+  ///
+  /// 약속이 먼저다 — 실제로 궁금한 건 몇 시에 만나느냐다. 마감은 뒤에 덧붙이되,
+  /// 이미 지났으면 붙이지 않는다(더 들어올 사람이 없으니 알려줄 것도 없다).
+  String get timeText {
+    final parts = <String>[];
+    if (meetAt != null) parts.add(meetTimeLabel(meetAt!));
+    if (expiresAt != null) {
+      final stillOpen = expiresAt!.isAfter(DateTime.now());
+      if (meetAt == null || stillOpen) parts.add(roomJoinDeadlineText(expiresAt!));
+    }
+    return parts.join(' · ');
+  }
+
+  factory _Meetup.fromSent(SentFlash f) => _Meetup(
+        flashId: f.flashId,
+        title: '${f.activity.label} · '
+            '${f.joinedCount == 0 ? '아직 아무도' : '${f.joinedCount}명 모였어요'}',
+        mine: true,
+        avatars: f.joined,
+        meetAt: f.meetAt,
+        expiresAt: f.expiresAt,
+      );
+
+  factory _Meetup.fromReceived(ReceivedFlash f) => _Meetup(
+        flashId: f.flashId,
+        title: '${f.senderNickname} · ${f.activity.label}',
+        mine: false,
+        avatars: [(nickname: f.senderNickname, profileImage: f.senderProfileImage)],
+        meetAt: f.meetAt,
+        expiresAt: f.expiresAt,
+      );
+}
+
+/// "진행 중인 모임 N" 머리줄.
+class _MeetupsHeader extends StatelessWidget {
+  const _MeetupsHeader({required this.count});
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: AppSpace.x4, bottom: 2),
+      child: Text.rich(TextSpan(
+        style: AppText.label15.copyWith(fontWeight: FontWeight.w600),
+        children: [
+          const TextSpan(text: '진행 중인 모임 '),
+          TextSpan(text: '$count', style: const TextStyle(color: AppColors.primary)),
+        ],
+      )),
+    );
+  }
+}
+
+/// 진행 중인 모임 한 줄. 누르면 그 모임방으로.
+class _MeetupBanner extends StatelessWidget {
+  const _MeetupBanner({required this.meetup, required this.onTap});
+  final _Meetup meetup;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final n = flash.joinedCount;
-    final expiry = flash.expiresAt != null ? flashExpiryText(flash.expiresAt!) : '';
-    final who = n == 0 ? '아직 아무도' : '$n명 모였어요';
     return _Banner(
-      avatars: flash.joined,
-      title: '내가 던진 툭',
-      summary: '${flash.activity.label} · $who · $expiry',
+      avatars: meetup.avatars,
+      title: meetup.title,
+      summary: meetup.timeText,
+      badge: meetup.mine ? '내가 띄움' : null,
       onTap: onTap,
+    );
+  }
+}
+
+/// 접어둔 모임 펼치기.
+class _MoreMeetups extends StatelessWidget {
+  const _MoreMeetups({required this.more, required this.onTap});
+  final int more;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpace.x8),
+        child: Center(
+          child: Text('+$more개 더 보기',
+              style: AppText.caption13.copyWith(
+                  color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
+        ),
+      ),
     );
   }
 }

@@ -170,15 +170,32 @@ class FlashViewModel extends ChangeNotifier {
     }
   }
 
+  /// 1분마다 남은 시간 문구를 갱신하고, 끝난 것은 목록에서 치운다.
+  ///
+  /// **합류 마감만 보고 지우면 안 된다.** 약속 시간이 잡힌 모임은 마감이 지나도
+  /// "어디서 몇 시더라"를 다시 볼 수 있어야 해서 서버가 계속 내려준다.
+  /// 여기서 마감만 보고 지우면, 서버엔 있는데 화면에서만 사라진다
+  /// (실제로 약속을 잡아둔 모임이 1분 뒤 조용히 없어졌다).
   void _tick() {
     final now = DateTime.now();
-    final r = _received.where((f) => (f.expiresAt ?? now).isAfter(now)).toList();
-    final s = _sent.where((f) => (f.expiresAt ?? now).isAfter(now)).toList();
+    bool alive(DateTime? expiresAt, DateTime? meetAt) {
+      final until = _later(expiresAt, meetAt);
+      return until == null || until.isAfter(now);
+    }
+
+    final r = _received.where((f) => alive(f.expiresAt, f.meetAt)).toList();
+    final s = _sent.where((f) => alive(f.expiresAt, f.meetAt)).toList();
     if (r.length != _received.length || s.length != _sent.length) {
       _received = r;
       _sent = s;
     }
     notifyListeners();
+  }
+
+  static DateTime? _later(DateTime? a, DateTime? b) {
+    if (a == null) return b;
+    if (b == null) return a;
+    return a.isAfter(b) ? a : b;
   }
 
   @override

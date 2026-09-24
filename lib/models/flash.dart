@@ -13,6 +13,7 @@ class ReceivedFlash {
     this.message,
     this.scheduledAt,
     this.expiresAt,
+    this.meetAt,
     required this.myStatus,
   });
 
@@ -24,6 +25,9 @@ class ReceivedFlash {
   final String? message;
   final DateTime? scheduledAt;
   final DateTime? expiresAt;
+
+  /// 약속 시간(합류한 뒤 누군가 정했으면 값이 있다).
+  final DateTime? meetAt;
 
   /// PENDING(아직 합류 안 함) | JOINED
   final String myStatus;
@@ -39,6 +43,7 @@ class ReceivedFlash {
         message: json['message'] as String?,
         scheduledAt: _parseDate(json['scheduledAt']),
         expiresAt: _parseDate(json['expiresAt']),
+        meetAt: _parseDate(json['meetAt']),
         myStatus: json['myStatus'] as String? ?? 'PENDING',
       );
 }
@@ -86,6 +91,7 @@ class SentFlash {
     this.message,
     this.scheduledAt,
     this.expiresAt,
+    this.meetAt,
     required this.joined,
   });
 
@@ -94,6 +100,9 @@ class SentFlash {
   final String? message;
   final DateTime? scheduledAt;
   final DateTime? expiresAt;
+
+  /// 약속 시간(아직 안 정했으면 null). expiresAt(합류 마감)과 다른 시각이다.
+  final DateTime? meetAt;
 
   /// 합류자 (닉네임/프로필). 수 = "N명 모였어요".
   final List<({String nickname, String? profileImage})> joined;
@@ -106,6 +115,7 @@ class SentFlash {
         message: json['message'] as String?,
         scheduledAt: _parseDate(json['scheduledAt']),
         expiresAt: _parseDate(json['expiresAt']),
+        meetAt: _parseDate(json['meetAt']),
         joined: (json['joinedMembers'] as List<dynamic>? ?? [])
             .map((e) => (
                   nickname: (e as Map)['nickname'] as String? ?? '친구',
