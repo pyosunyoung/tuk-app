@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
@@ -69,9 +70,10 @@ class KakaoAuthService {
     if (e is KakaoAuthException &&
         (e.error == AuthErrorCause.invalidClient ||
             e.error == AuthErrorCause.misconfigured)) {
-      // 키 해시 미등록·플랫폼 미등록 등 — 개발 중에 주로 본다
-      return '카카오 앱 설정을 확인해주세요. (키 해시/앱 키)';
+      // 키 해시·플랫폼 미등록 등 우리 쪽 설정 문제. 사용자가 할 수 있는 일이 없으므로
+      // 화면에는 일반 문구만 보여주고, 단서는 로그로 남긴다.
+      debugPrint('[tuk] 카카오 앱 설정 문제(키 해시/앱 키 확인): $e');
     }
-    return '카카오 로그인에 실패했어요. 잠시 후 다시 시도해 주세요.';
+    return '카카오 로그인에 실패했어요. 잠시 후 다시 시도해 주세요';
   }
 }

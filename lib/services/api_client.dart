@@ -1,11 +1,24 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../core/config.dart';
 import '../core/jwt.dart';
 import '../models/auth_tokens.dart';
 import 'token_storage.dart';
+
+/// 서버에 닿지 못했을 때 사용자에게 보여줄 문구.
+///
+/// 사용자는 서버 사정을 알 수 없으므로 **직접 할 수 있는 일**만 말한다.
+/// (예전엔 "서버가 켜져 있는지 확인해주세요" 라고 띄웠다 — 개발자용 문구가 제품에 남아 있었다)
+String connectionMessageFor(DioExceptionType type) => switch (type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout =>
+        '응답이 너무 늦어요. 잠시 후 다시 시도해 주세요',
+      _ => '지금 연결이 안 돼요. 인터넷 연결을 확인해 주세요',
+    };
 
 /// 백엔드 공통 에러 포맷 { "message": "..." } 을 감싼 예외.
 class ApiException implements Exception {
@@ -90,28 +103,50 @@ class ApiClient {
     Map<String, dynamic>? query,
     bool auth = true,
   }) async {
-    Response res = await _dio.request(
+    Response res = await _request(
+      method,
       path,
-      data: body,
-      queryParameters: query,
-      options: Options(method: method, extra: {'skipAuth': !auth}),
+      body: body,
+      query: query,
+      extra: {'skipAuth': !auth},
     );
 
     // access 만료 → refresh 후 1회 재시도
     if (res.statusCode == 401 && auth && _tokens.refreshToken != null) {
       final ok = await _ensureRefreshed();
       if (ok) {
-        res = await _dio.request(
-          path,
-          data: body,
-          queryParameters: query,
-          options: Options(method: method),
-        );
+        res = await _request(method, path, body: body, query: query);
       }
     }
 
     return _unwrap(res);
   }
+
+  /// 서버에 닿지 못한 경우(끊긴 네트워크·응답 없음)를 [ApiException] 으로 바꾼다.
+  ///
+  /// 이걸 안 하면 DioException 이 그대로 화면까지 올라가고, 뷰모델마다 제각각 문구를
+  /// 지어내게 된다. 실제로 로그인 화면은 "서버가 켜져 있는지 확인해주세요" 라는
+  /// 개발자용 문구를 띄우고 있었다 — 사용자는 서버가 뭔지도, 어떻게 확인하는지도 모른다.
+  Future<Response> _request(
+    String method,
+    String path, {
+    Object? body,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? extra,
+  }) async {
+    try {
+      return await _dio.request(
+        path,
+        data: body,
+        queryParameters: query,
+        options: Options(method: method, extra: extra),
+      );
+    } on DioException catch (e) {
+      throw ApiException(null, connectionMessageFor(e.type));
+    }
+  }
+
+
 
   /// HTTP 가 아닌 곳(STOMP CONNECT)에 실을 access token.
   ///
@@ -167,19 +202,21 @@ class ApiClient {
     if (code >= 200 && code < 300) {
       return res.data;
     }
+    debugPrint('[tuk] ${res.requestOptions.method} ${res.requestOptions.path} → $code');
     throw ApiException(code, _extractMessage(res.data, code));
   }
 
+  /// 서버가 message 를 줬으면 그대로 쓴다. 없을 때의 폴백은 앱 말투(해요체)에 맞추고,
+  /// 상태 코드 같은 내부 사정은 화면에 내보내지 않는다(로그에는 남긴다).
   String _extractMessage(dynamic data, int code) {
     if (data is Map && data['message'] is String) {
       return data['message'] as String;
     }
     return switch (code) {
-      401 => '로그인이 필요합니다.',
-      403 => '권한이 없습니다.',
-      404 => '찾을 수 없습니다.',
-      502 => '외부 서비스 오류입니다. 잠시 후 다시 시도해주세요.',
-      _ => '요청을 처리하지 못했습니다. ($code)',
+      401 => '다시 로그인해 주세요',
+      403 => '권한이 없어요',
+      404 => '찾을 수 없어요',
+      _ => '잠시 후 다시 시도해 주세요',
     };
   }
 }

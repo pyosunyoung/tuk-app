@@ -118,7 +118,10 @@ class AuthViewModel extends ChangeNotifier {
       _error = e.message;
       return false;
     } catch (e) {
-      _error = '로그인 중 문제가 발생했어요. 서버가 켜져 있는지 확인해주세요.';
+      // 연결 실패는 ApiClient 가 ApiException 으로 바꿔 위에서 잡힌다.
+      // 여기 오는 건 예상 못 한 경우뿐이라, 사용자에겐 할 수 있는 일만 말한다.
+      debugPrint('[tuk] 로그인 실패: $e');
+      _error = '로그인하지 못했어요. 잠시 후 다시 시도해 주세요';
       return false;
     }
   }
