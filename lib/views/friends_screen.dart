@@ -93,6 +93,21 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     const EdgeInsets.only(bottom: AppSpace.x8),
                                 child: _FriendRow(friend: f),
                               )),
+                        if (vm.sentRequests.isNotEmpty) ...[
+                          const SizedBox(height: AppSpace.x32),
+                          _sectionHeader('보낸 신청', vm.sentRequests.length),
+                          const SizedBox(height: AppSpace.x12),
+                          ...vm.sentRequests.map((r) => Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: AppSpace.x8),
+                                child: _SentRequestRow(request: r),
+                              )),
+                          const SizedBox(height: AppSpace.x12),
+                          Center(
+                            child: Text('수락하면 알려줄게요',
+                                style: AppText.caption12),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -175,6 +190,47 @@ class _FriendsScreenState extends State<FriendsScreen> {
           '친구 추가',
           onPressed: () => showFriendAddSheet(context),
         ),
+      ),
+    );
+  }
+}
+
+/// 보낸 신청 한 줄 — 읽기 전용. 친구 목록보다 덜 중요하니 흐리게, 아래에 둔다.
+///
+/// 문구에 주의: "수락 대기"처럼 *상대가 안 해주고 있다*로 읽히면 안 된다.
+/// 툭은 거절이 안 보이는 앱이고, 실제로는 상대가 아직 앱을 안 열었을 뿐인 경우가 대부분이다.
+class _SentRequestRow extends StatelessWidget {
+  const _SentRequestRow({required this.request});
+  final SentFriendRequest request;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpace.x16, vertical: AppSpace.x12),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Opacity(
+            opacity: 0.6,
+            child: InitialAvatar(
+                nickname: request.nickname,
+                imageUrl: request.profileImage,
+                size: 36),
+          ),
+          const SizedBox(width: AppSpace.x12),
+          Expanded(
+            child: Text(request.nickname,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.label15.copyWith(color: AppColors.textSub)),
+          ),
+          Text('기다리는 중', style: AppText.caption13),
+        ],
       ),
     );
   }

@@ -22,6 +22,14 @@ class FriendRepository {
         .toList();
   }
 
+  /// 내가 보낸 신청(아직 수락 전).
+  Future<List<SentFriendRequest>> sentRequests() async {
+    final data = await _api.get('$_base/requests/sent');
+    return (data as List)
+        .map((e) => SentFriendRequest.fromJson((e as Map).cast<String, dynamic>()))
+        .toList();
+  }
+
   Future<void> accept(int friendshipId) async {
     await _api.post('$_base/$friendshipId/accept');
   }

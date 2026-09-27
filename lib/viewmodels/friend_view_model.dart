@@ -29,6 +29,10 @@ class FriendViewModel extends ChangeNotifier {
   List<FriendRequest> _requests = [];
   List<FriendRequest> get requests => List.unmodifiable(_requests);
 
+  /// 내가 보낸 신청(아직 수락 전). 친구 목록 아래에 조용히 둔다.
+  List<SentFriendRequest> _sentRequests = [];
+  List<SentFriendRequest> get sentRequests => List.unmodifiable(_sentRequests);
+
   int get requestCount => _requests.length;
 
   String? _inviteCode;
@@ -53,9 +57,11 @@ class FriendViewModel extends ChangeNotifier {
       final results = await Future.wait([
         _repo.friends(),
         _repo.receivedRequests(),
+        _repo.sentRequests(),
       ]);
       _friends = _sorted(results[0] as List<Friend>);
       _requests = results[1] as List<FriendRequest>;
+      _sentRequests = results[2] as List<SentFriendRequest>;
     } on ApiException catch (e) {
       _error = e.message;
     } catch (_) {
@@ -70,6 +76,7 @@ class FriendViewModel extends ChangeNotifier {
   void reset() {
     _friends = [];
     _requests = [];
+    _sentRequests = [];
     _inviteCode = null;
     _initialized = false;
     _error = null;

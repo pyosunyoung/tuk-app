@@ -41,6 +41,31 @@ class FriendRequest {
       );
 }
 
+/// GET /api/friendships/requests/sent 항목 — 내가 보낸 신청(아직 수락 전).
+///
+/// 코드를 넣고 나면 토스트 하나가 전부라 앱을 닫으면 흔적이 없었다.
+/// "내가 신청했었나?" 를 확인할 자리로 둔다.
+class SentFriendRequest {
+  const SentFriendRequest({
+    required this.friendshipId,
+    required this.addresseeId,
+    required this.nickname,
+    this.profileImage,
+  });
+
+  final int friendshipId;
+  final int addresseeId;
+  final String nickname;
+  final String? profileImage;
+
+  factory SentFriendRequest.fromJson(Map<String, dynamic> json) => SentFriendRequest(
+        friendshipId: json['friendshipId'] as int,
+        addresseeId: json['addresseeId'] as int,
+        nickname: json['nickname'] as String,
+        profileImage: json['profileImage'] as String?,
+      );
+}
+
 /// POST /api/friendships 응답 — { friendshipId, status }
 class FriendshipResult {
   const FriendshipResult({required this.friendshipId, required this.status});
