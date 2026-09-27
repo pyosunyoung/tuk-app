@@ -30,7 +30,10 @@ class KakaoShareService {
   }) {
     final when = meetAt == null ? null : '🕘 ${meetTimeLabel(meetAt)}';
     // 만료는 부가정보. 예전엔 "21:43까지" 만 붙어서 약속 시간으로 읽혔다 — 무슨 시간인지 밝힌다.
-    final until = expiresAt == null ? null : '${_hhmm(expiresAt)}까지 합류할 수 있어요';
+    // 이미 지났으면 붙이지 않는다. 더 들어올 사람이 없는데 "합류할 수 있어요"는 거짓말이다.
+    final until = (expiresAt == null || !expiresAt.isAfter(DateTime.now()))
+        ? null
+        : '${_hhmm(expiresAt)}까지 합류할 수 있어요';
     final title = '툭 · ${activity.label} 모임';
     final description = [
       ?when,

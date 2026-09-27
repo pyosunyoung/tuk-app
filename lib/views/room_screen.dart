@@ -72,9 +72,22 @@ class _RoomScreenState extends State<RoomScreen> {
   /// 방 응답의 만료 시각이 진짜. 아직 안 불러왔으면 넘겨받은 값으로 버틴다.
   DateTime? get _expiresAt => _room?.expiresAt ?? widget.expiresAt;
 
-  bool get _ended =>
+  /// 합류 마감 — 새 사람이 못 들어온다. **모임이 끝난 건 아니다.**
+  bool get _joinClosed =>
       (_room?.status == 'CLOSED') ||
       (_expiresAt != null && flashEnded(_expiresAt!));
+
+  /// 모임 종료 — 약속 시간까지 지났거나, 약속 없이 합류가 끝났다. 이제 읽기 전용 기록이다.
+  ///
+  /// 합류 마감과 나누는 이유: 7시 약속인데 6시에 합류가 마감되는 일이 흔하고,
+  /// 그 사이에 "비 와서 실내로 바꾸자" 처럼 장소·시간을 고칠 일이 생긴다.
+  /// 둘을 한 덩어리로 보면 아직 만나지도 않은 모임이 박제된다.
+  /// (서버는 원래 멤버면 마감 뒤에도 수정을 허용한다 — 앱만 잠그고 있었다)
+  bool get _over {
+    final meetAt = _room?.meetAt;
+    if (meetAt != null) return flashEnded(meetAt);
+    return _joinClosed;
+  }
 
   Future<void> _load() async {
     try {
@@ -191,7 +204,8 @@ class _RoomScreenState extends State<RoomScreen> {
       return _ErrorRetry(message: _error!, onRetry: _load);
     }
     final room = _room!;
-    final ended = _ended;
+    final over = _over;          // 읽기 전용 기록
+    final joinClosed = _joinClosed; // 새 사람만 못 들어옴
     final members = [...room.members]..sort((a, b) => a.sender == b.sender ? 0 : (a.sender ? -1 : 1));
     final joinedOnly = members.where((m) => !m.sender).isEmpty;
 
@@ -201,12 +215,12 @@ class _RoomScreenState extends State<RoomScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(AppSpace.x20, AppSpace.x12, AppSpace.x20, 46),
         children: [
-          _infoCard(room, ended),
+          _infoCard(room, joinClosed, over),
           const SizedBox(height: AppSpace.x8),
-          _meetTimeCard(room, ended),
+          _meetTimeCard(room, over),
           const SizedBox(height: AppSpace.x8),
-          _placeCard(room, ended),
-          if (!ended) ...[
+          _placeCard(room, over),
+          if (!over) ...[
             const SizedBox(height: AppSpace.x12),
             // 채팅은 만들지 않는다 — 대화는 카톡으로. 모임 정보를 카드로 넘긴다.
             PillButton.kakao(
@@ -216,9 +230,9 @@ class _RoomScreenState extends State<RoomScreen> {
             ),
           ],
           const SizedBox(height: AppSpace.x32),
-          _sectionHeader(ended ? '모였던 사람' : '모인 사람', members.length, ended),
+          _sectionHeader(over ? '모였던 사람' : '모인 사람', members.length, over),
           const SizedBox(height: AppSpace.x12),
-          if (ended)
+          if (over)
             _EndedMembers(members: members)
           else ...[
             ...members.map((m) => Padding(
@@ -230,7 +244,7 @@ class _RoomScreenState extends State<RoomScreen> {
               const _WaitingCard(),
             ],
           ],
-          if (ended) ...[
+          if (over) ...[
             const SizedBox(height: AppSpace.x24),
             Center(child: Text('다음에 또 툭 던져보세요', style: AppText.caption12)),
             const SizedBox(height: AppSpace.x12),
@@ -241,7 +255,8 @@ class _RoomScreenState extends State<RoomScreen> {
     );
   }
 
-  Widget _infoCard(MeetupRoom room, bool ended) {
+  Widget _infoCard(MeetupRoom room, bool joinClosed, bool over) {
+    final ended = over;
     return Container(
       padding: const EdgeInsets.all(AppSpace.x20),
       decoration: BoxDecoration(
@@ -255,9 +270,11 @@ class _RoomScreenState extends State<RoomScreen> {
           const SizedBox(width: AppSpace.x8),
           Expanded(
             child: Text(
-              ended
-                  ? '합류가 끝났어요 · 기록은 남아요'
-                  : (_expiresAt != null ? roomJoinDeadlineText(_expiresAt!) : ''),
+              over
+                  ? '모임이 끝났어요 · 기록은 남아요'
+                  : joinClosed
+                      ? '합류는 끝났어요 · 약속은 그대로예요'
+                      : (_expiresAt != null ? roomJoinDeadlineText(_expiresAt!) : ''),
               style: AppText.label14.copyWith(color: AppColors.textSub),
             ),
           ),
