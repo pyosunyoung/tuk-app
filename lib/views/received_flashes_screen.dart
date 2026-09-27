@@ -92,7 +92,8 @@ class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen> {
                         children: [
                           ...list.map((f) => Padding(
                                 padding: const EdgeInsets.only(bottom: AppSpace.x12),
-                                child: _FlashCard(flash: f, onTap: () => _open(f)),
+                                child: _FlashCard(
+                                    flash: f, onJoin: () => _open(f)),
                               )),
                           const SizedBox(height: AppSpace.x8),
                           Center(child: Text(
@@ -110,9 +111,11 @@ class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen> {
 }
 
 class _FlashCard extends StatelessWidget {
-  const _FlashCard({required this.flash, required this.onTap});
+  const _FlashCard({required this.flash, required this.onJoin});
   final ReceivedFlash flash;
-  final VoidCallback onTap;
+
+  /// 합류(또는 이미 합류했으면 모임방 열기). **버튼에서만** 불린다.
+  final VoidCallback onJoin;
 
   bool get _reserved =>
       flash.scheduledAt != null && flash.scheduledAt!.isAfter(DateTime.now());
@@ -123,9 +126,12 @@ class _FlashCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final joined = flash.joined;
+    // 카드 전체를 탭 타깃으로 두면 메시지를 읽으려다 합류된다.
+    // 합류는 상대에게 보이는(되돌릴 수 없는) 행동이라 버튼에서만 받는다.
+    // 이미 합류한 카드는 눌러도 모임방이 열릴 뿐이라 전체 탭을 허용한다.
     return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      onTap: joined ? onJoin : null,
+      behavior: joined ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
       child: Container(
         padding: const EdgeInsets.all(AppSpace.x16),
         decoration: BoxDecoration(
@@ -215,20 +221,24 @@ class _FlashCard extends StatelessWidget {
   }
 
   Widget _cta(bool joined) {
-    return Container(
-      height: 48,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: joined ? AppColors.surface : AppColors.primary,
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-        border: joined ? Border.all(color: AppColors.border) : null,
-        boxShadow: joined ? null : AppShadow.coralCta,
+    return GestureDetector(
+      onTap: onJoin,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 48,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: joined ? AppColors.surface : AppColors.primary,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          border: joined ? Border.all(color: AppColors.border) : null,
+          boxShadow: joined ? null : AppShadow.coralCta,
+        ),
+        child: Text(joined ? '모임방 열기' : '합류하기',
+            style: AppText.label15.copyWith(
+              color: joined ? AppColors.textSub : Colors.white,
+              fontWeight: joined ? FontWeight.w500 : FontWeight.w600,
+            )),
       ),
-      child: Text(joined ? '모임방 열기' : '합류하기',
-          style: AppText.label15.copyWith(
-            color: joined ? AppColors.textSub : Colors.white,
-            fontWeight: joined ? FontWeight.w500 : FontWeight.w600,
-          )),
     );
   }
 }
