@@ -15,6 +15,15 @@ String flashExpiryText(DateTime expiresAt) {
   return '$m분 뒤 끝나요';
 }
 
+/// 합류 마감이 코앞인지(10분 이내). "곧 끝나요" 문구가 바뀌는 시점과 같은 기준이다.
+///
+/// 강조는 **빨강이 아니라 브랜드 코랄**로 한다. 툭은 재촉하지 않는 앱이라
+/// 경고색을 쓰면 "빨리 안 하면 큰일 나는" 느낌이 되어 성격이 어긋난다.
+bool flashEndingSoon(DateTime expiresAt) {
+  final diff = expiresAt.difference(DateTime.now());
+  return diff.inSeconds > 0 && diff.inMinutes < 10;
+}
+
 bool flashEnded(DateTime expiresAt) =>
     !expiresAt.isAfter(DateTime.now());
 

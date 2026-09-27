@@ -378,6 +378,7 @@ class _Banner extends StatelessWidget {
     required this.summary,
     required this.onTap,
     this.badge,
+    this.urgent = false,
   });
   final List<({String nickname, String? profileImage})> avatars;
   final String title;
@@ -386,6 +387,9 @@ class _Banner extends StatelessWidget {
 
   /// 있으면 제목 오른쪽에 작은 표시("내가 띄움"). 모임방의 '던진 사람' 배지와 같은 구분.
   final String? badge;
+
+  /// 합류 마감이 코앞이면 테두리를 진하게. 경고가 아니라 "지금 눈이 가야 할 것" 표시다.
+  final bool urgent;
 
   @override
   Widget build(BuildContext context) {
@@ -397,7 +401,9 @@ class _Banner extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryTint,
           borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: AppColors.primaryTintBorder),
+          border: Border.all(
+              color: urgent ? AppColors.primary : AppColors.primaryTintBorder,
+              width: urgent ? 1.5 : 1),
         ),
         child: Row(
           children: [
@@ -513,6 +519,11 @@ class _Meetup {
   /// 정렬·표시 기준 시각.
   DateTime? get when => meetAt ?? expiresAt;
 
+  /// 아직 모으는 중인데 마감이 코앞이면 눈에 띄어야 한다.
+  /// 약속 시간이 잡힌 모임은 이미 성사된 것이라 마감이 급하지 않다.
+  bool get urgent =>
+      meetAt == null && expiresAt != null && flashEndingSoon(expiresAt!);
+
   /// 시간 한 줄. **약속 시간과 합류 마감은 다른 시각이라 둘 다 보여준다.**
   ///
   /// 약속이 먼저다 — 실제로 궁금한 건 몇 시에 만나느냐다. 마감은 뒤에 덧붙이되,
@@ -580,6 +591,7 @@ class _MeetupBanner extends StatelessWidget {
       title: meetup.title,
       summary: meetup.timeText,
       badge: meetup.mine ? '내가 띄움' : null,
+      urgent: meetup.urgent,
       onTap: onTap,
     );
   }
@@ -629,11 +641,14 @@ class _ReceivedBanner extends StatelessWidget {
       final t = first.expiresAt != null ? flashExpiryText(first.expiresAt!) : '';
       summary = '${first.senderNickname} · ${first.activity.label} · $t';
     }
+    final soon = pending.any((f) =>
+        f.expiresAt != null && flashEndingSoon(f.expiresAt!));
     return _Banner(
       avatars: pending
           .take(3)
           .map((f) => (nickname: f.senderNickname, profileImage: f.senderProfileImage))
           .toList(),
+      urgent: soon,
       title: '받은 툭 $count',
       summary: summary,
       onTap: onTap,

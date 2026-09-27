@@ -117,6 +117,9 @@ class _FlashCard extends StatelessWidget {
   bool get _reserved =>
       flash.scheduledAt != null && flash.scheduledAt!.isAfter(DateTime.now());
 
+  bool get _endingSoon =>
+      !_reserved && flash.expiresAt != null && flashEndingSoon(flash.expiresAt!);
+
   @override
   Widget build(BuildContext context) {
     final joined = flash.joined;
@@ -128,8 +131,12 @@ class _FlashCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppRadius.card),
+          // 아직 합류 안 했고 마감이 코앞이면 테두리를 진하게(빨강 아님 — 재촉하지 않는다)
           border: Border.all(
-              color: joined ? AppColors.border : AppColors.primaryTintBorder),
+              color: joined
+                  ? AppColors.border
+                  : (_endingSoon ? AppColors.primary : AppColors.primaryTintBorder),
+              width: !joined && _endingSoon ? 1.5 : 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
