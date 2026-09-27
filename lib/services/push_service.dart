@@ -22,8 +22,12 @@ class PushService {
   final DeviceTokenRepository _deviceTokens;
   final FlutterLocalNotificationsPlugin _local = FlutterLocalNotificationsPlugin();
 
-  /// 알림 탭으로 열린 화면 라우팅용. { type: NEW_FLASH|MEMBER_JOINED, flashId: int }
+  /// 알림 탭으로 열린 화면 라우팅용. { type: NEW_FLASH|MEMBER_JOINED|FRIEND_*, flashId: int }
   final ValueNotifier<Map<String, String>?> tapped = ValueNotifier(null);
+
+  /// 친구 관계가 바뀌었다는 신호(신청 도착·수락됨). 앱이 떠 있을 때 배지를 바로 갱신하려고 둔다 —
+  /// 알림만 오고 숫자가 그대로면 알림이 거짓말처럼 보인다.
+  final ValueNotifier<int> friendsChanged = ValueNotifier(0);
 
   /// 서버에 등록해 둔 토큰. 로그아웃 때 이 값으로 해제한다.
   String? _registeredToken;
@@ -64,7 +68,12 @@ class PushService {
         );
         // 토큰은 앱 재설치·데이터 삭제 등으로 갱신된다 → 그때마다 다시 등록
         FirebaseMessaging.instance.onTokenRefresh.listen(_register);
-        FirebaseMessaging.onMessage.listen(_showForeground);
+        FirebaseMessaging.onMessage.listen((m) {
+          _showForeground(m);
+          if ((m.data['type'] ?? '').startsWith('FRIEND_')) {
+            friendsChanged.value++;
+          }
+        });
         FirebaseMessaging.onMessageOpenedApp.listen((m) => tapped.value = m.data.cast<String, String>());
         // 종료 상태에서 알림을 탭해 열린 경우
         final initial = await FirebaseMessaging.instance.getInitialMessage();

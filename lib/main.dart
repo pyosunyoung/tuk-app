@@ -21,6 +21,7 @@ import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/flash_view_model.dart';
 import 'viewmodels/friend_view_model.dart';
 import 'viewmodels/presence_view_model.dart';
+import 'views/friends_screen.dart';
 import 'views/received_flashes_screen.dart';
 import 'views/room_screen.dart';
 import 'views/splash_screen.dart';
@@ -135,15 +136,17 @@ class _TukAppState extends State<TukApp> {
   void initState() {
     super.initState();
     widget.push.tapped.addListener(_onPushTapped);
+    widget.push.friendsChanged.addListener(_onFriendsChanged);
   }
 
   @override
   void dispose() {
     widget.push.tapped.removeListener(_onPushTapped);
+    widget.push.friendsChanged.removeListener(_onFriendsChanged);
     super.dispose();
   }
 
-  /// 알림을 탭해서 들어온 경우: 새 번개는 목록으로, 합류 알림은 그 모임방으로.
+  /// 알림을 탭해서 들어온 경우: 친구 알림은 친구 화면, 합류는 그 모임방, 나머지는 받은 툭.
   void _onPushTapped() {
     final data = widget.push.tapped.value;
     if (data == null) return; // 처리 후 null 로 되돌릴 때도 리스너가 한 번 더 불린다
@@ -152,13 +155,21 @@ class _TukAppState extends State<TukApp> {
     final navigator = _navigatorKey.currentState;
     if (navigator == null) return;
 
+    final type = data['type'] ?? '';
     final flashId = int.tryParse(data['flashId'] ?? '');
-    if (data['type'] == 'MEMBER_JOINED' && flashId != null) {
+
+    if (type.startsWith('FRIEND_')) {
+      widget.friendVM.load(); // 신청/수락이 화면에 바로 반영되게
+      navigator.push(MaterialPageRoute(builder: (_) => const FriendsScreen()));
+    } else if (type == 'MEMBER_JOINED' && flashId != null) {
       navigator.push(MaterialPageRoute(builder: (_) => RoomScreen(flashId: flashId)));
     } else {
       navigator.push(MaterialPageRoute(builder: (_) => const ReceivedFlashesScreen()));
     }
   }
+
+  /// 앱이 떠 있는 동안 친구 알림이 오면 배지를 바로 갱신한다.
+  void _onFriendsChanged() => widget.friendVM.load();
 
   @override
   Widget build(BuildContext context) {
