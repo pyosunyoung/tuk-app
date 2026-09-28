@@ -176,19 +176,19 @@ class FlashViewModel extends ChangeNotifier {
 
   /// 1분마다 남은 시간 문구를 갱신하고, 끝난 것은 목록에서 치운다.
   ///
-  /// **합류 마감만 보고 지우면 안 된다.** 약속 시간이 잡힌 모임은 마감이 지나도
-  /// "어디서 몇 시더라"를 다시 볼 수 있어야 해서 서버가 계속 내려준다.
-  /// 여기서 마감만 보고 지우면, 서버엔 있는데 화면에서만 사라진다
-  /// (실제로 약속을 잡아둔 모임이 1분 뒤 조용히 없어졌다).
+  /// **언제 치울지는 서버가 준 `visibleUntil` 만 따른다.** 합류 마감이 지나도 성사된 모임은
+  /// 약속 시간까지(없으면 마감 후 6시간) 남는데, 이 규칙을 앱이 따로 들고 있으면 어긋난다
+  /// (실제로 마감만 보고 지워서, 약속을 잡아둔 모임이 1분 뒤 조용히 없어졌다).
+  /// visibleUntil 이 없는 옛 서버 응답이면 마감·약속 중 늦은 쪽으로 대신한다.
   void _tick() {
     final now = DateTime.now();
-    bool alive(DateTime? expiresAt, DateTime? meetAt) {
-      final until = _later(expiresAt, meetAt);
+    bool alive(DateTime? visibleUntil, DateTime? expiresAt, DateTime? meetAt) {
+      final until = visibleUntil ?? _later(expiresAt, meetAt);
       return until == null || until.isAfter(now);
     }
 
-    final r = _received.where((f) => alive(f.expiresAt, f.meetAt)).toList();
-    final s = _sent.where((f) => alive(f.expiresAt, f.meetAt)).toList();
+    final r = _received.where((f) => alive(f.visibleUntil, f.expiresAt, f.meetAt)).toList();
+    final s = _sent.where((f) => alive(f.visibleUntil, f.expiresAt, f.meetAt)).toList();
     if (r.length != _received.length || s.length != _sent.length) {
       _received = r;
       _sent = s;

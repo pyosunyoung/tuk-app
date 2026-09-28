@@ -516,8 +516,13 @@ class _Meetup {
   /// 합류 마감.
   final DateTime? expiresAt;
 
-  /// 정렬·표시 기준 시각.
-  DateTime? get when => meetAt ?? expiresAt;
+  /// 정렬 기준 시각. 합류가 끝났는데 시간도 안 정한 모임은 기준 시각이 없다 → 맨 뒤로
+  /// (지난 마감 시각으로 정렬하면 오히려 맨 위로 올라온다).
+  DateTime? get when => meetAt ?? (_unscheduledAfterClose ? null : expiresAt);
+
+  /// 합류는 끝났는데 약속 시간이 없다. 서버가 마감 후 6시간까지 보여준다(MeetupLifecycle).
+  bool get _unscheduledAfterClose =>
+      meetAt == null && expiresAt != null && flashEnded(expiresAt!);
 
   /// 아직 모으는 중인데 마감이 코앞이면 눈에 띄어야 한다.
   /// 약속 시간이 잡힌 모임은 이미 성사된 것이라 마감이 급하지 않다.
@@ -529,6 +534,8 @@ class _Meetup {
   /// 약속이 먼저다 — 실제로 궁금한 건 몇 시에 만나느냐다. 마감은 뒤에 덧붙이되,
   /// 이미 지났으면 붙이지 않는다(더 들어올 사람이 없으니 알려줄 것도 없다).
   String get timeText {
+    // 재촉하지 않고 상태만 알린다 — 홈에 남아 있는 것 자체가 "정해야지" 하는 신호다.
+    if (_unscheduledAfterClose) return '시간 미정 · 합류는 끝났어요';
     final parts = <String>[];
     if (meetAt != null) parts.add(meetTimeLabel(meetAt!));
     if (expiresAt != null) {

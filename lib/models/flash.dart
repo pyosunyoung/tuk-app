@@ -2,7 +2,7 @@ import 'activity.dart';
 
 /// GET /api/flashes/received 항목 — 받은 활성 번개.
 /// { flashId, senderId, senderNickname, senderProfileImage, activity,
-///   message, scheduledAt, expiresAt, myStatus }
+///   message, scheduledAt, expiresAt, meetAt, visibleUntil, myStatus }
 class ReceivedFlash {
   const ReceivedFlash({
     required this.flashId,
@@ -14,6 +14,7 @@ class ReceivedFlash {
     this.scheduledAt,
     this.expiresAt,
     this.meetAt,
+    this.visibleUntil,
     required this.myStatus,
   });
 
@@ -28,6 +29,9 @@ class ReceivedFlash {
 
   /// 약속 시간(합류한 뒤 누군가 정했으면 값이 있다).
   final DateTime? meetAt;
+
+  /// 목록에서 치울 시각. 규칙은 서버(MeetupLifecycle)가 정한다 — 앱은 따르기만.
+  final DateTime? visibleUntil;
 
   /// PENDING(아직 합류 안 함) | JOINED
   final String myStatus;
@@ -44,6 +48,7 @@ class ReceivedFlash {
         scheduledAt: _parseDate(json['scheduledAt']),
         expiresAt: _parseDate(json['expiresAt']),
         meetAt: _parseDate(json['meetAt']),
+        visibleUntil: _parseDate(json['visibleUntil']),
         myStatus: json['myStatus'] as String? ?? 'PENDING',
       );
 }
@@ -92,6 +97,7 @@ class SentFlash {
     this.scheduledAt,
     this.expiresAt,
     this.meetAt,
+    this.visibleUntil,
     this.recipientIds = const [],
     required this.joined,
   });
@@ -104,6 +110,9 @@ class SentFlash {
 
   /// 약속 시간(아직 안 정했으면 null). expiresAt(합류 마감)과 다른 시각이다.
   final DateTime? meetAt;
+
+  /// 목록에서 치울 시각. 규칙은 서버(MeetupLifecycle)가 정한다 — 앱은 따르기만.
+  final DateTime? visibleUntil;
 
   /// 이 툭을 받은 절친 전부(합류 여부 무관). 같은 친구들에게 또 띄우려 할 때 알려주는 데 쓴다.
   final List<int> recipientIds;
@@ -120,6 +129,7 @@ class SentFlash {
         scheduledAt: _parseDate(json['scheduledAt']),
         expiresAt: _parseDate(json['expiresAt']),
         meetAt: _parseDate(json['meetAt']),
+        visibleUntil: _parseDate(json['visibleUntil']),
         recipientIds: (json['recipientIds'] as List<dynamic>? ?? [])
             .map((e) => e as int)
             .toList(),
