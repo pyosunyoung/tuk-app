@@ -38,10 +38,10 @@ void main() {
   });
 
   group('좌표가 있을 때(P1-B 대비) — 지점 링크', () {
-    test('카카오맵: look + 좌표, 웹은 이름·좌표 핀', () {
+    test('카카오맵: 좌표 기준 이름 검색, 웹은 이름·좌표 핀', () {
       final link = buildMapLink(MapApp.kakao, placeName: '툭카페', lat: 37.4979, lng: 127.0276);
-      expect(link.app.host, 'look');
-      expect(link.app.queryParameters['p'], '37.4979,127.0276');
+      expect(link.app.host, 'search');
+      expect(link.app.queryParameters, {'q': '툭카페', 'p': '37.4979,127.0276'});
       expect(link.web.pathSegments, ['link', 'map', '툭카페,37.4979,127.0276']);
     });
 
@@ -60,10 +60,11 @@ void main() {
   });
 
   group('검색으로 고른 장소(카카오 장소 ID)', () {
-    test('카카오맵: 가게 페이지를 바로 연다', () {
+    test('카카오맵: 앱은 좌표 기준 이름 검색(place?id 는 앱에서 깨짐), 웹은 가게 페이지', () {
       final link = buildMapLink(MapApp.kakao,
           placeName: '스타벅스 강남R점', lat: 37.4979, lng: 127.028, kakaoPlaceId: '26338954');
-      expect(link.app.toString(), 'kakaomap://place?id=26338954');
+      expect(link.app.host, 'search');
+      expect(link.app.queryParameters, {'q': '스타벅스 강남R점', 'p': '37.4979,127.028'});
       expect(link.web.toString(), 'https://place.map.kakao.com/26338954');
     });
 

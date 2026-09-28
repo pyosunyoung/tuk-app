@@ -4,9 +4,13 @@
 /// 앱 딥링크를 먼저 시도하고, 앱이 없으면 같은 장소의 웹 지도로 연다 → [MapLink.app] / [MapLink.web].
 ///
 /// 무엇을 여는가 (정확한 것부터):
-///  1. 카카오 장소 ID (검색으로 고른 장소) → 카카오맵은 그 가게 페이지를 바로 연다
-///  2. 좌표 → 그 지점
+///  1. 카카오 장소 ID (검색으로 고른 장소) → 웹에서만 그 가게 페이지
+///  2. 좌표 → 카카오맵은 그 근처 기준 이름 검색, 네이버는 그 지점
 ///  3. 이름만 (직접 입력) → 이름 검색 결과
+///
+/// 카카오맵 앱(6.29 실기기)은 `kakaomap://place?id=` 도, place.map.kakao.com 앱 링크도
+/// "네트워크 연결" 오류 뒤 빈 지도로 떨어진다. `look?p=` 는 주소 핀만 찍는다.
+/// `search?q=이름&p=좌표` 가 그 장소를 맨 위에 핀으로 보여줘서 이걸 쓴다.
 library;
 
 enum MapApp {
@@ -52,20 +56,17 @@ MapLink buildMapLink(
 
   switch (app) {
     case MapApp.kakao:
-      // https://apis.map.kakao.com/android/guide/#urlscheme
-      if (placeId != null && placeId.isNotEmpty) {
-        return MapLink(
-          app: Uri(scheme: 'kakaomap', host: 'place', queryParameters: {'id': placeId}),
-          web: Uri(scheme: 'https', host: 'place.map.kakao.com', pathSegments: [placeId]),
-        );
-      }
+      // https://apis.map.kakao.com/android_v2/docs/api-guide/urlscheme/
       return MapLink(
-        app: hasCoord
-            ? Uri(scheme: 'kakaomap', host: 'look', queryParameters: {'p': '$lat,$lng'})
-            : Uri(scheme: 'kakaomap', host: 'search', queryParameters: {'q': name}),
-        web: hasCoord
-            ? Uri(scheme: 'https', host: 'map.kakao.com', pathSegments: ['link', 'map', '$name,$lat,$lng'])
-            : Uri(scheme: 'https', host: 'map.kakao.com', pathSegments: ['link', 'search', name]),
+        app: Uri(scheme: 'kakaomap', host: 'search', queryParameters: {
+          'q': name,
+          if (hasCoord) 'p': '$lat,$lng',
+        }),
+        web: placeId != null && placeId.isNotEmpty
+            ? Uri(scheme: 'https', host: 'place.map.kakao.com', pathSegments: [placeId])
+            : hasCoord
+                ? Uri(scheme: 'https', host: 'map.kakao.com', pathSegments: ['link', 'map', '$name,$lat,$lng'])
+                : Uri(scheme: 'https', host: 'map.kakao.com', pathSegments: ['link', 'search', name]),
       );
     case MapApp.naver:
       // https://guide.ncloud-docs.com/docs/maps-url-scheme
