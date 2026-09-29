@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import 'core/config.dart';
 import 'core/theme.dart';
+import 'models/realtime_event.dart';
 import 'repositories/auth_repository.dart';
 import 'repositories/flash_repository.dart';
 import 'repositories/place_repository.dart';
@@ -25,6 +28,7 @@ import 'views/friends_screen.dart';
 import 'views/received_flashes_screen.dart';
 import 'views/room_screen.dart';
 import 'views/splash_screen.dart';
+import 'widgets/toast.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,24 +133,51 @@ class TukApp extends StatefulWidget {
   State<TukApp> createState() => _TukAppState();
 }
 
-class _TukAppState extends State<TukApp> {
+class _TukAppState extends State<TukApp> with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
+  StreamSubscription? _flashSub;
 
   @override
   void initState() {
     super.initState();
     widget.push.tapped.addListener(_onPushTapped);
     widget.push.friendsChanged.addListener(_onFriendsChanged);
+    _flashSub = widget.flashVM.events.listen(_onFlashEvent);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     widget.push.tapped.removeListener(_onPushTapped);
     widget.push.friendsChanged.removeListener(_onFriendsChanged);
+    _flashSub?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  /// 알림을 탭해서 들어온 경우: 친구 알림은 친구 화면, 합류는 그 모임방, 나머지는 받은 툭.
+  /// 백그라운드에선 실시간 연결을 끊어 서버가 FCM 으로 보내게 하고, 돌아오면 다시 붙인다.
+  /// `inactive`(알림창 내림·앱 전환 중)는 잠깐이라 무시 — `paused` 에서만 끊는다.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      widget.presenceVM.pauseRealtime();
+    } else if (state == AppLifecycleState.resumed) {
+      if (!widget.presenceVM.resumeRealtime()) return;
+      // 끊겨 있던 사이 온 툭·합류·장소 변경·친구 신청은 WebSocket 으로 못 받았다 — 다시 불러온다
+      widget.flashVM.load();
+      widget.friendVM.load();
+    }
+  }
+
+  /// 앱을 보고 있는데 다른 멤버가 장소·시간을 바꿨다 — 접속 중이라 푸시 대신 WebSocket 으로 온다.
+  /// 그 모임방을 보고 있으면 방이 직접 알리므로 여기선 건너뛴다(토스트 중복 방지).
+  void _onFlashEvent(FlashPushEvent e) {
+    if (!e.isPlanUpdated || RoomScreen.isOpen(e.flashId)) return;
+    final ctx = _navigatorKey.currentContext;
+    if (ctx != null) showTukToast(ctx, planUpdateText(e));
+  }
+
+  /// 알림을 탭해서 들어온 경우: 친구 알림은 친구 화면, 합류·장소·시간은 그 모임방, 나머지는 받은 툭.
   void _onPushTapped() {
     final data = widget.push.tapped.value;
     if (data == null) return; // 처리 후 null 로 되돌릴 때도 리스너가 한 번 더 불린다
@@ -161,12 +192,14 @@ class _TukAppState extends State<TukApp> {
     if (type.startsWith('FRIEND_')) {
       widget.friendVM.load(); // 신청/수락이 화면에 바로 반영되게
       navigator.push(MaterialPageRoute(builder: (_) => const FriendsScreen()));
-    } else if (type == 'MEMBER_JOINED' && flashId != null) {
+    } else if (_roomTypes.contains(type) && flashId != null) {
       navigator.push(MaterialPageRoute(builder: (_) => RoomScreen(flashId: flashId)));
     } else {
       navigator.push(MaterialPageRoute(builder: (_) => const ReceivedFlashesScreen()));
     }
   }
+
+  static const _roomTypes = {'MEMBER_JOINED', 'PLACE_UPDATED', 'MEET_AT_UPDATED'};
 
   /// 앱이 떠 있는 동안 친구 알림이 오면 배지를 바로 갱신한다.
   void _onFriendsChanged() => widget.friendVM.load();

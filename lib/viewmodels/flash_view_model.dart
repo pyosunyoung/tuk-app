@@ -171,6 +171,11 @@ class FlashViewModel extends ChangeNotifier {
       reloadReceived(); // 새 툭 도착 → 목록/배너 갱신
     } else if (e.isMemberJoined) {
       reloadSent(); // 누가 합류 → 홈 "내가 던진 툭" 의 "N명 모였어요" 갱신
+    } else if (e.isPlanUpdated) {
+      // 약속 시간이 바뀌면 홈 카드의 시간 줄·정렬·visibleUntil 이 모두 달라진다.
+      // 내가 띄운 모임인지 합류한 모임인지 이벤트만으론 모르니 둘 다.
+      reloadSent();
+      reloadReceived();
     }
   }
 

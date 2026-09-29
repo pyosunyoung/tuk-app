@@ -35,6 +35,7 @@ class PresenceEvent {
 
 /// /user/queue/flash 이벤트 (FlashPushEvent)
 /// type: NEW_FLASH(새 번개 — userId=보낸이) | MEMBER_JOINED(누가 합류 — userId=합류자)
+///     | PLACE_UPDATED / MEET_AT_UPDATED(장소·시간 정함/바꿈 — userId=정한 사람, before 가 null 이면 처음)
 class FlashPushEvent {
   const FlashPushEvent({
     required this.type,
@@ -46,6 +47,10 @@ class FlashPushEvent {
     this.message,
     this.scheduledAt,
     this.expiresAt,
+    this.placeBefore,
+    this.placeAfter,
+    this.meetAtBefore,
+    this.meetAtAfter,
   });
 
   final String type;
@@ -57,9 +62,18 @@ class FlashPushEvent {
   final String? message;
   final DateTime? scheduledAt;
   final DateTime? expiresAt;
+  final String? placeBefore;
+  final String? placeAfter;
+  final DateTime? meetAtBefore;
+  final DateTime? meetAtAfter;
 
   bool get isNewFlash => type == 'NEW_FLASH';
   bool get isMemberJoined => type == 'MEMBER_JOINED';
+  bool get isPlaceUpdated => type == 'PLACE_UPDATED';
+  bool get isMeetAtUpdated => type == 'MEET_AT_UPDATED';
+
+  /// 장소나 약속 시간이 정해지거나 바뀌었다 — 모임방·홈 목록을 다시 불러와야 한다.
+  bool get isPlanUpdated => isPlaceUpdated || isMeetAtUpdated;
 
   factory FlashPushEvent.fromJson(Map<String, dynamic> json) => FlashPushEvent(
         type: json['type'] as String,
@@ -74,8 +88,12 @@ class FlashPushEvent {
         scheduledAt: json['scheduledAt'] == null
             ? null
             : DateTime.tryParse(json['scheduledAt'] as String),
-        expiresAt: json['expiresAt'] == null
-            ? null
-            : DateTime.tryParse(json['expiresAt'] as String),
+        expiresAt: _date(json['expiresAt']),
+        placeBefore: json['placeBefore'] as String?,
+        placeAfter: json['placeAfter'] as String?,
+        meetAtBefore: _date(json['meetAtBefore']),
+        meetAtAfter: _date(json['meetAtAfter']),
       );
 }
+
+DateTime? _date(dynamic v) => v == null ? null : DateTime.tryParse(v as String);

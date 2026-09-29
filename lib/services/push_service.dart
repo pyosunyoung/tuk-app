@@ -22,7 +22,7 @@ class PushService {
   final DeviceTokenRepository _deviceTokens;
   final FlutterLocalNotificationsPlugin _local = FlutterLocalNotificationsPlugin();
 
-  /// 알림 탭으로 열린 화면 라우팅용. { type: NEW_FLASH|MEMBER_JOINED|FRIEND_*, flashId: int }
+  /// 알림 탭으로 열린 화면 라우팅용. { type: NEW_FLASH|MEMBER_JOINED|PLACE_UPDATED|MEET_AT_UPDATED|FRIEND_*, flashId: int }
   final ValueNotifier<Map<String, String>?> tapped = ValueNotifier(null);
 
   /// 친구 관계가 바뀌었다는 신호(신청 도착·수락됨). 앱이 떠 있을 때 배지를 바로 갱신하려고 둔다 —

@@ -91,6 +91,25 @@ class PresenceViewModel extends ChangeNotifier {
     load();
   }
 
+  /// 앱이 백그라운드로 갔을 때. 실시간 연결만 끊는다(상태는 유지).
+  ///
+  /// 안 끊으면 서버가 계속 "접속 중"으로 보고 푸시 대신 WebSocket 으로 보내는데,
+  /// 화면에 없는 앱은 그걸 보여줄 수 없다 — 새 툭·장소 변경 알림이 **아무 데도 안 뜬다**.
+  /// 끊으면 서버가 미접속으로 보고 FCM 으로 보낸다.
+  void pauseRealtime() {
+    if (!_started) return;
+    _stomp.disconnect();
+  }
+
+  /// 앱이 다시 앞으로 왔을 때. 다시 연결하고, 떨어져 있던 사이의 변화를 불러온다.
+  /// 로그인 상태가 아니었으면 아무것도 안 하고 false.
+  bool resumeRealtime() {
+    if (!_started) return false;
+    _stomp.connect(_accessToken);
+    load();
+    return true;
+  }
+
   /// 로그아웃 시. 연결 해제 + 상태 초기화.
   void stop() {
     _sub?.cancel();

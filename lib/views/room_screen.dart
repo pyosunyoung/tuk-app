@@ -7,6 +7,7 @@ import '../core/flash_format.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/meetup_room.dart';
+import '../models/realtime_event.dart';
 import '../services/api_client.dart';
 import '../services/kakao_share_service.dart';
 import '../services/map_launcher.dart';
@@ -36,11 +37,29 @@ class RoomScreen extends StatefulWidget {
   final DateTime? expiresAt;
   final String? initialToast;
 
+  /// 지금 화면에 떠 있는 모임방들. 장소·시간 변경 토스트를 방 안에서 띄우면
+  /// 앱 루트는 같은 토스트를 또 띄우지 않는다(main.dart).
+  static final Set<int> _open = {};
+  static bool isOpen(int flashId) => _open.contains(flashId);
+
   @override
   State<RoomScreen> createState() => _RoomScreenState();
 }
 
-class _RoomScreenState extends State<RoomScreen> {
+/// 다른 멤버가 장소·시간을 정하거나 바꿨을 때의 토스트 문구.
+/// 처음 정함과 바꿈을 구분한다 — 바뀐 걸 모르면 옛 장소·시간으로 가는 사고가 난다.
+String planUpdateText(FlashPushEvent e) {
+  final who = '${e.nickname ?? '친구'}님이';
+  if (e.isPlaceUpdated) {
+    final verb = e.placeBefore == null ? '정했어요' : '바꿨어요';
+    return '$who 장소를 $verb · ${e.placeAfter ?? ''}';
+  }
+  final verb = e.meetAtBefore == null ? '정했어요' : '바꿨어요';
+  final when = e.meetAtAfter == null ? '' : ' · ${meetTimeLabel(e.meetAtAfter!)}';
+  return '$who 시간을 $verb$when';
+}
+
+class _RoomScreenState extends State<RoomScreen> with WidgetsBindingObserver {
   MeetupRoom? _room;
   bool _loading = true;
   String? _error;
@@ -51,9 +70,18 @@ class _RoomScreenState extends State<RoomScreen> {
   void initState() {
     super.initState();
     _vm = context.read<FlashViewModel>();
+    RoomScreen._open.add(widget.flashId);
+    WidgetsBinding.instance.addObserver(this);
     // 실시간: 이 방에 누가 합류하면 조용히 참여자 갱신(토스트 없음).
+    // 장소·시간이 바뀌면 갱신 + 토스트 — 보고 있던 값이 말없이 바뀌면 오히려 헷갈린다.
     _evSub = _vm.events.listen((e) {
-      if (e.isMemberJoined && e.flashId == widget.flashId && mounted) _load();
+      if (e.flashId != widget.flashId || !mounted) return;
+      if (e.isMemberJoined) {
+        _load();
+      } else if (e.isPlanUpdated) {
+        _load();
+        showTukToast(context, planUpdateText(e));
+      }
     });
     _load();
     if (widget.initialToast != null) {
@@ -65,8 +93,16 @@ class _RoomScreenState extends State<RoomScreen> {
 
   @override
   void dispose() {
+    RoomScreen._open.remove(widget.flashId);
+    WidgetsBinding.instance.removeObserver(this);
     _evSub?.cancel();
     super.dispose();
+  }
+
+  /// 백그라운드에선 실시간 연결을 끊으므로(main.dart), 돌아오면 그 사이 바뀐 장소·시간·멤버를 다시 불러온다.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _load();
   }
 
   /// 방 응답의 만료 시각이 진짜. 아직 안 불러왔으면 넘겨받은 값으로 버틴다.
