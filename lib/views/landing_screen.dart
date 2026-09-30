@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../core/config.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../viewmodels/auth_view_model.dart';
@@ -211,13 +213,30 @@ class _TermsNotice extends StatelessWidget {
         style: AppText.caption12,
         children: [
           const TextSpan(text: '계속하면 '),
-          TextSpan(text: '이용약관', style: link),
+          _linkSpan(context, '이용약관', ShareConfig.termsPage, link),
           const TextSpan(text: '·'),
-          TextSpan(text: '개인정보 처리방침', style: link),
+          _linkSpan(context, '개인정보 처리방침', ShareConfig.privacyPage, link),
           const TextSpan(text: '에 동의합니다'),
         ],
       ),
       textAlign: TextAlign.center,
+    );
+  }
+
+  /// 밑줄만 있고 눌러도 아무 일 없던 링크 — 동의를 받으면서 내용을 볼 길이 없었다.
+  /// TapGestureRecognizer 는 dispose 를 챙겨야 해서 글자를 GestureDetector 로 감싼다.
+  InlineSpan _linkSpan(BuildContext context, String label, Uri url, TextStyle style) {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          final opened = await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+          if (!opened && context.mounted) showTukToast(context, '페이지를 열지 못했어요');
+        },
+        child: Text(label, style: style),
+      ),
     );
   }
 }

@@ -63,6 +63,10 @@ class ShareConfig {
   /// 앱이 없는 사람이 초대 카드를 눌렀을 때 — 코드를 보여주고 설치를 안내
   static Uri invitePage(String code) =>
       Uri.parse('$webBase/invite').replace(queryParameters: {'code': code});
+
+  /// 이용약관·개인정보 처리방침 (서버 public/ — 로컬 서버엔 없으니 개발 중에도 운영 주소)
+  static Uri get termsPage => Uri.parse('$webBase/terms');
+  static Uri get privacyPage => Uri.parse('$webBase/privacy');
 }
 
 /// 카카오 로그인 설정.
