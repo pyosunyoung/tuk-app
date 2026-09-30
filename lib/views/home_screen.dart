@@ -597,7 +597,7 @@ class _MeetupBanner extends StatelessWidget {
       avatars: meetup.avatars,
       title: meetup.title,
       summary: meetup.timeText,
-      badge: meetup.mine ? '내가 띄움' : null,
+      badge: meetup.mine ? '내가 던짐' : null,
       urgent: meetup.urgent,
       onTap: onTap,
     );

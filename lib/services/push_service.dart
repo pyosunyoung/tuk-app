@@ -37,7 +37,8 @@ class PushService {
   static const _channel = AndroidNotificationChannel(
     'tuk_flash',
     '툭 알림',
-    description: '친구가 툭 띄웠을 때 알려줘요',
+    // 안드로이드 설정 > 알림에 보이는 설명. 채널 id 는 그대로(바꾸면 사용자가 해둔 설정이 날아간다).
+    description: '친구의 툭, 합류, 장소·시간 변경, 친구 신청을 알려줘요',
     importance: Importance.high,
   );
 

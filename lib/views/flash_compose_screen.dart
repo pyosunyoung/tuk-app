@@ -428,9 +428,9 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
         .whereType<String>()
         .toList();
     final who = switch (names.length) {
-      0 => '이미 띄운 친구가 있어요',
-      1 => '${names.first}님에겐 이미 띄운 툭이 있어요',
-      _ => '${names.first}님 외 ${names.length - 1}명에겐 이미 띄운 툭이 있어요',
+      0 => '이미 툭을 받은 친구가 있어요',
+      1 => '${names.first}님에겐 이미 던진 툭이 있어요',
+      _ => '${names.first}님 외 ${names.length - 1}명에겐 이미 던진 툭이 있어요',
     };
 
     return Padding(
@@ -444,7 +444,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
           ),
           const SizedBox(width: AppSpace.x8),
           Expanded(
-            child: Text('$who · 새로 띄우면 모임방이 따로 생겨요',
+            child: Text('$who · 새로 던지면 모임방이 따로 생겨요',
                 style: AppText.caption13.copyWith(color: AppColors.textSub)),
           ),
         ],

@@ -67,7 +67,7 @@ class _DeleteAccountSheetState extends State<_DeleteAccountSheet> {
           const SizedBox(height: AppSpace.x20),
           Text('툭을 탈퇴할까요?', style: AppText.title20),
           const SizedBox(height: AppSpace.x16),
-          const _Line('내가 띄운 툭과 모임방이 지워져요. 합류한 친구 화면에서도 사라져요.'),
+          const _Line('내가 던진 툭과 모임방이 지워져요. 합류한 친구 화면에서도 사라져요.'),
           const _Line('친구 목록에서 조용히 빠져요. 친구에게 따로 알리지 않아요.'),
           const _Line('되돌릴 수 없어요. 다시 가입하면 새 계정으로 시작해요.'),
           const SizedBox(height: AppSpace.x24),
