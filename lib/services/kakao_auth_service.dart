@@ -60,6 +60,15 @@ class KakaoAuthService {
     }
   }
 
+  /// 탈퇴 시 카카오 쪽 "툭 연결"도 끊는다. 서버엔 사용자의 카카오 토큰이 없어서 앱이 한다.
+  /// 서버 탈퇴가 이미 끝난 뒤라 실패해도(토큰 만료·dev 계정) 무시한다 — 다음 로그인은 새 계정이 된다.
+  Future<void> unlink() async {
+    if (!KakaoConfig.isConfigured) return;
+    try {
+      await UserApi.instance.unlink();
+    } catch (_) {}
+  }
+
   /// 취소는 세 갈래로 온다: SDK 자체 취소, 네이티브(뒤로가기/창 닫기), 동의화면 거부.
   bool _isCancelled(Object e) =>
       (e is KakaoClientException && e.reason == ClientErrorCause.cancelled) ||

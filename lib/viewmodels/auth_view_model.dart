@@ -136,6 +136,14 @@ class AuthViewModel extends ChangeNotifier {
     await _finishLogout();
   }
 
+  /// 탈퇴. 서버 삭제가 실패하면 [ApiException] 을 그대로 던진다(세션 유지 — 다시 시도할 수 있게).
+  /// 성공하면 카카오 연결을 끊고(실패 무시) 로그아웃과 같이 세션을 정리한다.
+  Future<void> deleteAccount() async {
+    await _user.deleteMe();
+    await _kakao.unlink();
+    await _finishLogout();
+  }
+
   /// refresh 실패 등으로 세션이 죽었을 때 ApiClient 가 호출.
   Future<void> onSessionExpired() async {
     await _finishLogout();

@@ -13,4 +13,7 @@ class UserRepository {
     final data = await _api.get('$_base/me');
     return Me.fromJson((data as Map).cast<String, dynamic>());
   }
+
+  /// 탈퇴. 서버가 내 툭·모임방·친구 관계·기기 토큰을 지운다(되돌릴 수 없음).
+  Future<void> deleteMe() => _api.delete('$_base/me');
 }

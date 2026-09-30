@@ -10,6 +10,7 @@ import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
+import 'delete_account_sheet.dart';
 import 'friend_add_sheet.dart';
 import 'landing_screen.dart';
 
@@ -37,6 +38,17 @@ class _FriendsScreenState extends State<FriendsScreen> {
   Future<void> _logout() async {
     await context.read<AuthViewModel>().logout();
     if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LandingScreen()),
+      (route) => false,
+    );
+  }
+
+  Future<void> _deleteAccount() async {
+    final deleted = await showDeleteAccountSheet(context);
+    if (!deleted || !mounted) return;
+    // 토스트는 앱 루트 ScaffoldMessenger 에 뜨므로 화면을 바꾸기 전에 띄워도 랜딩에서 보인다
+    showTukToast(context, '탈퇴했어요. 그동안 고마웠어요');
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LandingScreen()),
       (route) => false,
@@ -144,9 +156,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
             icon: const Icon(Icons.more_horiz, color: AppColors.textSub),
             onSelected: (v) {
               if (v == 'logout') _logout();
+              if (v == 'delete') _deleteAccount();
             },
             itemBuilder: (_) => [
               const PopupMenuItem(value: 'logout', child: Text('로그아웃')),
+              const PopupMenuItem(value: 'delete', child: Text('탈퇴하기')),
             ],
           ),
         ],
