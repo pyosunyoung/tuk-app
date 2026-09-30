@@ -162,13 +162,13 @@ class PresenceViewModel extends ChangeNotifier {
   ///
   /// 홈과 콜드스타트(친구 0명 화면)는 이 숫자로 갈린다. 예전엔 로그인 때 한 번만 세서,
   /// 첫 친구가 생겨도 앱을 다시 켜기 전까지 콜드스타트에 머물렀다.
-  /// 친구가 늘면 "지금 한가한 친구"도 다시 불러온다 — 새 친구가 이미 켜 두었을 수 있다.
+  /// 친구가 바뀌면 "지금 한가한 친구"도 다시 불러온다 — 새 친구가 이미 켜 두었을 수 있고,
+  /// 끊은 친구는 목록에서 빠져야 한다. 마지막 친구를 끊으면 콜드스타트로 돌아간다.
   void syncFriendCount(int count) {
     if (!_started || count == _friendCount) return;
-    final grew = count > _friendCount;
     _friendCount = count;
     notifyListeners();
-    if (grew) load();
+    load();
   }
 
   void _applyMe(MyPresence me) {

@@ -133,6 +133,23 @@ class FriendViewModel extends ChangeNotifier {
     }
   }
 
+  // ── 친구 끊기 · 보낸 신청 취소 ──────────────────────────
+  // 낙관적으로 먼저 지우지 않는다. 되돌리기 어려운 행동이라 서버가 끝낸 뒤에 목록을 바꾼다.
+  // 실패하면 [ApiException] 을 그대로 던진다(시트가 토스트로 알린다).
+
+  Future<void> unfriend(Friend friend) async {
+    await _repo.unfriend(friend.userId);
+    _friends = _friends.where((f) => f.userId != friend.userId).toList();
+    notifyListeners();
+  }
+
+  Future<void> cancelRequest(SentFriendRequest request) async {
+    await _repo.cancelRequest(request.friendshipId);
+    _sentRequests =
+        _sentRequests.where((r) => r.friendshipId != request.friendshipId).toList();
+    notifyListeners();
+  }
+
   List<FriendRequest> _sorted2(List<FriendRequest> list) {
     // 신청은 특별한 정렬 규칙이 없어 원래 순서 유지(닉네임 보조 정렬)
     list.sort((a, b) => a.nickname.compareTo(b.nickname));

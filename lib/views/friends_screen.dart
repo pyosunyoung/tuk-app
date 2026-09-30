@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/friend.dart';
+import '../services/api_client.dart';
 import '../viewmodels/auth_view_model.dart';
 import '../viewmodels/friend_view_model.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/avatar.dart';
+import '../widgets/confirm_sheet.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'delete_account_sheet.dart';
@@ -42,6 +44,33 @@ class _FriendsScreenState extends State<FriendsScreen> {
       MaterialPageRoute(builder: (_) => const LandingScreen()),
       (route) => false,
     );
+  }
+
+  /// 친구 끊기 — 양쪽 목록에서 조용히 사라진다. 되돌리려면 초대 코드부터라 한 번 더 묻는다.
+  Future<void> _unfriend(Friend f) async {
+    final fvm = context.read<FriendViewModel>();
+    final done = await showConfirmSheet(
+      context,
+      title: '${f.nickname}님과 친구를 끊을까요?',
+      lines: [
+        '${f.nickname}님 목록에서도 조용히 빠져요. 따로 알리지 않아요.',
+        '이미 함께한 모임은 그대로 남아요.',
+        '다시 친구가 되려면 초대 코드를 주고받아야 해요.',
+      ],
+      confirmLabel: '친구 끊기',
+      cancelLabel: '그대로 둘게요',
+      onConfirm: () => fvm.unfriend(f),
+    );
+    if (done && mounted) showTukToast(context, '친구를 끊었어요');
+  }
+
+  Future<void> _cancelRequest(SentFriendRequest r) async {
+    try {
+      await context.read<FriendViewModel>().cancelRequest(r);
+      if (mounted) showTukToast(context, '신청을 취소했어요');
+    } on ApiException catch (e) {
+      if (mounted) showTukToast(context, e.message);
+    }
   }
 
   Future<void> _deleteAccount() async {
@@ -103,7 +132,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           ...vm.friends.map((f) => Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: AppSpace.x8),
-                                child: _FriendRow(friend: f),
+                                child: _FriendRow(friend: f, onMore: () => _unfriend(f)),
                               )),
                         if (vm.sentRequests.isNotEmpty) ...[
                           const SizedBox(height: AppSpace.x32),
@@ -112,7 +141,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           ...vm.sentRequests.map((r) => Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: AppSpace.x8),
-                                child: _SentRequestRow(request: r),
+                                child: _SentRequestRow(request: r, onCancel: () => _cancelRequest(r)),
                               )),
                           const SizedBox(height: AppSpace.x12),
                           Center(
@@ -214,8 +243,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
 /// 문구에 주의: "수락 대기"처럼 *상대가 안 해주고 있다*로 읽히면 안 된다.
 /// 툭은 거절이 안 보이는 앱이고, 실제로는 상대가 아직 앱을 안 열었을 뿐인 경우가 대부분이다.
 class _SentRequestRow extends StatelessWidget {
-  const _SentRequestRow({required this.request});
+  const _SentRequestRow({required this.request, required this.onCancel});
   final SentFriendRequest request;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -244,6 +274,18 @@ class _SentRequestRow extends StatelessWidget {
                 style: AppText.label15.copyWith(color: AppColors.textSub)),
           ),
           Text('기다리는 중', style: AppText.caption13),
+          // 코드를 다시 넣으면 되돌릴 수 있어 확인 없이 바로 취소한다
+          GestureDetector(
+            onTap: onCancel,
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.only(left: AppSpace.x12),
+              child: Text('취소',
+                  style: AppText.caption13.copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.border)),
+            ),
+          ),
         ],
       ),
     );
@@ -306,10 +348,11 @@ class _AcceptButton extends StatelessWidget {
   }
 }
 
-/// 내 절친 행 — 아바타 + 이름, 오른쪽에 아무것도 없음.
+/// 내 절친 행 — 아바타 + 이름, 오른쪽에 흐린 ⋯(친구 끊기). 자주 쓰는 동작이 아니라 눈에 띄지 않게.
 class _FriendRow extends StatelessWidget {
-  const _FriendRow({required this.friend});
+  const _FriendRow({required this.friend, required this.onMore});
   final Friend friend;
+  final VoidCallback onMore;
 
   @override
   Widget build(BuildContext context) {
@@ -329,6 +372,14 @@ class _FriendRow extends StatelessWidget {
             child: Text(friend.nickname,
                 overflow: TextOverflow.ellipsis,
                 style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+          ),
+          GestureDetector(
+            onTap: onMore,
+            behavior: HitTestBehavior.opaque,
+            child: const Padding(
+              padding: EdgeInsets.all(AppSpace.x4),
+              child: Icon(Icons.more_horiz, size: 20, color: AppColors.border),
+            ),
           ),
         ],
       ),

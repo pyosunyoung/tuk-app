@@ -35,6 +35,12 @@ class FriendRepository {
   }
 
   /// 상대 userId 를 직접 알 때 (내부/디버그용 경로).
+  /// 친구 끊기. 양쪽 목록에서 사라지고 상대에게 알림은 없다.
+  Future<void> unfriend(int friendUserId) => _api.delete('$_base/friends/$friendUserId');
+
+  /// 내가 보낸 신청 취소(받은 신청을 지우는 API 는 없다 — 거절이 드러나므로).
+  Future<void> cancelRequest(int friendshipId) => _api.delete('$_base/requests/$friendshipId');
+
   Future<FriendshipResult> requestByUserId(int addresseeId) async {
     final data = await _api.post(_base, body: {'addresseeId': addresseeId});
     return FriendshipResult.fromJson((data as Map).cast<String, dynamic>());
