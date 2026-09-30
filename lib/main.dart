@@ -101,6 +101,14 @@ Future<void> main() async {
     }
   });
 
+  // 친구 목록 → 홈/콜드스타트 분기. 처음 불러오기 전·불러오는 중엔 건드리지 않는다
+  // (그 순간 목록이 비어 보여 콜드스타트로 깜빡일 수 있다). 불러오기가 실패하면 목록은
+  // 이전 값 그대로라 괜찮고, 수락이 실패해 되돌린 목록은 그대로 따라가야 한다.
+  friendVM.addListener(() {
+    if (!friendVM.initialized || friendVM.loading) return;
+    presenceVM.syncFriendCount(friendVM.friends.length);
+  });
+
   runApp(TukApp(
     authVM: authVM,
     presenceVM: presenceVM,
