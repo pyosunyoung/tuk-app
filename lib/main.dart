@@ -7,6 +7,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 
 import 'core/config.dart';
+import 'core/open_routes.dart';
 import 'core/theme.dart';
 import 'models/realtime_event.dart';
 import 'repositories/auth_repository.dart';
@@ -197,13 +198,21 @@ class _TukAppState extends State<TukApp> with WidgetsBindingObserver {
     final type = data['type'] ?? '';
     final flashId = int.tryParse(data['flashId'] ?? '');
 
+    // 그 화면이 이미 열려 있으면 새로 쌓지 않고 거기로 돌아간다(뒤로 가기를 두 번 눌러야 하던 문제).
+    // 돌아간 화면은 앱이 앞으로 올 때 다시 불러오므로 내용은 최신이다.
+    void open(String key, WidgetBuilder builder) {
+      if (OpenRoutes.bringToFront(navigator, key)) return;
+      navigator.push(MaterialPageRoute(builder: builder));
+    }
+
     if (type.startsWith('FRIEND_')) {
       widget.friendVM.load(); // 신청/수락이 화면에 바로 반영되게
-      navigator.push(MaterialPageRoute(builder: (_) => const FriendsScreen()));
+      open('friends', (_) => const FriendsScreen());
     } else if (_roomTypes.contains(type) && flashId != null) {
-      navigator.push(MaterialPageRoute(builder: (_) => RoomScreen(flashId: flashId)));
+      open(RoomScreen.routeKey(flashId), (_) => RoomScreen(flashId: flashId));
     } else {
-      navigator.push(MaterialPageRoute(builder: (_) => const ReceivedFlashesScreen()));
+      widget.flashVM.load();
+      open('received', (_) => const ReceivedFlashesScreen());
     }
   }
 

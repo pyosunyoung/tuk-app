@@ -221,7 +221,7 @@ class _EmptyState extends StatelessWidget {
           children: [
             const TukLogo(size: 96, variant: TukLogoVariant.light),
             const SizedBox(height: AppSpace.x16),
-            Text('아직 절친이 없어요',
+            Text('아직 친구가 없어요',
                 textAlign: TextAlign.center,
                 style: AppText.title20.copyWith(fontWeight: FontWeight.w600)),
             const SizedBox(height: AppSpace.x8),

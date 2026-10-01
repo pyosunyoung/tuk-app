@@ -549,7 +549,7 @@ class _Cut3 extends StatelessWidget {
         const SizedBox(height: AppSpace.x32),
         const _Headline(
           '툭 던지면 알림이 딱',
-          '한 탭이면 절친들에게 바로 닿아요. 지나쳐도 보낸 사람에겐 아무것도 안 보여서 서로 부담이 없어요.',
+          '한 탭이면 친한 친구들에게 바로 닿아요. 지나쳐도 보낸 사람에겐 아무것도 안 보여서 서로 부담이 없어요.',
         ),
       ],
     );
@@ -724,7 +724,7 @@ class _Cut5 extends StatelessWidget {
         const SizedBox(height: AppSpace.x24),
         const _Headline(
           '이제 툭 던져볼까요?',
-          '절친 몇 명만 모으면 바로 쓸 수 있어요.',
+          '친한 친구 몇 명만 모으면 바로 쓸 수 있어요.',
           center: true,
         ),
         const SizedBox(height: AppSpace.x32),

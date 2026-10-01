@@ -84,7 +84,7 @@ class _FriendPreviewSheet extends StatelessWidget {
           ],
           const SizedBox(height: AppSpace.x12),
           PillButton.secondary(
-            '절친 모두에게 던지기',
+            '친구 모두에게 던지기',
             onPressed: () {
               final nav = Navigator.of(context);
               nav.pop();

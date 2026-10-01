@@ -157,7 +157,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
           ),
           const SizedBox(height: AppSpace.x12),
           Center(
-            child: Text('절친에게만 보여요 · $_durationLabel 뒤 자동으로 꺼져요',
+            child: Text('친구에게만 보여요 · $_durationLabel 뒤 자동으로 꺼져요',
                 textAlign: TextAlign.center, style: AppText.caption12),
           ),
         ],

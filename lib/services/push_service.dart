@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -135,8 +136,22 @@ class PushService {
           presentSound: true,
         ),
       ),
-      payload: message.data['flashId'],
+      // 탭했을 때 시스템 알림과 같은 경로로 보내려면 종류(type)까지 필요하다.
+      // 예전엔 flashId 만 넣고 탭 처리기도 없어서, 앱을 보는 중에 뜬 알림은 눌러도 반응이 없었다.
+      payload: jsonEncode(message.data),
     );
+  }
+
+  /// 앱이 직접 띄운 알림(포그라운드)을 탭했을 때. 시스템 알림 탭과 같은 [tapped] 로 보낸다.
+  void _onLocalTap(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload == null || payload.isEmpty) return;
+    try {
+      final data = (jsonDecode(payload) as Map).map((k, v) => MapEntry('$k', '$v'));
+      tapped.value = data;
+    } catch (_) {
+      // 예전 형식(flashId 만)이면 무시
+    }
   }
 
   Future<void> _ensureLocalPlugin() async {
@@ -151,6 +166,7 @@ class PushService {
           requestBadgePermission: false,
         ),
       ),
+      onDidReceiveNotificationResponse: _onLocalTap,
     );
     await _local
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()

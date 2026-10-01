@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/flash_format.dart';
+import '../core/open_routes.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/meetup_room.dart';
@@ -37,10 +38,10 @@ class RoomScreen extends StatefulWidget {
   final DateTime? expiresAt;
   final String? initialToast;
 
-  /// 지금 화면에 떠 있는 모임방들. 장소·시간 변경 토스트를 방 안에서 띄우면
-  /// 앱 루트는 같은 토스트를 또 띄우지 않는다(main.dart).
-  static final Set<int> _open = {};
-  static bool isOpen(int flashId) => _open.contains(flashId);
+  /// 이 모임방이 지금 떠 있나. 장소·시간 변경 토스트를 방 안에서 띄우면
+  /// 앱 루트는 같은 토스트를 또 띄우지 않고, 알림을 탭하면 새로 쌓지 않고 이 방으로 돌아간다(main.dart).
+  static String routeKey(int flashId) => 'room:$flashId';
+  static bool isOpen(int flashId) => OpenRoutes.isOpen(routeKey(flashId));
 
   @override
   State<RoomScreen> createState() => _RoomScreenState();
@@ -59,7 +60,11 @@ String planUpdateText(FlashPushEvent e) {
   return '$who 시간을 $verb$when';
 }
 
-class _RoomScreenState extends State<RoomScreen> with WidgetsBindingObserver {
+class _RoomScreenState extends State<RoomScreen>
+    with WidgetsBindingObserver, OpenRouteTracking<RoomScreen> {
+  @override
+  String get openRouteKey => RoomScreen.routeKey(widget.flashId);
+
   MeetupRoom? _room;
   bool _loading = true;
   String? _error;
@@ -70,7 +75,6 @@ class _RoomScreenState extends State<RoomScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _vm = context.read<FlashViewModel>();
-    RoomScreen._open.add(widget.flashId);
     WidgetsBinding.instance.addObserver(this);
     // 실시간: 이 방에 누가 합류하면 조용히 참여자 갱신(토스트 없음).
     // 장소·시간이 바뀌면 갱신 + 토스트 — 보고 있던 값이 말없이 바뀌면 오히려 헷갈린다.
@@ -93,7 +97,6 @@ class _RoomScreenState extends State<RoomScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    RoomScreen._open.remove(widget.flashId);
     WidgetsBinding.instance.removeObserver(this);
     _evSub?.cancel();
     super.dispose();

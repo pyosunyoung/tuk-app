@@ -106,7 +106,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
       }
       return '${_selected.length}명에게 툭 던지기';
     }
-    return '절친 ${friends.length}명에게 툭 던지기';
+    return '친구 ${friends.length}명에게 툭 던지기';
   }
 
   Future<void> _pickSchedule() async {
@@ -182,12 +182,12 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
   }
 
   String _sendToast(int count, List friends) {
-    if (count == 0) return '지금 받을 절친이 없어요 · 방은 열어뒀어요';
+    if (count == 0) return '지금 받을 친구가 없어요 · 방은 열어뒀어요';
     if (_pickMode && _selected.length == 1) {
       final f = friends.cast<dynamic>().firstWhere((e) => e.userId == _selected.first, orElse: () => null);
       if (f != null) return '${f.nickname}에게 툭을 던졌어요';
     }
-    return '절친 $count명에게 툭을 던졌어요';
+    return '친구 $count명에게 툭을 던졌어요';
   }
 
   @override
@@ -310,7 +310,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
     return Row(
       children: [
         Expanded(
-          child: Text('먼저 절친을 추가해 주세요',
+          child: Text('먼저 친구를 추가해 주세요',
               style: AppText.label14.copyWith(color: AppColors.textSub)),
         ),
         const SizedBox(width: AppSpace.x8),
@@ -348,14 +348,14 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
   }
 
   Widget _targetSection(List friends, Map<int, AvailableFriend> available) {
-    // '절친 모두'일 때 몇 명이 지금 한가한지 — 보내기 전 안심용(꺼진 친구 수는 말하지 않는다)
+    // '친구 모두'일 때 몇 명이 지금 한가한지 — 보내기 전 안심용(꺼진 친구 수는 말하지 않는다)
     final availableCount = friends.where((f) => available.containsKey(f.userId)).length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            Expanded(child: _Segment('절친 모두', !_pickMode, () => setState(() => _pickMode = false))),
+            Expanded(child: _Segment('친구 모두', !_pickMode, () => setState(() => _pickMode = false))),
             const SizedBox(width: AppSpace.x8),
             Expanded(child: _Segment('골라서', _pickMode, () => setState(() => _pickMode = true))),
           ],
@@ -369,7 +369,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
               Flexible(
                 child: Text.rich(
                   TextSpan(style: AppText.caption13, children: [
-                    TextSpan(text: '절친 ${friends.length}명에게 갈 거예요'),
+                    TextSpan(text: '친구 ${friends.length}명에게 갈 거예요'),
                     if (availableCount > 0)
                       TextSpan(
                         text: ' · $availableCount명은 지금 한가해요',

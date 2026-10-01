@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/open_routes.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/friend.dart';
@@ -24,7 +25,11 @@ class FriendsScreen extends StatefulWidget {
   State<FriendsScreen> createState() => _FriendsScreenState();
 }
 
-class _FriendsScreenState extends State<FriendsScreen> {
+class _FriendsScreenState extends State<FriendsScreen>
+    with OpenRouteTracking<FriendsScreen> {
+  @override
+  String get openRouteKey => 'friends';
+
   Future<void> _accept(FriendRequest r) async {
     final fvm = context.read<FriendViewModel>();
     final name = await fvm.accept(r.friendshipId);
@@ -124,7 +129,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         ],
                         SizedBox(
                             height: hasRequests ? AppSpace.x32 : AppSpace.x12),
-                        _sectionHeader('내 절친', vm.friends.length),
+                        _sectionHeader('내 친구', vm.friends.length),
                         const SizedBox(height: AppSpace.x12),
                         if (vm.friends.isEmpty)
                           const _EmptyFriends()
@@ -407,7 +412,7 @@ class _EmptyFriends extends StatelessWidget {
             children: [
               const _DashedPlaceholders(),
               const SizedBox(height: AppSpace.x12),
-              Text('아직 절친이 없어요',
+              Text('아직 친구가 없어요',
                   style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: AppSpace.x4),
               ConstrainedBox(

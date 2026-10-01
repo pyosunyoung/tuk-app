@@ -81,7 +81,7 @@ class KakaoShareService {
     final template = FeedTemplate(
       content: _content(
         title: '$who 툭에 초대했어요',
-        description: '초대 코드 $code\n한가할 때 한 탭으로 부르는 절친 앱',
+        description: '초대 코드 $code\n한가할 때 친한 친구를 한 탭으로 부르는 앱',
         link: appLink,
       ),
       buttons: [Button(title: '툭에서 친구 되기', link: appLink)],

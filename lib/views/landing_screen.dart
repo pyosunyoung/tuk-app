@@ -46,7 +46,7 @@ class LandingScreen extends StatelessWidget {
                     Text('시간 비었을 때\n툭 던지면 끝', style: AppText.display),
                     const SizedBox(height: AppSpace.x12),
                     Text(
-                      '단톡방에 묻지 않아도 돼요. 지금 한가한 절친만 보고, 한 탭으로 부르세요.',
+                      '단톡방에 묻지 않아도 돼요. 친한 친구 중 지금 한가한 사람만 보고, 한 탭으로 부르세요.',
                       style: AppText.body.copyWith(color: AppColors.textSub),
                     ),
                     const SizedBox(height: AppSpace.x32),

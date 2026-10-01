@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../core/flash_format.dart';
+import '../core/open_routes.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/flash.dart';
@@ -19,7 +20,11 @@ class ReceivedFlashesScreen extends StatefulWidget {
   State<ReceivedFlashesScreen> createState() => _ReceivedFlashesScreenState();
 }
 
-class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen> {
+class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen>
+    with OpenRouteTracking<ReceivedFlashesScreen> {
+  @override
+  String get openRouteKey => 'received';
+
   @override
   void initState() {
     super.initState();
