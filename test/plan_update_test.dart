@@ -28,6 +28,16 @@ void main() {
       expect(planUpdateText(change), startsWith('민수님이 시간을 바꿨어요 · '));
     });
 
+    test('방 밖 토스트는 어느 모임인지 앞에 붙인다', () {
+      final e = parse({'type': 'PLACE_UPDATED', 'activity': 'MEAL', 'placeBefore': '홍대입구역', 'placeAfter': '합정역'});
+      expect(planUpdateText(e, withActivity: true), '밥 · 민수님이 장소를 바꿨어요 · 합정역');
+      expect(planUpdateText(e), '민수님이 장소를 바꿨어요 · 합정역');
+
+      final joined = parse({'type': 'MEMBER_JOINED', 'activity': 'CAFE'});
+      expect(memberJoinedText(joined), '카페 · 민수님이 합류했어요');
+      expect(memberJoinedText(parse({'type': 'MEMBER_JOINED'})), '민수님이 합류했어요');
+    });
+
     test('합류·새 툭은 장소·시간 이벤트가 아니다', () {
       expect(parse({'type': 'MEMBER_JOINED'}).isPlanUpdated, isFalse);
       expect(parse({'type': 'NEW_FLASH'}).isPlanUpdated, isFalse);

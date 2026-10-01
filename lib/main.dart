@@ -178,12 +178,22 @@ class _TukAppState extends State<TukApp> with WidgetsBindingObserver {
     }
   }
 
-  /// 앱을 보고 있는데 다른 멤버가 장소·시간을 바꿨다 — 접속 중이라 푸시 대신 WebSocket 으로 온다.
-  /// 그 모임방을 보고 있으면 방이 직접 알리므로 여기선 건너뛴다(토스트 중복 방지).
+  /// 앱을 보고 있는데 다른 멤버가 장소·시간을 바꿨거나 누가 합류했다 — 접속 중이라 푸시 대신
+  /// WebSocket 으로 온다. 앱이 꺼져 있었다면 알림이 떴을 일이라 화면에서도 알린다.
+  /// 그 모임방을 보고 있으면 방이 직접 반영하므로 여기선 건너뛴다(토스트 중복 방지).
+  /// 방 밖이라 어느 모임인지 앞에 붙인다("밥 · …").
   void _onFlashEvent(FlashPushEvent e) {
-    if (!e.isPlanUpdated || RoomScreen.isOpen(e.flashId)) return;
+    if (RoomScreen.isOpen(e.flashId)) return;
+    final String text;
+    if (e.isPlanUpdated) {
+      text = planUpdateText(e, withActivity: true);
+    } else if (e.isMemberJoined) {
+      text = memberJoinedText(e);
+    } else {
+      return;
+    }
     final ctx = _navigatorKey.currentContext;
-    if (ctx != null) showTukToast(ctx, planUpdateText(e));
+    if (ctx != null) showTukToast(ctx, text);
   }
 
   /// 알림을 탭해서 들어온 경우: 친구 알림은 친구 화면, 합류·장소·시간은 그 모임방, 나머지는 받은 툭.

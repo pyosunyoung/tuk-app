@@ -13,9 +13,11 @@ class MeetupRoom {
     this.placeAddress,
     this.placeSetById,
     this.placeSetByNickname,
+    this.placeChanged = false,
     this.meetAt,
     this.meetAtSetById,
     this.meetAtSetByNickname,
+    this.meetAtChanged = false,
     required this.status,
     this.expiresAt,
     required this.members,
@@ -37,6 +39,9 @@ class MeetupRoom {
   final int? placeSetById;
   final String? placeSetByNickname;
 
+  /// 마지막 동작이 "바꿈"이었나(처음 정함이면 false). "OO님이 정했어요 / 바꿨어요"에 쓴다.
+  final bool placeChanged;
+
   /// 만나기로 한 시각. 아직 안 정했으면 null.
   /// [expiresAt](모집 마감)과 다른 시각이다 — 약속을 정해도 만료는 늘어나지 않는다.
   final DateTime? meetAt;
@@ -44,6 +49,7 @@ class MeetupRoom {
   /// 약속 시간을 정한 멤버. 장소와 같이 아무나 다시 정할 수 있다.
   final int? meetAtSetById;
   final String? meetAtSetByNickname;
+  final bool meetAtChanged;
 
   /// OPEN | CLOSED
   final String status;
@@ -67,11 +73,13 @@ class MeetupRoom {
         placeAddress: json['placeAddress'] as String?,
         placeSetById: json['placeSetById'] as int?,
         placeSetByNickname: json['placeSetByNickname'] as String?,
+        placeChanged: json['placeChanged'] as bool? ?? false,
         meetAt: json['meetAt'] == null
             ? null
             : DateTime.tryParse(json['meetAt'] as String),
         meetAtSetById: json['meetAtSetById'] as int?,
         meetAtSetByNickname: json['meetAtSetByNickname'] as String?,
+        meetAtChanged: json['meetAtChanged'] as bool? ?? false,
         status: json['status'] as String? ?? 'OPEN',
         expiresAt: json['expiresAt'] == null
             ? null

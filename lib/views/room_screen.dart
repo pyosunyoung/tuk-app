@@ -49,7 +49,19 @@ class RoomScreen extends StatefulWidget {
 
 /// 다른 멤버가 장소·시간을 정하거나 바꿨을 때의 토스트 문구.
 /// 처음 정함과 바꿈을 구분한다 — 바뀐 걸 모르면 옛 장소·시간으로 가는 사고가 난다.
-String planUpdateText(FlashPushEvent e) {
+/// [withActivity] — 방 밖에서 띄울 땐 어느 모임인지 앞에 붙인다("밥 · …"). 방 안에선 뻔하니 뺀다.
+String planUpdateText(FlashPushEvent e, {bool withActivity = false}) {
+  final which = withActivity && e.activity != null ? '${e.activity!.label} · ' : '';
+  return which + _planUpdateBody(e);
+}
+
+/// 방 밖에서 누가 합류했을 때의 토스트 문구.
+String memberJoinedText(FlashPushEvent e) {
+  final which = e.activity != null ? '${e.activity!.label} · ' : '';
+  return '$which${e.nickname ?? '친구'}님이 합류했어요';
+}
+
+String _planUpdateBody(FlashPushEvent e) {
   final who = '${e.nickname ?? '친구'}님이';
   if (e.isPlaceUpdated) {
     final verb = e.placeBefore == null ? '정했어요' : '바꿨어요';
@@ -469,20 +481,24 @@ class _ActivityBadge extends StatelessWidget {
 }
 
 /// 장소 밑 한 줄 — 누가 정했는지. 서버가 정한 사람을 안 주는 옛 방이면 담백하게 넘어간다.
+/// "OO님이 정했어요 / 바꿨어요" — 알림이 "바뀌었어요"라고 했으면 방도 같은 말을 해야 한다.
 String _meetAtSetByLabel(BuildContext context, MeetupRoom room) {
   final me = context.read<AuthViewModel>().me?.userId;
+  final verb = room.meetAtChanged ? '바꿨어요' : '정했어요';
   if (room.meetAtSetById == null) return '';
-  if (room.meetAtSetById == me) return '내가 정했어요';
+  if (room.meetAtSetById == me) return '내가 $verb';
   final name = room.meetAtSetByNickname;
-  return name == null ? '' : '$name님이 정했어요';
+  return name == null ? '' : '$name님이 $verb';
 }
 
 String _placeSetByLabel(BuildContext context, MeetupRoom room) {
   final setterId = room.placeSetById;
-  if (setterId == null) return '장소가 정해졌어요';
-  if (setterId == context.watch<AuthViewModel>().me?.userId) return '내가 정했어요';
+  final verb = room.placeChanged ? '바꿨어요' : '정했어요';
+  // 정한 사람이 탈퇴했으면 이름 없이
+  if (setterId == null) return room.placeChanged ? '장소가 바뀌었어요' : '장소가 정해졌어요';
+  if (setterId == context.watch<AuthViewModel>().me?.userId) return '내가 $verb';
   final name = room.placeSetByNickname;
-  return name == null ? '장소가 정해졌어요' : '$name님이 정했어요';
+  return name == null ? '장소가 정해졌어요' : '$name님이 $verb';
 }
 
 class _PlaceButton extends StatelessWidget {
