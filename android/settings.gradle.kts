@@ -23,6 +23,8 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.3.20" apply false
     // FCM — google-services.json 을 읽어 Firebase 설정을 앱에 심는다
     id("com.google.gms.google-services") version "4.4.2" apply false
+    // 오류 수집 — 릴리스 빌드의 난독화 매핑 파일을 올려 스택 트레이스를 읽을 수 있게 한다
+    id("com.google.firebase.crashlytics") version "3.0.6" apply false
 }
 
 include(":app")

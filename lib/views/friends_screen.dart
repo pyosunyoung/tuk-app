@@ -14,6 +14,7 @@ import '../widgets/confirm_sheet.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'delete_account_sheet.dart';
+import 'feedback_sheet.dart';
 import 'friend_add_sheet.dart';
 import 'landing_screen.dart';
 
@@ -189,10 +190,12 @@ class _FriendsScreenState extends State<FriendsScreen>
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_horiz, color: AppColors.textSub),
             onSelected: (v) {
+              if (v == 'feedback') showFeedbackSheet(context);
               if (v == 'logout') _logout();
               if (v == 'delete') _deleteAccount();
             },
             itemBuilder: (_) => [
+              const PopupMenuItem(value: 'feedback', child: Text('의견 보내기')),
               const PopupMenuItem(value: 'logout', child: Text('로그아웃')),
               const PopupMenuItem(value: 'delete', child: Text('탈퇴하기')),
             ],

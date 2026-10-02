@@ -29,13 +29,21 @@ class AppConfig {
     return 'localhost';
   }
 
-  static String get baseUrl =>
-      _baseUrlOverride.isNotEmpty ? _baseUrlOverride : 'http://$_host:8080';
+  /// 운영 서버. 릴리스 빌드는 아무 옵션 없이 빌드해도 여기로 붙는다.
+  /// (예전엔 기본값이 에뮬레이터용 10.0.2.2 라, 빌드 옵션 하나 빠뜨리면 친구 폰에서 로그인부터 안 됐다)
+  static const String prodBaseUrl = 'https://tuk.158-247-230-36.sslip.io';
 
-  /// STOMP 웹소켓 엔드포인트 (SockJS 아님 — 네이티브 ws)
-  static String get wsUrl => _baseUrlOverride.isNotEmpty
-      ? '${_baseUrlOverride.replaceFirst(RegExp(r'^http'), 'ws')}/ws'
-      : 'ws://$_host:8080/ws';
+  /// 우선순위: API_BASE_URL 옵션 > 릴리스면 운영 > 개발이면 로컬(API_HOST 또는 에뮬레이터)
+  static String get _origin {
+    if (_baseUrlOverride.isNotEmpty) return _baseUrlOverride;
+    if (kReleaseMode && _hostOverride.isEmpty) return prodBaseUrl;
+    return 'http://$_host:8080';
+  }
+
+  static String get baseUrl => _origin;
+
+  /// STOMP 웹소켓 엔드포인트 (SockJS 아님 — 네이티브 ws). https 면 wss.
+  static String get wsUrl => '${_origin.replaceFirst(RegExp(r'^http'), 'ws')}/ws';
 
   static const String apiPrefix = '/api';
 }
@@ -49,7 +57,7 @@ class ShareConfig {
 
   static const String webBase = String.fromEnvironment(
     'SHARE_WEB_BASE',
-    defaultValue: 'https://tuk.158-247-230-36.sslip.io',
+    defaultValue: AppConfig.prodBaseUrl,
   );
 
   /// 카드 대표 이미지 (서버 Caddy 가 public/share/ 에서 제공). 카카오 권장 비율 2:1.

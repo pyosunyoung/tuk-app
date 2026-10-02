@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,7 @@ import 'services/deep_link_service.dart';
 import 'services/push_service.dart';
 import 'services/stomp_service.dart';
 import 'services/token_storage.dart';
+import 'services/update_checker.dart';
 import 'viewmodels/auth_view_model.dart';
 import 'viewmodels/flash_view_model.dart';
 import 'viewmodels/friend_view_model.dart';
@@ -29,7 +32,22 @@ import 'views/friends_screen.dart';
 import 'views/received_flashes_screen.dart';
 import 'views/room_screen.dart';
 import 'views/splash_screen.dart';
+import 'views/update_sheet.dart';
 import 'widgets/toast.dart';
+
+/// 오류 수집(Crashlytics). 친구 폰에서 앱이 죽어도 지금까진 알 방법이 없었다.
+///
+/// 개발 빌드는 수집하지 않는다 — 고치는 중에 나는 오류가 실사용 오류와 섞이면 안 된다.
+/// 화면(Flutter) 오류와 그 밖의 비동기 오류를 둘 다 잡는다.
+Future<void> _startCrashReporting() async {
+  final crashlytics = FirebaseCrashlytics.instance;
+  await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+  FlutterError.onError = crashlytics.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    crashlytics.recordError(error, stack, fatal: true);
+    return true;
+  };
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +56,9 @@ Future<void> main() async {
   try {
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
+    await _startCrashReporting();
   } catch (e) {
-    debugPrint('[tuk] Firebase 초기화 실패 — 푸시 없이 계속: $e');
+    debugPrint('[tuk] Firebase 초기화 실패 — 푸시·오류 수집 없이 계속: $e');
   }
 
   // 카카오 SDK — 키가 없으면 초기화를 건너뛴다(다른 기능은 그대로 동작).
@@ -153,6 +172,17 @@ class _TukAppState extends State<TukApp> with WidgetsBindingObserver {
     widget.push.friendsChanged.addListener(_onFriendsChanged);
     _flashSub = widget.flashVM.events.listen(_onFlashEvent);
     WidgetsBinding.instance.addObserver(this);
+    // 스플래시·로그인 흐름이 자리 잡은 뒤에 묻는다(첫 화면 위에 바로 시트가 뜨면 정신없다)
+    Future.delayed(const Duration(seconds: 3), _checkForUpdate);
+  }
+
+  Future<void> _checkForUpdate() async {
+    final checker = UpdateChecker();
+    final update = await checker.check();
+    final ctx = _navigatorKey.currentContext;
+    if (update == null || ctx == null || !ctx.mounted) return;
+    await showUpdateSheet(ctx, update);
+    await checker.markSeen(update.info.latestBuild);
   }
 
   @override

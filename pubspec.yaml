@@ -47,6 +47,8 @@ dependencies:
   url_launcher: ^6.3.2
   shared_preferences: ^2.5.5
   kakao_flutter_sdk_share: ^2.0.1
+  package_info_plus: ^10.2.2
+  firebase_crashlytics: ^5.4.0
 
 dev_dependencies:
   flutter_test:

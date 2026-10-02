@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,10 +17,12 @@ import 'intro_screen.dart';
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
+  // 인트로 마지막 컷과 같은 세 줄. "알아서 꺼져요"는 무엇이 꺼지는지 밝힌다 —
+  // 모인 약속은 남는데 "다 사라지나?"로 읽히면 안 된다.
   static const _summaries = [
     '한가한 친구가 먼저 보여요',
     '거절은 아무에게도 안 보여요',
-    '시간 지나면 알아서 꺼져요',
+    '한가함은 시간 지나면 알아서 꺼져요',
   ];
 
   @override
@@ -39,14 +42,16 @@ class LandingScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onLongPress: () => _openDevLogin(context),
+                      // 숨은 dev 로그인은 개발 빌드에서만. 운영 서버가 401 로 막지만 친구 폰에 남길 이유가 없다.
+                      onLongPress: kReleaseMode ? null : () => _openDevLogin(context),
                       child: const TukLogo(size: 80),
                     ),
                     const SizedBox(height: AppSpace.x32),
                     Text('시간 비었을 때\n툭 던지면 끝', style: AppText.display),
                     const SizedBox(height: AppSpace.x12),
                     Text(
-                      '단톡방에 묻지 않아도 돼요. 친한 친구 중 지금 한가한 사람만 보고, 한 탭으로 부르세요.',
+                      // 한글은 글자 단위로 줄바꿈돼 "한가한 사/람만"처럼 끊겼다 → 끊을 곳을 직접 정한다
+                      '단톡방에 묻지 않아도 돼요.\n친한 친구 중 지금 한가한 사람만 보고,\n한 탭으로 부르세요.',
                       style: AppText.body.copyWith(color: AppColors.textSub),
                     ),
                     const SizedBox(height: AppSpace.x32),
