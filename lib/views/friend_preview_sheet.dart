@@ -8,6 +8,7 @@ import '../widgets/presence.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
 import 'flash_compose_screen.dart';
+import '../core/keep_words.dart';
 
 /// 친구 카드 탭 → 미리보기 시트 (9e).
 /// 여기까지가 프레즌스 범위. "툭 던지기"는 발송 상세(별도 기능)로 넘어가며,
@@ -79,7 +80,7 @@ class _FriendPreviewSheet extends StatelessWidget {
           else ...[
             _DisabledButton('${friend.nickname}에게 툭 던지기'),
             const SizedBox(height: AppSpace.x8),
-            Text('지금은 한가하지 않대요. 그래도 던져두면 나중에 봐요.',
+            Text(keepWords('지금은 한가하지 않대요. 그래도 던져두면 나중에 봐요.'),
                 textAlign: TextAlign.center, style: AppText.caption12),
           ],
           const SizedBox(height: AppSpace.x12),
@@ -93,7 +94,7 @@ class _FriendPreviewSheet extends StatelessWidget {
           ),
           const SizedBox(height: AppSpace.x12),
           Center(
-            child: Text('무시해도 상대에겐 아무것도 안 보여요',
+            child: Text(keepWords('무시해도 상대에겐 아무것도 안 보여요'),
                 style: AppText.caption12),
           ),
         ],
@@ -119,7 +120,7 @@ class _ProfileRow extends StatelessWidget {
           alignment: Alignment.center,
           decoration: const BoxDecoration(
               color: AppColors.primaryTint, shape: BoxShape.circle),
-          child: Text(initial,
+          child: Text(keepWords(initial),
               style: AppText.title20.copyWith(color: AppColors.primaryPress)),
         ),
         const SizedBox(width: AppSpace.x12),
@@ -130,7 +131,7 @@ class _ProfileRow extends StatelessWidget {
               Row(
                 children: [
                   Flexible(
-                    child: Text(friend.nickname,
+                    child: Text(keepWords(friend.nickname),
                         overflow: TextOverflow.ellipsis,
                         style: AppText.title20),
                   ),
@@ -140,7 +141,7 @@ class _ProfileRow extends StatelessWidget {
               ),
               const SizedBox(height: AppSpace.x4),
               if (liveExpiresAt == null)
-                Text('지금은 한가하지 않아요', style: AppText.caption12)
+                Text(keepWords('지금은 한가하지 않아요'), style: AppText.caption12)
               else
                 Row(
                   children: [
@@ -151,11 +152,11 @@ class _ProfileRow extends StatelessWidget {
                           color: AppColors.success, shape: BoxShape.circle),
                     ),
                     const SizedBox(width: 5),
-                    Text('지금 한가함',
+                    Text(keepWords('지금 한가함'),
                         style: AppText.caption12.copyWith(
                             color: AppColors.success,
                             fontWeight: FontWeight.w500)),
-                    Text(' · ${friendRemainingText(liveExpiresAt!)}',
+                    Text(keepWords(' · ${friendRemainingText(liveExpiresAt!)}'),
                         style: AppText.caption12),
                   ],
                 ),
@@ -181,7 +182,7 @@ class _DisabledButton extends StatelessWidget {
         color: AppColors.background,
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
-      child: Text(label,
+      child: Text(keepWords(label),
           style: AppText.title16.copyWith(color: AppColors.textSub)),
     );
   }

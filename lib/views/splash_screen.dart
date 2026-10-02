@@ -6,6 +6,7 @@ import '../widgets/logo.dart';
 import '../viewmodels/auth_view_model.dart';
 import 'home_screen.dart';
 import 'landing_screen.dart';
+import '../core/keep_words.dart';
 
 /// 스플래시 (7a-1) — 코랄 전면, 로고 등장(0.92→1, 320ms) 후 ~1s 만에 분기.
 /// 로그인 상태면 홈으로 직행, 아니면 랜딩으로.
@@ -60,8 +61,8 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 const TukLogo(size: 96, variant: TukLogoVariant.splashTile),
                 const SizedBox(height: AppSpace.x20),
-                Text(
-                  '지금 볼래?',
+                Text(keepWords(
+                  '지금 볼래?'),
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 14,

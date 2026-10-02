@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
+import '../core/keep_words.dart';
 
 /// 툭 로고 변형.
 enum TukLogoVariant {
@@ -68,8 +69,8 @@ class TukLogo extends StatelessWidget {
             Positioned(
               left: 16 * scale,
               bottom: 14 * scale,
-              child: Text(
-                '툭',
+              child: Text(keepWords(
+                '툭'),
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,

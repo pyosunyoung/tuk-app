@@ -5,6 +5,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../viewmodels/auth_view_model.dart';
 import 'avatar.dart';
+import '../core/keep_words.dart';
 
 /// 친구 화면으로 가는 입구 (홈·콜드스타트 공통).
 ///
@@ -45,8 +46,8 @@ class FriendsEntryChip extends StatelessWidget {
                   size: 28,
                 ),
                 const SizedBox(width: AppSpace.x8),
-                Text(
-                  '친구',
+                Text(keepWords(
+                  '친구'),
                   style: AppText.label14.copyWith(
                     color: AppColors.text,
                     fontWeight: FontWeight.w600,
@@ -69,8 +70,8 @@ class FriendsEntryChip extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                   border: Border.all(color: AppColors.background, width: 2),
                 ),
-                child: Text(
-                  requestCount > 9 ? '9+' : '$requestCount',
+                child: Text(keepWords(
+                  requestCount > 9 ? '9+' : '$requestCount'),
                   style: const TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 11,

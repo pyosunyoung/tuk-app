@@ -6,6 +6,7 @@ import '../services/api_client.dart';
 import 'primitives.dart';
 import 'sheet.dart';
 import 'toast.dart';
+import '../core/keep_words.dart';
 
 /// 되돌리기 어려운 행동을 한 번 더 묻는 시트(탈퇴, 친구 끊기). 끝까지 해냈으면 true.
 ///
@@ -88,7 +89,7 @@ class _ConfirmSheetState extends State<_ConfirmSheet> {
                 color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text(widget.title, style: AppText.title20),
+          Text(keepWords(widget.title), style: AppText.title20),
           const SizedBox(height: AppSpace.x16),
           for (final line in widget.lines) _Line(line),
           const SizedBox(height: AppSpace.x24),
@@ -118,7 +119,7 @@ class _Line extends StatelessWidget {
             child: Container(width: 4, height: 4,
                 decoration: const BoxDecoration(color: AppColors.textSub, shape: BoxShape.circle)),
           ),
-          Expanded(child: Text(text, style: AppText.body)),
+          Expanded(child: Text(keepWords(text), style: AppText.body)),
         ],
       ),
     );

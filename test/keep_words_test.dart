@@ -11,4 +11,13 @@ void main() {
     const text = '한가하다는 표시도, 툭에 합류 받는 것도 시간이 지나면 끝나요.';
     expect(keepWords(text).replaceAll('⁠', ''), text);
   });
+
+  test('한글이 없으면 그대로 둔다', () {
+    expect(keepWords('ABC-123'), 'ABC-123');
+  });
+
+  test('이모지 옆에는 끼우지 않는다(조합 이모지가 깨지지 않게)', () {
+    expect(keepWords('👍🏻좋아'), '👍🏻좋⁠아');
+    expect(keepWords('🎮 PC방'), '🎮 PC⁠방');
+  });
 }

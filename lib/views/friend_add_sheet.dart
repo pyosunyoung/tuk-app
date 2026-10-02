@@ -11,6 +11,7 @@ import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 const _mono = 'monospace';
 
@@ -110,7 +111,7 @@ class _Chooser extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('어떻게 추가할까요?', style: AppText.title20),
+        Text(keepWords('어떻게 추가할까요?'), style: AppText.title20),
         const SizedBox(height: AppSpace.x16),
         _MenuRow(
           glyph: '코드',
@@ -127,7 +128,7 @@ class _Chooser extends StatelessWidget {
         ),
         const SizedBox(height: AppSpace.x20),
         Center(
-          child: Text('코드로만 친구가 돼요 · 검색으로는 찾을 수 없어요',
+          child: Text(keepWords('코드로만 친구가 돼요 · 검색으로는 찾을 수 없어요'),
               style: AppText.caption12),
         ),
       ],
@@ -169,7 +170,7 @@ class _MenuRow extends StatelessWidget {
                 color: AppColors.primaryTint,
                 borderRadius: BorderRadius.circular(AppRadius.small),
               ),
-              child: Text(glyph,
+              child: Text(keepWords(glyph),
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: glyph.characters.length > 1 ? 15 : 20,
@@ -182,13 +183,13 @@ class _MenuRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppText.title16),
+                  Text(keepWords(title), style: AppText.title16),
                   const SizedBox(height: 3),
-                  Text(desc, style: AppText.caption13),
+                  Text(keepWords(desc), style: AppText.caption13),
                 ],
               ),
             ),
-            Text('›',
+            Text(keepWords('›'),
                 style: AppText.title20.copyWith(color: AppColors.textSub)),
           ],
         ),
@@ -223,9 +224,9 @@ class _MyCodeState extends State<_MyCode> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('내 초대 코드', style: AppText.title20),
+        Text(keepWords('내 초대 코드'), style: AppText.title20),
         const SizedBox(height: AppSpace.x8),
-        Text('이 코드를 친구에게 알려주세요',
+        Text(keepWords('이 코드를 친구에게 알려주세요'),
             style: AppText.label14.copyWith(color: AppColors.textSub)),
         const SizedBox(height: AppSpace.x20),
         GestureDetector(
@@ -238,8 +239,8 @@ class _MyCodeState extends State<_MyCode> {
               borderRadius: BorderRadius.circular(AppRadius.card),
               border: Border.all(color: AppColors.primaryTintBorder),
             ),
-            child: Text(
-              code ?? '········',
+            child: Text(keepWords(
+              code ?? '········'),
               style: TextStyle(
                 fontFamily: _mono,
                 fontSize: 34,
@@ -270,7 +271,7 @@ class _MyCodeState extends State<_MyCode> {
         ),
         const SizedBox(height: AppSpace.x16),
         Center(
-          child: Text('코드를 아는 사람만 신청할 수 있어요',
+          child: Text(keepWords('코드를 아는 사람만 신청할 수 있어요'),
               style: AppText.caption12),
         ),
       ],
@@ -352,9 +353,9 @@ class _CodeInputState extends State<_CodeInput> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('친구 코드 입력', style: AppText.title20),
+        Text(keepWords('친구 코드 입력'), style: AppText.title20),
         const SizedBox(height: AppSpace.x8),
-        Text('친구에게 받은 8자 코드를 넣어주세요',
+        Text(keepWords('친구에게 받은 8자 코드를 넣어주세요'),
             style: AppText.label14.copyWith(color: AppColors.textSub)),
         const SizedBox(height: AppSpace.x20),
         Container(
@@ -412,7 +413,7 @@ class _CodeInputState extends State<_CodeInput> {
         ),
         const SizedBox(height: AppSpace.x16),
         Center(
-          child: Text('상대가 수락해야 친구가 돼요', style: AppText.caption12),
+          child: Text(keepWords('상대가 수락해야 친구가 돼요'), style: AppText.caption12),
         ),
       ],
     );

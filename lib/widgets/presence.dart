@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../core/keep_words.dart';
 
 // ─────────────────────────────────────────── 만료/남은시간 문구
 
@@ -50,7 +51,7 @@ class ActivityChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.xsmall),
         border: Border.all(color: AppColors.border),
       ),
-      child: Text(label,
+      child: Text(keepWords(label),
           style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
     );
   }
@@ -160,10 +161,10 @@ class NowCallCard extends StatelessWidget {
                       ),
                       const SizedBox(width: AppSpace.x8),
                       Flexible(
-                        child: Text(
+                        child: Text(keepWords(
                           // 라벨은 켜짐/꺼짐에 따라 바뀌지 않는다 — 상태는 오른쪽 스위치가 말한다.
                           // 무엇을 켜는 건지는 라벨이, 지금 어떤지는 스위치와 아래 설명이 맡는다.
-                          '지금 한가해요',
+                          '지금 한가해요'),
                           style: AppText.title20.copyWith(
                             color: on ? AppColors.text : AppColors.textSub,
                           ),
@@ -174,13 +175,13 @@ class NowCallCard extends StatelessWidget {
                   const SizedBox(height: AppSpace.x4),
                   Padding(
                     padding: const EdgeInsets.only(left: AppSpace.x16),
-                    child: Text(
+                    child: Text(keepWords(
                       on
                           ? [
                               if (activityLabel != null && activityLabel!.isNotEmpty) activityLabel!,
                               if (expiresAt != null) callExpiryText(expiresAt!),
                             ].join(' · ')
-                          : '켜두면 한가할 때 친구에게만 보여요',
+                          : '켜두면 한가할 때 친구에게만 보여요'),
                       style: AppText.label14.copyWith(color: AppColors.textSub),
                     ),
                   ),
@@ -239,7 +240,7 @@ class FriendPresenceCard extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(nickname,
+                        child: Text(keepWords(nickname),
                             overflow: TextOverflow.ellipsis,
                             style: AppText.label15
                                 .copyWith(fontWeight: FontWeight.w600)),
@@ -258,7 +259,7 @@ class FriendPresenceCard extends StatelessWidget {
                             color: AppColors.success, shape: BoxShape.circle),
                       ),
                       const SizedBox(width: 5),
-                      Text('지금 한가함',
+                      Text(keepWords('지금 한가함'),
                           style: AppText.caption12.copyWith(
                               color: AppColors.success,
                               fontWeight: FontWeight.w500)),
@@ -268,7 +269,7 @@ class FriendPresenceCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpace.x8),
-            Text(friendRemainingText(expiresAt), style: AppText.caption12),
+            Text(keepWords(friendRemainingText(expiresAt)), style: AppText.caption12),
           ],
         ),
       ),
@@ -295,7 +296,7 @@ class _Avatar extends StatelessWidget {
           color: AppColors.primaryTint, shape: BoxShape.circle),
       child: (imageUrl != null && imageUrl!.isNotEmpty)
           ? Image.network(imageUrl!, width: size, height: size, fit: BoxFit.cover)
-          : Text(initial,
+          : Text(keepWords(initial),
               style: TextStyle(
                 fontFamily: 'Pretendard',
                 fontSize: size * 0.4,

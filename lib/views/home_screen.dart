@@ -24,6 +24,7 @@ import 'friends_screen.dart';
 import 'home_coldstart_screen.dart';
 import 'received_flashes_screen.dart';
 import 'room_screen.dart';
+import '../core/keep_words.dart';
 
 /// 로그인 이후 홈. 친구 수에 따라 콜드스타트(초대) vs 프레즌스 홈으로 분기.
 class HomeScreen extends StatelessWidget {
@@ -217,7 +218,7 @@ class _PresenceHomeState extends State<_PresenceHome> {
                         ],
                         const SizedBox(height: AppSpace.x24),
                         Center(
-                          child: Text('무시해도 상대에겐 아무것도 안 보여요',
+                          child: Text(keepWords('무시해도 상대에겐 아무것도 안 보여요'),
                               style: AppText.caption12),
                         ),
                       ],
@@ -320,15 +321,15 @@ class _EmptyAvailable extends StatelessWidget {
         children: [
           const _AvatarPlaceholders(),
           const SizedBox(height: AppSpace.x12),
-          Text('아직 아무도 안 켰어요',
+          Text(keepWords('아직 아무도 안 켰어요'),
               style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: AppSpace.x4),
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 240),
-            child: Text(
+            child: Text(keepWords(
               myOn
                   ? '켜져 있으니 괜찮아요. 친구가 한가해지면 바로 알려줄게요.'
-                  : '친구가 한가해지면 여기 떠요.',
+                  : '친구가 한가해지면 여기 떠요.'),
               textAlign: TextAlign.center,
               style: AppText.label14
                   .copyWith(color: AppColors.textSub, height: 1.55),
@@ -418,7 +419,7 @@ class _Banner extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(title,
+                        child: Text(keepWords(title),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppText.label15
@@ -434,7 +435,7 @@ class _Banner extends StatelessWidget {
                             borderRadius:
                                 BorderRadius.circular(AppRadius.pill),
                           ),
-                          child: Text(badge!,
+                          child: Text(keepWords(badge!),
                               style: AppText.caption12
                                   .copyWith(color: AppColors.primaryPress)),
                         ),
@@ -442,13 +443,13 @@ class _Banner extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 2),
-                  Text(summary,
+                  Text(keepWords(summary),
                       maxLines: 1, overflow: TextOverflow.ellipsis,
                       style: AppText.caption13.copyWith(color: AppColors.primaryPress)),
                 ],
               ),
             ),
-            const Text('›', style: TextStyle(
+            Text(keepWords('›'), style: TextStyle(
                 fontFamily: 'Pretendard', fontSize: 18, color: AppColors.primaryPress)),
           ],
         ),
@@ -618,7 +619,7 @@ class _MoreMeetups extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpace.x8),
         child: Center(
-          child: Text('+$more개 더 보기',
+          child: Text(keepWords('+$more개 더 보기'),
               style: AppText.caption13.copyWith(
                   color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
         ),
@@ -725,7 +726,7 @@ class _TurnOnBanner extends StatelessWidget {
             ),
             const SizedBox(width: AppSpace.x10),
             Expanded(
-              child: Text('나도 켜두면 친구가 먼저 부를 수 있어요',
+              child: Text(keepWords('나도 켜두면 친구가 먼저 부를 수 있어요'),
                   style: AppText.label14.copyWith(
                       color: AppColors.primaryPress,
                       fontWeight: FontWeight.w500)),

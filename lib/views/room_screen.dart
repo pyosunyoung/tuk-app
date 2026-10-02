@@ -21,6 +21,7 @@ import 'flash_compose_screen.dart';
 import 'map_app_sheet.dart';
 import 'meet_time_sheet.dart';
 import 'place_sheet.dart';
+import '../core/keep_words.dart';
 
 /// 모임방 (11c) — 합류한 사람이 모여 언제·어디서 만날지 맞춘다.
 /// 만료 시각은 방 응답에 들어 있다. 생성자의 [expiresAt] 은 방을 불러오기 전에도 남은 시간을
@@ -236,7 +237,7 @@ class _RoomScreenState extends State<RoomScreen>
                         child: Icon(Icons.arrow_back, size: 22, color: AppColors.text)),
                   ),
                   const SizedBox(width: AppSpace.x12),
-                  Text('모임방', style: AppText.title20),
+                  Text(keepWords('모임방'), style: AppText.title20),
                 ],
               ),
             ),
@@ -297,7 +298,7 @@ class _RoomScreenState extends State<RoomScreen>
           ],
           if (over) ...[
             const SizedBox(height: AppSpace.x24),
-            Center(child: Text('다음에 또 툭 던져보세요', style: AppText.caption12)),
+            Center(child: Text(keepWords('다음에 또 툭 던져보세요'), style: AppText.caption12)),
             const SizedBox(height: AppSpace.x12),
             PillButton.secondary('같은 내용으로 다시 던지기', onPressed: _resend),
           ],
@@ -320,12 +321,12 @@ class _RoomScreenState extends State<RoomScreen>
           _ActivityBadge(label: room.activity.label, ended: ended),
           const SizedBox(width: AppSpace.x8),
           Expanded(
-            child: Text(
+            child: Text(keepWords(
               over
                   ? '모임이 끝났어요 · 기록은 남아요'
                   : joinClosed
                       ? '합류는 끝났어요 · 약속은 그대로예요'
-                      : (_expiresAt != null ? roomJoinDeadlineText(_expiresAt!) : ''),
+                      : (_expiresAt != null ? roomJoinDeadlineText(_expiresAt!) : '')),
               style: AppText.label14.copyWith(color: AppColors.textSub),
             ),
           ),
@@ -347,7 +348,7 @@ class _RoomScreenState extends State<RoomScreen>
           borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(color: AppColors.border),
         ),
-        child: Text(meetTimeLabel(room.meetAt!),
+        child: Text(keepWords(meetTimeLabel(room.meetAt!)),
             style: AppText.label15.copyWith(color: AppColors.textSub)),
       );
     }
@@ -364,12 +365,12 @@ class _RoomScreenState extends State<RoomScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(set ? meetTimeLabel(room.meetAt!) : '언제 만날까요?',
+                Text(keepWords(set ? meetTimeLabel(room.meetAt!) : '언제 만날까요?'),
                     style: AppText.label15.copyWith(
                         color: set ? AppColors.text : AppColors.textSub,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 3),
-                Text(set ? _meetAtSetByLabel(context, room) : '아직 안 정했어요',
+                Text(keepWords(set ? _meetAtSetByLabel(context, room) : '아직 안 정했어요'),
                     style: AppText.caption13),
               ],
             ),
@@ -392,7 +393,7 @@ class _RoomScreenState extends State<RoomScreen>
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(color: AppColors.border),
           ),
-          child: Text(room.placeName!,
+          child: Text(keepWords(room.placeName!),
               style: AppText.label15.copyWith(color: AppColors.textSub)),
         ),
       );
@@ -414,20 +415,20 @@ class _RoomScreenState extends State<RoomScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(set ? room.placeName! : '어디서 볼까요?',
+                    Text(keepWords(set ? room.placeName! : '어디서 볼까요?'),
                         style: AppText.label15.copyWith(
                             color: set ? AppColors.text : AppColors.textSub,
                             fontWeight: FontWeight.w600)),
                     // 검색으로 고른 장소면 주소 — 같은 이름의 다른 지점과 헷갈리지 않게
                     if (set && room.placeAddress != null) ...[
                       const SizedBox(height: 2),
-                      Text(room.placeAddress!,
+                      Text(keepWords(room.placeAddress!),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppText.caption13),
                     ],
                     const SizedBox(height: 3),
-                    Text(set ? _placeSetByLabel(context, room) : '아직 안 정했어요',
+                    Text(keepWords(set ? _placeSetByLabel(context, room) : '아직 안 정했어요'),
                         style: AppText.caption13),
                   ],
                 ),
@@ -473,7 +474,7 @@ class _ActivityBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.pill),
         border: ended ? Border.all(color: AppColors.border) : null,
       ),
-      child: Text(label, style: AppText.label14.copyWith(
+      child: Text(keepWords(label), style: AppText.label14.copyWith(
           fontWeight: FontWeight.w600,
           color: ended ? AppColors.textSub : AppColors.primaryPress)),
     );
@@ -517,7 +518,7 @@ class _PlaceButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.pill),
           border: Border.all(color: set ? AppColors.border : AppColors.primaryTintBorder),
         ),
-        child: Text(set ? '변경' : '정하기', style: AppText.label14.copyWith(
+        child: Text(keepWords(set ? '변경' : '정하기'), style: AppText.label14.copyWith(
             fontWeight: FontWeight.w600,
             color: set ? AppColors.textSub : AppColors.primaryPress)),
       ),
@@ -541,7 +542,7 @@ class _MapButton extends StatelessWidget {
             const Icon(Icons.map_outlined, size: 18, color: AppColors.primaryPress),
             const SizedBox(width: AppSpace.x8),
             Expanded(
-              child: Text('지도에서 보기', style: AppText.label14.copyWith(
+              child: Text(keepWords('지도에서 보기'), style: AppText.label14.copyWith(
                   fontWeight: FontWeight.w600, color: AppColors.primaryPress)),
             ),
             const Icon(Icons.chevron_right, size: 20, color: AppColors.textSub),
@@ -572,12 +573,12 @@ class _MemberCard extends StatelessWidget {
           Expanded(
             child: Row(children: [
               Flexible(
-                child: Text(member.nickname, overflow: TextOverflow.ellipsis,
+                child: Text(keepWords(member.nickname), overflow: TextOverflow.ellipsis,
                     style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
               ),
               if (isMe) ...[
                 const SizedBox(width: AppSpace.x4),
-                Text('· 나', style: AppText.label15.copyWith(color: AppColors.textSub)),
+                Text(keepWords('· 나'), style: AppText.label15.copyWith(color: AppColors.textSub)),
               ],
             ]),
           ),
@@ -589,14 +590,14 @@ class _MemberCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.xsmall),
                 border: Border.all(color: AppColors.border),
               ),
-              child: Text('던진 사람', style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
+              child: Text(keepWords('던진 사람'), style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
             )
           else
             Row(children: [
               Container(width: 6, height: 6, decoration: const BoxDecoration(
                   color: AppColors.success, shape: BoxShape.circle)),
               const SizedBox(width: 5),
-              Text('합류', style: AppText.caption12.copyWith(
+              Text(keepWords('합류'), style: AppText.caption12.copyWith(
                   color: AppColors.success, fontWeight: FontWeight.w500)),
             ]),
         ],
@@ -619,12 +620,12 @@ class _WaitingCard extends StatelessWidget {
       child: Column(children: [
         _placeholders(),
         const SizedBox(height: AppSpace.x12),
-        Text('합류하면 여기 떠요',
+        Text(keepWords('합류하면 여기 떠요'),
             style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: AppSpace.x4),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 240),
-          child: Text('기다리는 동안 장소를 정해두면 편해요.',
+          child: Text(keepWords('기다리는 동안 장소를 정해두면 편해요.'),
               textAlign: TextAlign.center,
               style: AppText.label14.copyWith(color: AppColors.textSub, height: 1.55)),
         ),
@@ -679,8 +680,8 @@ class _EndedMembers extends StatelessWidget {
           // 끝난 모임은 "누구였더라"를 다시 보는 자리다 — 얼굴만으론 알 수 없어 이름도 적는다.
           if (members.isNotEmpty) ...[
             const SizedBox(height: AppSpace.x8),
-            Text(
-              members.map((m) => m.nickname).join(' · '),
+            Text(keepWords(
+              members.map((m) => m.nickname).join(' · ')),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppText.caption13,
@@ -700,7 +701,7 @@ class _ErrorRetry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text(message, style: AppText.label14.copyWith(color: AppColors.textSub)),
+        Text(keepWords(message), style: AppText.label14.copyWith(color: AppColors.textSub)),
         const SizedBox(height: AppSpace.x12),
         SizedBox(width: 160, child: PillButton.secondary('다시 불러오기', onPressed: onRetry)),
       ]),

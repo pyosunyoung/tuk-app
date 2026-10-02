@@ -4,6 +4,7 @@ import '../core/map_links.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 /// 지도 앱 고르기 시트. 고른 앱을 반환, 닫으면 null.
 /// 마지막으로 쓴 앱을 위에 두고 '최근' 표시 — 매번 같은 앱을 쓰는 사람은 한 번에 누른다.
@@ -48,9 +49,9 @@ class _MapAppSheet extends StatelessWidget {
                 color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('어느 지도로 볼까요?', style: AppText.title20),
+          Text(keepWords('어느 지도로 볼까요?'), style: AppText.title20),
           const SizedBox(height: AppSpace.x4),
-          Text(placeName,
+          Text(keepWords(placeName),
               maxLines: 1, overflow: TextOverflow.ellipsis, style: AppText.caption13),
           const SizedBox(height: AppSpace.x20),
           for (final app in apps) ...[
@@ -62,7 +63,7 @@ class _MapAppSheet extends StatelessWidget {
             const SizedBox(height: AppSpace.x8),
           ],
           const SizedBox(height: AppSpace.x8),
-          Center(child: Text('앱이 없으면 웹 지도로 열려요', style: AppText.caption12)),
+          Center(child: Text(keepWords('앱이 없으면 웹 지도로 열려요'), style: AppText.caption12)),
         ],
       ),
     );
@@ -95,11 +96,11 @@ class _AppRow extends StatelessWidget {
                   color: recent ? AppColors.primaryPress : AppColors.textSub),
               const SizedBox(width: AppSpace.x12),
               Expanded(
-                child: Text(app.label,
+                child: Text(keepWords(app.label),
                     style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
               ),
               if (recent)
-                Text('최근', style: AppText.caption12.copyWith(
+                Text(keepWords('최근'), style: AppText.caption12.copyWith(
                     color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
               const SizedBox(width: AppSpace.x4),
               const Icon(Icons.chevron_right, size: 20, color: AppColors.textSub),

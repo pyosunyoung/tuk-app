@@ -6,6 +6,7 @@ import '../core/typography.dart';
 import '../services/update_checker.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 /// "새 버전이 나왔어요". 받을 곳이 있으면 버튼으로, 없으면(카톡으로 나눠주는 동안) 어디서 받는지 말로.
 Future<void> showUpdateSheet(BuildContext context, PendingUpdate update) {
@@ -41,17 +42,17 @@ class _UpdateSheet extends StatelessWidget {
                 color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('새 버전이 나왔어요 (${info.latestVersion})', style: AppText.title20),
+          Text(keepWords('새 버전이 나왔어요 (${info.latestVersion})'), style: AppText.title20),
           const SizedBox(height: AppSpace.x8),
           if (update.required)
-            Text('지금 버전으로는 일부 기능이 제대로 안 될 수 있어요.', style: AppText.body),
+            Text(keepWords('지금 버전으로는 일부 기능이 제대로 안 될 수 있어요.'), style: AppText.body),
           if (info.notes != null && info.notes!.isNotEmpty) ...[
             const SizedBox(height: AppSpace.x8),
-            Text(info.notes!, style: AppText.body.copyWith(color: AppColors.textSub)),
+            Text(keepWords(info.notes!), style: AppText.body.copyWith(color: AppColors.textSub)),
           ],
           const SizedBox(height: AppSpace.x8),
           if (url == null)
-            Text('툭을 나눠준 친구나 단톡방에서 새 설치 파일을 받아 설치해 주세요. 지금 쓰던 내용은 그대로 남아요.',
+            Text(keepWords('툭을 나눠준 친구나 단톡방에서 새 설치 파일을 받아 설치해 주세요. 지금 쓰던 내용은 그대로 남아요.'),
                 style: AppText.caption13),
           const SizedBox(height: AppSpace.x24),
           if (url != null) ...[

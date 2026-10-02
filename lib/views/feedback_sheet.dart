@@ -10,6 +10,7 @@ import '../core/typography.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
 import '../widgets/toast.dart';
+import '../core/keep_words.dart';
 
 /// 의견 보내기. 친구들이 실제로 쓰기 시작하면 "이상해요"를 알려줄 길이 있어야 한다.
 ///
@@ -77,9 +78,9 @@ class _FeedbackSheet extends StatelessWidget {
                 color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('의견 보내기', style: AppText.title20),
+          Text(keepWords('의견 보내기'), style: AppText.title20),
           const SizedBox(height: AppSpace.x8),
-          Text('불편한 점, 이상하게 동작한 것, 있었으면 하는 것 무엇이든 좋아요. 직접 읽고 답장할게요.',
+          Text(keepWords('불편한 점, 이상하게 동작한 것, 있었으면 하는 것 무엇이든 좋아요. 직접 읽고 답장할게요.'),
               style: AppText.body),
           const SizedBox(height: AppSpace.x16),
           GestureDetector(
@@ -93,8 +94,8 @@ class _FeedbackSheet extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Expanded(child: Text(feedbackEmail, style: AppText.label15)),
-                  Text('복사', style: AppText.caption13),
+                  Expanded(child: Text(keepWords(feedbackEmail), style: AppText.label15)),
+                  Text(keepWords('복사'), style: AppText.caption13),
                 ],
               ),
             ),

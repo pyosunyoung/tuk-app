@@ -17,6 +17,7 @@ import 'delete_account_sheet.dart';
 import 'feedback_sheet.dart';
 import 'friend_add_sheet.dart';
 import 'landing_screen.dart';
+import '../core/keep_words.dart';
 
 /// 친구 화면 (10a/10b) — 받은 신청 수락 + 내 절친 목록 + 친구 추가.
 class FriendsScreen extends StatefulWidget {
@@ -124,7 +125,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                               )),
                           const SizedBox(height: AppSpace.x12),
                           Center(
-                            child: Text('그냥 둬도 괜찮아요. 상대에겐 아무것도 안 보여요',
+                            child: Text(keepWords('그냥 둬도 괜찮아요. 상대에겐 아무것도 안 보여요'),
                                 style: AppText.caption12),
                           ),
                         ],
@@ -151,7 +152,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                               )),
                           const SizedBox(height: AppSpace.x12),
                           Center(
-                            child: Text('수락하면 알려줄게요',
+                            child: Text(keepWords('수락하면 알려줄게요'),
                                 style: AppText.caption12),
                           ),
                         ],
@@ -184,7 +185,7 @@ class _FriendsScreenState extends State<FriendsScreen>
             ),
           ),
           const SizedBox(width: AppSpace.x12),
-          Text('친구', style: AppText.title20),
+          Text(keepWords('친구'), style: AppText.title20),
           const Spacer(),
           // 로그아웃은 본문이 아니라 ⋯ 메뉴에(임시, 설정 화면 생기면 이동).
           PopupMenuButton<String>(
@@ -276,19 +277,19 @@ class _SentRequestRow extends StatelessWidget {
           ),
           const SizedBox(width: AppSpace.x12),
           Expanded(
-            child: Text(request.nickname,
+            child: Text(keepWords(request.nickname),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppText.label15.copyWith(color: AppColors.textSub)),
           ),
-          Text('기다리는 중', style: AppText.caption13),
+          Text(keepWords('기다리는 중'), style: AppText.caption13),
           // 코드를 다시 넣으면 되돌릴 수 있어 확인 없이 바로 취소한다
           GestureDetector(
             onTap: onCancel,
             behavior: HitTestBehavior.opaque,
             child: Padding(
               padding: const EdgeInsets.only(left: AppSpace.x12),
-              child: Text('취소',
+              child: Text(keepWords('취소'),
                   style: AppText.caption13.copyWith(
                       decoration: TextDecoration.underline,
                       decorationColor: AppColors.border)),
@@ -321,7 +322,7 @@ class _RequestCard extends StatelessWidget {
           InitialAvatar(nickname: request.nickname, imageUrl: request.profileImage),
           const SizedBox(width: AppSpace.x12),
           Expanded(
-            child: Text(request.nickname,
+            child: Text(keepWords(request.nickname),
                 overflow: TextOverflow.ellipsis,
                 style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
           ),
@@ -348,7 +349,7 @@ class _AcceptButton extends StatelessWidget {
           color: AppColors.primary,
           borderRadius: BorderRadius.circular(AppRadius.pill),
         ),
-        child: Text('수락',
+        child: Text(keepWords('수락'),
             style: AppText.label14
                 .copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
       ),
@@ -377,7 +378,7 @@ class _FriendRow extends StatelessWidget {
           InitialAvatar(nickname: friend.nickname, imageUrl: friend.profileImage),
           const SizedBox(width: AppSpace.x12),
           Expanded(
-            child: Text(friend.nickname,
+            child: Text(keepWords(friend.nickname),
                 overflow: TextOverflow.ellipsis,
                 style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
           ),
@@ -415,13 +416,13 @@ class _EmptyFriends extends StatelessWidget {
             children: [
               const _DashedPlaceholders(),
               const SizedBox(height: AppSpace.x12),
-              Text('아직 친구가 없어요',
+              Text(keepWords('아직 친구가 없어요'),
                   style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: AppSpace.x4),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 250),
-                child: Text(
-                  '코드를 주고받으면 바로 친구가 돼요. 검색으로는 아무도 찾을 수 없어요.',
+                child: Text(keepWords(
+                  '코드를 주고받으면 바로 친구가 돼요. 검색으로는 아무도 찾을 수 없어요.'),
                   textAlign: TextAlign.center,
                   style: AppText.label14
                       .copyWith(color: AppColors.textSub, height: 1.55),
@@ -431,7 +432,7 @@ class _EmptyFriends extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpace.x24),
-        Text('낯선 사람은 들어올 수 없어요', style: AppText.caption12),
+        Text(keepWords('낯선 사람은 들어올 수 없어요'), style: AppText.caption12),
       ],
     );
   }

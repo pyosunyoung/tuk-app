@@ -77,7 +77,7 @@ class _IntroScreenState extends State<IntroScreen> {
                             horizontal: AppSpace.x20, vertical: AppSpace.x12),
                         child: GestureDetector(
                           onTap: () => Navigator.of(context).pop(),
-                          child: Text('건너뛰기',
+                          child: Text(keepWords('건너뛰기'),
                               style: AppText.label14
                                   .copyWith(color: AppColors.textSub)),
                         ),
@@ -128,7 +128,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       onPressed: _startWithKakao,
                     ),
                     const SizedBox(height: AppSpace.x12),
-                    Text('가입만으로는 아무에게도 알림이 가지 않아요',
+                    Text(keepWords('가입만으로는 아무에게도 알림이 가지 않아요'),
                         textAlign: TextAlign.center, style: AppText.caption12),
                   ] else
                     PillButton.primary('다음', onPressed: _next),
@@ -279,7 +279,7 @@ class _Cut1 extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('단톡방 · 우리들',
+              Text(keepWords('단톡방 · 우리들'),
                   style: AppText.caption13.copyWith(
                       color: AppColors.textSub, fontWeight: FontWeight.w500)),
               const SizedBox(height: AppSpace.x12),
@@ -300,7 +300,7 @@ class _Cut1 extends StatelessWidget {
                         bottomLeft: Radius.circular(16),
                       ),
                     ),
-                    child: Text('오늘 저녁에 누구 시간 돼?',
+                    child: Text(keepWords('오늘 저녁에 누구 시간 돼?'),
                         style: AppText.label15
                             .copyWith(fontWeight: FontWeight.w400)),
                   ),
@@ -309,14 +309,14 @@ class _Cut1 extends StatelessWidget {
               const SizedBox(height: AppSpace.x4),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text('오후 6:12', style: AppText.caption12),
+                child: Text(keepWords('오후 6:12'), style: AppText.caption12),
               ),
               const SizedBox(height: AppSpace.x12),
               _skeleton(0.56, const Color(0xFFF4F0EA)),
               const SizedBox(height: AppSpace.x8),
               _skeleton(0.38, const Color(0xFFF7F4EF)),
               const SizedBox(height: AppSpace.x12),
-              Center(child: Text('…답장 없음', style: AppText.caption13)),
+              Center(child: Text(keepWords('…답장 없음'), style: AppText.caption13)),
             ],
           ),
         ),
@@ -408,7 +408,7 @@ class _FriendCard extends StatelessWidget {
               color: AppColors.primaryTint,
               shape: BoxShape.circle,
             ),
-            child: Text(initial,
+            child: Text(keepWords(initial),
                 style: AppText.label15.copyWith(
                     color: AppColors.primaryPress,
                     fontWeight: FontWeight.w600)),
@@ -419,7 +419,7 @@ class _FriendCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(name,
+                  Text(keepWords(name),
                       style: AppText.label15
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(width: AppSpace.x8),
@@ -436,7 +436,7 @@ class _FriendCard extends StatelessWidget {
                         color: AppColors.success, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: AppSpace.x4),
-                  Text('지금 한가함',
+                  Text(keepWords('지금 한가함'),
                       style: AppText.caption12.copyWith(
                           color: AppColors.success,
                           fontWeight: FontWeight.w500)),
@@ -463,7 +463,7 @@ class _ActivityChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.xsmall),
         border: Border.all(color: AppColors.border),
       ),
-      child: Text(label,
+      child: Text(keepWords(label),
           style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
     );
   }
@@ -500,20 +500,20 @@ class _Cut3 extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text('툭',
+                        Text(keepWords('툭'),
                             style: AppText.caption13.copyWith(
                                 color: AppColors.text,
                                 fontWeight: FontWeight.w600)),
                         const Spacer(),
-                        Text('지금', style: AppText.caption12),
+                        Text(keepWords('지금'), style: AppText.caption12),
                       ],
                     ),
                     const SizedBox(height: 2),
                     // 실제 푸시와 같은 문구(서버 FlashPushListener) — 처음 받는 알림과 같아야 알아본다
-                    Text('민수님이 툭 던졌어요',
+                    Text(keepWords('민수님이 툭 던졌어요'),
                         style: AppText.label14
                             .copyWith(fontWeight: FontWeight.w600)),
-                    Text('술 · 지금 볼래?',
+                    Text(keepWords('술 · 지금 볼래?'),
                         style: AppText.label14
                             .copyWith(fontWeight: FontWeight.w400)),
                   ],
@@ -531,19 +531,19 @@ class _Cut3 extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text('민수 · 술',
+                  Text(keepWords('민수 · 술'),
                       style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
                   const Spacer(),
-                  Text('52분 뒤 끝나요', style: AppText.caption12),
+                  Text(keepWords('52분 뒤 끝나요'), style: AppText.caption12),
                 ],
               ),
               const SizedBox(height: AppSpace.x4),
-              Text('지금 볼래?', style: AppText.caption13),
+              Text(keepWords('지금 볼래?'), style: AppText.caption13),
               const SizedBox(height: AppSpace.x12),
               const _MiniButton('합류하기', filled: true),
               const SizedBox(height: AppSpace.x12),
               Center(
-                child: Text('안 누르고 지나쳐도 민수에겐 아무것도 안 보여요',
+                child: Text(keepWords('안 누르고 지나쳐도 민수에겐 아무것도 안 보여요'),
                     style: AppText.caption12),
               ),
             ],
@@ -575,8 +575,8 @@ class _MiniButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.pill),
         border: filled ? null : Border.all(color: AppColors.border),
       ),
-      child: Text(
-        label,
+      child: Text(keepWords(
+        label),
         style: AppText.label15.copyWith(
           color: filled ? Colors.white : AppColors.textSub,
           fontWeight: filled ? FontWeight.w600 : FontWeight.w500,
@@ -609,10 +609,10 @@ class _CutRoom extends StatelessWidget {
               const TukLogo(size: 28),
               const SizedBox(width: AppSpace.x12),
               Expanded(
-                child: Text('술 · 장소가 바뀌었어요',
+                child: Text(keepWords('술 · 장소가 바뀌었어요'),
                     style: AppText.label14.copyWith(fontWeight: FontWeight.w600)),
               ),
-              Text('지금', style: AppText.caption12),
+              Text(keepWords('지금'), style: AppText.caption12),
             ],
           ),
         ),
@@ -634,7 +634,7 @@ class _CutRoom extends StatelessWidget {
                 children: [
                   const Icon(Icons.map_outlined, size: 16, color: AppColors.primary),
                   const SizedBox(width: AppSpace.x4),
-                  Text('지도에서 보기',
+                  Text(keepWords('지도에서 보기'),
                       style: AppText.caption13.copyWith(
                           color: AppColors.primary, fontWeight: FontWeight.w600)),
                 ],
@@ -647,12 +647,12 @@ class _CutRoom extends StatelessWidget {
                   color: const Color(0xFFFEE500),
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
-                child: Text('카톡으로 이야기하기',
+                child: Text(keepWords('카톡으로 이야기하기'),
                     style: AppText.label14.copyWith(
                         color: const Color(0xFF191600), fontWeight: FontWeight.w600)),
               ),
               const SizedBox(height: AppSpace.x12),
-              Text('민수 · 지호 · 나  3명 모였어요', style: AppText.caption12),
+              Text(keepWords('민수 · 지호 · 나  3명 모였어요'), style: AppText.caption12),
             ],
           ),
         ),
@@ -678,14 +678,14 @@ class _RoomRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(width: 48, child: Text(label, style: AppText.caption13)),
+        SizedBox(width: 48, child: Text(keepWords(label), style: AppText.caption13)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value, style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+              Text(keepWords(value), style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: 2),
-              Text(note, style: AppText.caption12),
+              Text(keepWords(note), style: AppText.caption12),
             ],
           ),
         ),
@@ -723,14 +723,14 @@ class _Cut4 extends StatelessWidget {
                               color: AppColors.success, shape: BoxShape.circle),
                         ),
                         const SizedBox(width: AppSpace.x8),
-                        Text('지금 한가해요',
+                        Text(keepWords('지금 한가해요'),
                             style: AppText.title16
                                 .copyWith(fontWeight: FontWeight.w600)),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: AppSpace.x16, top: AppSpace.x4),
-                      child: Text('카페 · 1시간 32분 뒤 자동으로 꺼져요',
+                    Padding(
+                      padding: const EdgeInsets.only(left: AppSpace.x16, top: AppSpace.x4),
+                      child: Text(keepWords('카페 · 1시간 32분 뒤 자동으로 꺼져요'),
                           style: AppText.caption13),
                     ),
                   ],
@@ -746,11 +746,11 @@ class _Cut4 extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('↓',
+              Text(keepWords('↓'),
                   style: AppText.title20.copyWith(
                       color: AppColors.textSub, fontWeight: FontWeight.w500)),
               const SizedBox(width: AppSpace.x8),
-              Text('시간이 지나면',
+              Text(keepWords('시간이 지나면'),
                   style: AppText.caption13
                       .copyWith(fontWeight: FontWeight.w500)),
             ],
@@ -771,7 +771,7 @@ class _Cut4 extends StatelessWidget {
                     color: AppColors.border, shape: BoxShape.circle),
               ),
               const SizedBox(width: AppSpace.x8),
-              Text('지금 한가해요',
+              Text(keepWords('지금 한가해요'),
                   style: AppText.title16.copyWith(
                       color: AppColors.textSub, fontWeight: FontWeight.w500)),
               const Spacer(),

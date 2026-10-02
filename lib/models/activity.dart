@@ -6,6 +6,7 @@ enum Activity {
   walk('WALK', '산책', '🚶'),
   movie('MOVIE', '영화', '🎬'),
   karaoke('KARAOKE', '노래방', '🎤'),
+  pcRoom('PC_ROOM', 'PC방', '🎮'),
   anything('ANYTHING', '아무거나', '✨');
 
   const Activity(this.wire, this.label, this.emoji);

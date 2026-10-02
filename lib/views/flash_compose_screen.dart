@@ -16,6 +16,7 @@ import '../widgets/toast.dart';
 import '../widgets/sheet.dart';
 import 'friend_add_sheet.dart';
 import 'room_screen.dart';
+import '../core/keep_words.dart';
 
 /// 아래에서 위로 올라오는 전체화면 모달 라우트.
 Route<void> flashComposeRoute({Activity? prefillActivity, List<int>? prefillTargetIds}) {
@@ -219,7 +220,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
                         child: Icon(Icons.close, size: 22, color: AppColors.text)),
                   ),
                   const SizedBox(width: AppSpace.x12),
-                  Text('툭 던지기', style: AppText.title20),
+                  Text(keepWords('툭 던지기'), style: AppText.title20),
                 ],
               ),
             ),
@@ -258,7 +259,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
 
   Widget _label(String t) => Padding(
         padding: const EdgeInsets.only(left: AppSpace.x4),
-        child: Text(t, style: AppText.label14.copyWith(color: AppColors.textSub)),
+        child: Text(keepWords(t), style: AppText.label14.copyWith(color: AppColors.textSub)),
       );
 
   Widget _activityChips() {
@@ -301,7 +302,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
           ),
         ),
         const SizedBox(height: AppSpace.x8),
-        Text('${_message.text.characters.length} / 200', style: AppText.caption12),
+        Text(keepWords('${_message.text.characters.length} / 200'), style: AppText.caption12),
       ],
     );
   }
@@ -310,7 +311,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
     return Row(
       children: [
         Expanded(
-          child: Text('먼저 친구를 추가해 주세요',
+          child: Text(keepWords('먼저 친구를 추가해 주세요'),
               style: AppText.label14.copyWith(color: AppColors.textSub)),
         ),
         const SizedBox(width: AppSpace.x8),
@@ -324,7 +325,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
               borderRadius: BorderRadius.circular(AppRadius.pill),
               border: Border.all(color: AppColors.border),
             ),
-            child: Text('친구 추가',
+            child: Text(keepWords('친구 추가'),
                 style: AppText.label15.copyWith(color: AppColors.textSub)),
           ),
         ),
@@ -369,10 +370,10 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
               Flexible(
                 child: Text.rich(
                   TextSpan(style: AppText.caption13, children: [
-                    TextSpan(text: '친구 ${friends.length}명에게 갈 거예요'),
+                    TextSpan(text: keepWords('친구 ${friends.length}명에게 갈 거예요')),
                     if (availableCount > 0)
                       TextSpan(
-                        text: ' · $availableCount명은 지금 한가해요',
+                        text: keepWords(' · $availableCount명은 지금 한가해요'),
                         style: AppText.caption13.copyWith(
                             color: AppColors.success, fontWeight: FontWeight.w600),
                       ),
@@ -444,7 +445,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
           ),
           const SizedBox(width: AppSpace.x8),
           Expanded(
-            child: Text('$who · 새로 던지면 모임방이 따로 생겨요',
+            child: Text(keepWords('$who · 새로 던지면 모임방이 따로 생겨요'),
                 style: AppText.caption13.copyWith(color: AppColors.textSub)),
           ),
         ],
@@ -511,7 +512,7 @@ class _FlashComposeScreenState extends State<FlashComposeScreen> {
               onPressed: canSend ? () => _send(friends) : null,
             ),
             const SizedBox(height: AppSpace.x12),
-            Text('무시해도 상대에겐 아무것도 안 보여요 · $_durationLabel 뒤 끝나요',
+            Text(keepWords('무시해도 상대에겐 아무것도 안 보여요 · $_durationLabel 뒤 끝나요'),
                 textAlign: TextAlign.center, style: AppText.caption12),
           ],
         ),
@@ -538,7 +539,7 @@ class _Chip extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.pill),
           border: Border.all(color: selected ? AppColors.primaryTintBorder : AppColors.border),
         ),
-        child: Text(label, style: AppText.title16.copyWith(
+        child: Text(keepWords(label), style: AppText.title16.copyWith(
             fontWeight: FontWeight.w500,
             color: selected ? AppColors.primaryPress : AppColors.textSub)),
       ),
@@ -563,7 +564,7 @@ class _Segment extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.small),
           border: Border.all(color: selected ? AppColors.primaryTintBorder : AppColors.border),
         ),
-        child: Text(label,
+        child: Text(keepWords(label),
             maxLines: 1, overflow: TextOverflow.ellipsis,
             style: AppText.label15.copyWith(
                 color: selected ? AppColors.primaryPress : AppColors.textSub)),
@@ -603,7 +604,7 @@ class _AvatarStack extends StatelessWidget {
                   color: AppColors.primaryTint, shape: BoxShape.circle,
                   border: Border.all(color: AppColors.background, width: 2),
                 ),
-                child: Text('+$extra', style: AppText.caption12.copyWith(
+                child: Text(keepWords('+$extra'), style: AppText.caption12.copyWith(
                     color: AppColors.primaryPress, fontWeight: FontWeight.w600)),
               ),
             ),
@@ -648,7 +649,7 @@ class _FriendPick extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(nickname, overflow: TextOverflow.ellipsis,
+                  Text(keepWords(nickname), overflow: TextOverflow.ellipsis,
                       style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
                   if (available != null) ...[
                     const SizedBox(height: 3),
@@ -712,7 +713,7 @@ class _DurationWheelState extends State<_DurationWheel> {
           Container(width: 40, height: 4, decoration: BoxDecoration(
               color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
           const SizedBox(height: AppSpace.x20),
-          Text('얼마나 열어둘까요?', style: AppText.title20),
+          Text(keepWords('얼마나 열어둘까요?'), style: AppText.title20),
           const SizedBox(height: AppSpace.x12),
           SizedBox(
             height: 160,
@@ -724,7 +725,7 @@ class _DurationWheelState extends State<_DurationWheel> {
               onSelectedItemChanged: (i) => setState(() => _index = i),
               childDelegate: ListWheelChildBuilderDelegate(
                 childCount: _values.length,
-                builder: (_, i) => Center(child: Text(_label(_values[i]),
+                builder: (_, i) => Center(child: Text(keepWords(_label(_values[i])),
                     style: AppText.title20.copyWith(
                         color: i == _index ? AppColors.primaryPress : AppColors.textSub))),
               ),
@@ -755,8 +756,8 @@ class _AvailableLine extends StatelessWidget {
         ),
         const SizedBox(width: 6),
         Flexible(
-          child: Text(
-            '지금 한가함 · ${friend.activity.label} · ${friendRemainingText(friend.expiresAt)}',
+          child: Text(keepWords(
+            '지금 한가함 · ${friend.activity.label} · ${friendRemainingText(friend.expiresAt)}'),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppText.caption12.copyWith(

@@ -12,6 +12,7 @@ import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'home_screen.dart';
 import 'intro_screen.dart';
+import '../core/keep_words.dart';
 
 /// 랜딩 (7a-2) — 로그인의 주 진입점. 인트로 없이도 이해하고 바로 시작.
 class LandingScreen extends StatelessWidget {
@@ -47,11 +48,11 @@ class LandingScreen extends StatelessWidget {
                       child: const TukLogo(size: 80),
                     ),
                     const SizedBox(height: AppSpace.x32),
-                    Text('시간 비었을 때\n툭 던지면 끝', style: AppText.display),
+                    Text(keepWords('시간 비었을 때\n툭 던지면 끝'), style: AppText.display),
                     const SizedBox(height: AppSpace.x12),
-                    Text(
+                    Text(keepWords(
                       // 한글은 글자 단위로 줄바꿈돼 "한가한 사/람만"처럼 끊겼다 → 끊을 곳을 직접 정한다
-                      '단톡방에 묻지 않아도 돼요.\n친한 친구 중 지금 한가한 사람만 보고,\n한 탭으로 부르세요.',
+                      '단톡방에 묻지 않아도 돼요.\n친한 친구 중 지금 한가한 사람만 보고,\n한 탭으로 부르세요.'),
                       style: AppText.body.copyWith(color: AppColors.textSub),
                     ),
                     const SizedBox(height: AppSpace.x32),
@@ -105,7 +106,7 @@ class LandingScreen extends StatelessWidget {
     final id = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('개발용 로그인'),
+        title: Text(keepWords('개발용 로그인')),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -114,10 +115,10 @@ class LandingScreen extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('취소')),
+              child: Text(keepWords('취소'))),
           FilledButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: const Text('로그인'),
+            child: Text(keepWords('로그인')),
           ),
         ],
       ),
@@ -188,8 +189,8 @@ class _BrowseButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Center(
-          child: Text(
-            '툭이 뭔가요? 30초만 둘러보기',
+          child: Text(keepWords(
+            '툭이 뭔가요? 30초만 둘러보기'),
             style: AppText.label15.copyWith(
               color: AppColors.textSub,
               decoration: TextDecoration.underline,
@@ -217,11 +218,11 @@ class _TermsNotice extends StatelessWidget {
       TextSpan(
         style: AppText.caption12,
         children: [
-          const TextSpan(text: '계속하면 '),
+          TextSpan(text: keepWords('계속하면 ')),
           _linkSpan(context, '이용약관', ShareConfig.termsPage, link),
           const TextSpan(text: '·'),
           _linkSpan(context, '개인정보 처리방침', ShareConfig.privacyPage, link),
-          const TextSpan(text: '에 동의합니다'),
+          TextSpan(text: keepWords('에 동의합니다')),
         ],
       ),
       textAlign: TextAlign.center,
@@ -240,7 +241,7 @@ class _TermsNotice extends StatelessWidget {
           final opened = await launchUrl(url, mode: LaunchMode.inAppBrowserView);
           if (!opened && context.mounted) showTukToast(context, '페이지를 열지 못했어요');
         },
-        child: Text(label, style: style),
+        child: Text(keepWords(label), style: style),
       ),
     );
   }

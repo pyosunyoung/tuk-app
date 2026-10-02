@@ -6,6 +6,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../models/place.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 /// 장소 정하기 시트 (11e). 고른 [Place] 를 반환, 닫으면 null.
 ///
@@ -145,7 +146,7 @@ class _PlaceSheetState extends State<_PlaceSheet> {
                   color: AppColors.border, borderRadius: BorderRadius.circular(AppRadius.pill))),
             ),
             const SizedBox(height: AppSpace.x20),
-            Text('어디서 볼까요?', style: AppText.title20),
+            Text(keepWords('어디서 볼까요?'), style: AppText.title20),
             const SizedBox(height: AppSpace.x16),
             _searchField(),
             const SizedBox(height: AppSpace.x12),
@@ -156,7 +157,7 @@ class _PlaceSheetState extends State<_PlaceSheet> {
             ],
             const SizedBox(height: AppSpace.x12),
             Center(
-              child: Text('모인 사람 모두에게 보여요 · 나중에 바꿀 수 있어요',
+              child: Text(keepWords('모인 사람 모두에게 보여요 · 나중에 바꿀 수 있어요'),
                   style: AppText.caption12),
             ),
           ],
@@ -265,20 +266,20 @@ class _ResultRow extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(place.name,
+                        child: Text(keepWords(place.name),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
                       ),
                       if (place.category != null) ...[
                         const SizedBox(width: AppSpace.x8),
-                        Text(place.category!, style: AppText.caption12),
+                        Text(keepWords(place.category!), style: AppText.caption12),
                       ],
                     ],
                   ),
                   if (place.address != null) ...[
                     const SizedBox(height: 2),
-                    Text(place.address!,
+                    Text(keepWords(place.address!),
                         maxLines: 1, overflow: TextOverflow.ellipsis, style: AppText.caption13),
                   ],
                 ],
@@ -347,11 +348,11 @@ class _Hint extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
+          Text(keepWords(title),
               style: AppText.label14
                   .copyWith(color: AppColors.textSub, fontWeight: FontWeight.w600)),
           const SizedBox(height: AppSpace.x4),
-          Text(body, style: AppText.caption13),
+          Text(keepWords(body), style: AppText.caption13),
         ],
       ),
     );

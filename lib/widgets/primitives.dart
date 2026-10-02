@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../core/keep_words.dart';
 
 enum _PillKind { primary, kakao, secondary }
 
@@ -108,8 +109,8 @@ class _PillButtonState extends State<PillButton> {
                 widget.leading!,
                 const SizedBox(width: AppSpace.x10),
               ],
-              Text(
-                widget.label,
+              Text(keepWords(
+                widget.label),
                 style: (widget._kind == _PillKind.secondary
                         ? AppText.label15
                         : AppText.title16)
@@ -179,7 +180,7 @@ class SummaryCard extends StatelessWidget {
           ),
           const SizedBox(width: AppSpace.x10),
           Expanded(
-            child: Text(text, style: AppText.label15),
+            child: Text(keepWords(text), style: AppText.label15),
           ),
         ],
       ),

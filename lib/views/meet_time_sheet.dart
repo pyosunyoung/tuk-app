@@ -4,6 +4,7 @@ import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 /// 약속 시간 정하기 시트. 고른 시각을 반환, 닫으면 null.
 ///
@@ -102,9 +103,9 @@ class _MeetTimeSheetState extends State<_MeetTimeSheet> {
             ),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('언제 만날까요?', style: AppText.title20),
+          Text(keepWords('언제 만날까요?'), style: AppText.title20),
           const SizedBox(height: AppSpace.x4),
-          Text('정하기 어려우면 카톡으로 이야기하고 와서 적어도 돼요',
+          Text(keepWords('정하기 어려우면 카톡으로 이야기하고 와서 적어도 돼요'),
               style: AppText.label14.copyWith(color: AppColors.textSub)),
           const SizedBox(height: AppSpace.x16),
           SizedBox(
@@ -127,7 +128,7 @@ class _MeetTimeSheetState extends State<_MeetTimeSheet> {
           ),
           const SizedBox(height: AppSpace.x12),
           Center(
-            child: Text('모인 사람 모두에게 보여요 · 나중에 바꿀 수 있어요',
+            child: Text(keepWords('모인 사람 모두에게 보여요 · 나중에 바꿀 수 있어요'),
                 style: AppText.caption12),
           ),
         ],
@@ -160,8 +161,8 @@ class _TimeRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(
-                label,
+              child: Text(keepWords(
+                label),
                 style: AppText.body.copyWith(
                   color: selected ? AppColors.primary : AppColors.text,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w500,

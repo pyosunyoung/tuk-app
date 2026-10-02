@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/tokens.dart';
 import '../core/typography.dart';
+import '../core/keep_words.dart';
 
 /// 하단 토스트 — 다크 pill, 흰 글씨, 1.8초. (핸드오프 실패 토스트 규격)
 void showTukToast(BuildContext context, String message) {
@@ -17,8 +18,8 @@ void showTukToast(BuildContext context, String message) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
-      content: Text(
-        message,
+      content: Text(keepWords(
+        message),
         textAlign: TextAlign.center,
         style: AppText.label14.copyWith(color: Colors.white),
       ),

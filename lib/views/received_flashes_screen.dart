@@ -11,6 +11,7 @@ import '../viewmodels/flash_view_model.dart';
 import '../widgets/avatar.dart';
 import '../widgets/toast.dart';
 import 'room_screen.dart';
+import '../core/keep_words.dart';
 
 /// 받은 번개 목록 (11b). 무시는 아무것도 하지 않는 것 — 거절 버튼 없음.
 class ReceivedFlashesScreen extends StatefulWidget {
@@ -101,8 +102,8 @@ class _ReceivedFlashesScreenState extends State<ReceivedFlashesScreen>
                                     flash: f, onJoin: () => _open(f)),
                               )),
                           const SizedBox(height: AppSpace.x8),
-                          Center(child: Text(
-                              '그냥 둬도 괜찮아요 · 보낸 사람에겐 아무것도 안 보여요',
+                          Center(child: Text(keepWords(
+                              '그냥 둬도 괜찮아요 · 보낸 사람에겐 아무것도 안 보여요'),
                               style: AppText.caption12)),
                         ],
                       ),
@@ -166,7 +167,7 @@ class _FlashCard extends StatelessWidget {
                       Row(
                         children: [
                           Flexible(
-                            child: Text(flash.senderNickname,
+                            child: Text(keepWords(flash.senderNickname),
                                 overflow: TextOverflow.ellipsis,
                                 style: AppText.title16),
                           ),
@@ -177,7 +178,7 @@ class _FlashCard extends StatelessWidget {
                             Container(width: 6, height: 6, decoration: const BoxDecoration(
                                 color: AppColors.success, shape: BoxShape.circle)),
                             const SizedBox(width: 4),
-                            Text('합류했어요', style: AppText.caption12.copyWith(
+                            Text(keepWords('합류했어요'), style: AppText.caption12.copyWith(
                                 color: AppColors.success, fontWeight: FontWeight.w500)),
                           ],
                         ],
@@ -191,7 +192,7 @@ class _FlashCard extends StatelessWidget {
             ),
             if (flash.message != null && flash.message!.isNotEmpty) ...[
               const SizedBox(height: AppSpace.x12),
-              Text(flash.message!,
+              Text(keepWords(flash.message!),
                   maxLines: 3, overflow: TextOverflow.ellipsis,
                   style: AppText.label15.copyWith(fontWeight: FontWeight.w400, height: 1.5)),
             ],
@@ -212,16 +213,16 @@ class _FlashCard extends StatelessWidget {
             color: AppColors.primaryTint,
             borderRadius: BorderRadius.circular(AppRadius.xsmall),
           ),
-          child: Text(reservedTimeText(flash.scheduledAt!),
+          child: Text(keepWords(reservedTimeText(flash.scheduledAt!)),
               style: AppText.caption12.copyWith(
                   color: AppColors.primaryPress, fontWeight: FontWeight.w500)),
         ),
         const SizedBox(width: AppSpace.x8),
-        Text('예약', style: AppText.caption12),
+        Text(keepWords('예약'), style: AppText.caption12),
       ]);
     }
-    return Text(
-        flash.expiresAt != null ? flashExpiryText(flash.expiresAt!) : '',
+    return Text(keepWords(
+        flash.expiresAt != null ? flashExpiryText(flash.expiresAt!) : ''),
         style: AppText.caption12);
   }
 
@@ -238,7 +239,7 @@ class _FlashCard extends StatelessWidget {
           border: joined ? Border.all(color: AppColors.border) : null,
           boxShadow: joined ? null : AppShadow.coralCta,
         ),
-        child: Text(joined ? '모임방 열기' : '합류하기',
+        child: Text(keepWords(joined ? '모임방 열기' : '합류하기'),
             style: AppText.label15.copyWith(
               color: joined ? AppColors.textSub : Colors.white,
               fontWeight: joined ? FontWeight.w500 : FontWeight.w600,
@@ -260,7 +261,7 @@ class _Chip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.xsmall),
         border: Border.all(color: AppColors.border),
       ),
-      child: Text(label, style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
+      child: Text(keepWords(label), style: AppText.caption12.copyWith(fontWeight: FontWeight.w500)),
     );
   }
 }
@@ -273,12 +274,12 @@ class _EmptyReceived extends StatelessWidget {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         _placeholders(),
         const SizedBox(height: AppSpace.x12),
-        Text('받은 툭이 없어요',
+        Text(keepWords('받은 툭이 없어요'),
             style: AppText.title16.copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: AppSpace.x4),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 240),
-          child: Text('친구가 툭 던지면 여기 떠요. 알림으로도 알려줄게요.',
+          child: Text(keepWords('친구가 툭 던지면 여기 떠요. 알림으로도 알려줄게요.'),
               textAlign: TextAlign.center,
               style: AppText.label14.copyWith(color: AppColors.textSub, height: 1.55)),
         ),

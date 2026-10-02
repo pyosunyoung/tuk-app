@@ -13,6 +13,7 @@ import '../widgets/toast.dart';
 import 'call_on_sheet.dart';
 import 'friend_add_sheet.dart';
 import 'friends_screen.dart';
+import '../core/keep_words.dart';
 
 /// 홈 — 콜드스타트 (1b). 로그인 직후, 친구 0명 상태. 친구 초대를 유도한다.
 ///
@@ -116,9 +117,9 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
                     ),
                     const SizedBox(width: AppSpace.x8),
                     Flexible(
-                      child: Text(
+                      child: Text(keepWords(
                         // 홈과 같은 규칙 — 라벨은 고정, 상태는 스위치와 아래 설명이 말한다.
-                        '지금 한가해요',
+                        '지금 한가해요'),
                         overflow: TextOverflow.ellipsis,
                         style: AppText.title20.copyWith(
                           color: callOn ? AppColors.text : AppColors.textSub,
@@ -132,13 +133,13 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
                 Padding(
                   padding: const EdgeInsets.only(
                       left: AppSpace.x16, top: AppSpace.x4),
-                  child: Text(
+                  child: Text(keepWords(
                     callOn
                         ? [
                             vm.myActivity?.label ?? '아무거나',
                             if (expiresAt != null) callExpiryText(expiresAt),
                           ].join(' · ')
-                        : '켜두면 한가할 때 친구에게만 보여요',
+                        : '켜두면 한가할 때 친구에게만 보여요'),
                     style: AppText.label14,
                   ),
                 ),
@@ -168,7 +169,7 @@ class _HomeColdstartScreenState extends State<HomeColdstartScreen> {
             onPressed: () => showFriendAddSheet(context, startAtMyCode: true),
           ),
           const SizedBox(height: AppSpace.x12),
-          Text('코드로만 친구가 돼요 · 낯선 사람은 들어올 수 없어요',
+          Text(keepWords('코드로만 친구가 돼요 · 낯선 사람은 들어올 수 없어요'),
               textAlign: TextAlign.center, style: AppText.caption12),
         ],
       ),
@@ -221,14 +222,14 @@ class _EmptyState extends StatelessWidget {
           children: [
             const TukLogo(size: 96, variant: TukLogoVariant.light),
             const SizedBox(height: AppSpace.x16),
-            Text('아직 친구가 없어요',
+            Text(keepWords('아직 친구가 없어요'),
                 textAlign: TextAlign.center,
                 style: AppText.title20.copyWith(fontWeight: FontWeight.w600)),
             const SizedBox(height: AppSpace.x8),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 260),
-              child: Text(
-                '먼저 켜두면 친구가 한가해질 때 알려줄게요',
+              child: Text(keepWords(
+                '먼저 켜두면 친구가 한가해질 때 알려줄게요'),
                 textAlign: TextAlign.center,
                 style: AppText.body
                     .copyWith(color: AppColors.textSub, height: 1.5),

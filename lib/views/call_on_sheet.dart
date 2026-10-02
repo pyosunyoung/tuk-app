@@ -7,6 +7,7 @@ import '../models/activity.dart';
 import '../viewmodels/presence_view_model.dart';
 import '../widgets/primitives.dart';
 import '../widgets/sheet.dart';
+import '../core/keep_words.dart';
 
 /// '지금 한가해요' 켜기 바텀시트 (9d). 성공 시 켠 Activity 를 반환, 취소/실패 시 null.
 Future<Activity?> showCallOnSheet(
@@ -61,7 +62,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
     } else {
       setState(() => _busy = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(err)),
+        SnackBar(content: Text(keepWords(err))),
       );
     }
   }
@@ -108,7 +109,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
             ),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('지금 뭐 하고 싶어요?', style: AppText.title20),
+          Text(keepWords('지금 뭐 하고 싶어요?'), style: AppText.title20),
           const SizedBox(height: AppSpace.x16),
           Wrap(
             spacing: AppSpace.x8,
@@ -122,7 +123,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
                 .toList(),
           ),
           const SizedBox(height: AppSpace.x24),
-          Text('얼마나 켜둘까요?',
+          Text(keepWords('얼마나 켜둘까요?'),
               style: AppText.label14.copyWith(color: AppColors.textSub)),
           const SizedBox(height: AppSpace.x12),
           Row(
@@ -157,7 +158,7 @@ class _CallOnSheetState extends State<_CallOnSheet> {
           ),
           const SizedBox(height: AppSpace.x12),
           Center(
-            child: Text('친구에게만 보여요 · $_durationLabel 뒤 자동으로 꺼져요',
+            child: Text(keepWords('친구에게만 보여요 · $_durationLabel 뒤 자동으로 꺼져요'),
                 textAlign: TextAlign.center, style: AppText.caption12),
           ),
         ],
@@ -186,7 +187,7 @@ class _Chip extends StatelessWidget {
           border: Border.all(
               color: selected ? AppColors.primaryTintBorder : AppColors.border),
         ),
-        child: Text(label,
+        child: Text(keepWords(label),
             style: AppText.title16.copyWith(
               fontWeight: FontWeight.w500,
               color: selected ? AppColors.primaryPress : AppColors.textSub,
@@ -217,7 +218,7 @@ class _DurationBox extends StatelessWidget {
           border: Border.all(
               color: selected ? AppColors.primaryTintBorder : AppColors.border),
         ),
-        child: Text(label,
+        child: Text(keepWords(label),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppText.title16.copyWith(
@@ -282,7 +283,7 @@ class _DurationWheelState extends State<_DurationWheel> {
                 borderRadius: BorderRadius.circular(AppRadius.pill)),
           ),
           const SizedBox(height: AppSpace.x20),
-          Text('얼마나 켜둘까요?', style: AppText.title20),
+          Text(keepWords('얼마나 켜둘까요?'), style: AppText.title20),
           const SizedBox(height: AppSpace.x12),
           SizedBox(
             height: 160,
@@ -295,7 +296,7 @@ class _DurationWheelState extends State<_DurationWheel> {
               childDelegate: ListWheelChildBuilderDelegate(
                 childCount: _values.length,
                 builder: (_, i) => Center(
-                  child: Text(_label(_values[i]),
+                  child: Text(keepWords(_label(_values[i])),
                       style: AppText.title20.copyWith(
                         color: i == _index
                             ? AppColors.primaryPress
