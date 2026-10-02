@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../core/keep_words.dart';
 import '../core/tokens.dart';
 import '../core/typography.dart';
 import '../viewmodels/auth_view_model.dart';
@@ -9,7 +10,8 @@ import '../widgets/primitives.dart';
 import '../widgets/toast.dart';
 import 'home_screen.dart';
 
-/// 인트로 5컷 (6b) — 왜 필요한지(상황) → 어떻게 해결하는지(기능).
+/// 인트로 6컷 (6b) — 왜 필요한지(상황) → 어떻게 해결하는지(기능) → 모인 다음.
+/// 그림 속 문구는 실제 화면·알림과 같게 둔다(처음 받는 알림을 보고 "아, 그거구나" 하도록).
 /// 좌우 스와이프 + "다음" 버튼. 마지막 컷에서 카카오(dev) 로그인.
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -22,7 +24,7 @@ class _IntroScreenState extends State<IntroScreen> {
   final _controller = PageController();
   int _index = 0;
 
-  static const _cutCount = 5;
+  static const _cutCount = 6;
   static const _slideCurve = Cubic(0.32, 0.72, 0, 1);
 
   @override
@@ -89,11 +91,12 @@ class _IntroScreenState extends State<IntroScreen> {
                 controller: _controller,
                 onPageChanged: (i) => setState(() => _index = i),
                 children: const [
-                  _Cut1(),
-                  _Cut2(),
-                  _Cut3(),
-                  _Cut4(),
-                  _Cut5(),
+                  _Cut1(), // 갑자기 시간이 비는 날
+                  _Cut2(), // 누가 한가한지 먼저 보여요
+                  _Cut3(), // 툭 던지면 알림이 딱
+                  _CutRoom(), // 모이면 언제·어디서만
+                  _Cut4(), // 그리고 알아서 꺼져요
+                  _Cut5(), // 이제 툭 던져볼까요?
                 ],
               ),
             ),
@@ -185,9 +188,10 @@ class _Headline extends StatelessWidget {
       crossAxisAlignment:
           center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppText.display, textAlign: align),
+        // 단어 중간에서 줄이 넘어가지 않게(keepWords)
+        Text(keepWords(title), style: AppText.display, textAlign: align),
         const SizedBox(height: AppSpace.x12),
-        Text(body,
+        Text(keepWords(body),
             style: AppText.body.copyWith(color: AppColors.textSub),
             textAlign: align),
       ],
@@ -505,7 +509,11 @@ class _Cut3 extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 2),
-                    Text('민수가 툭 던졌어요 · 술',
+                    // 실제 푸시와 같은 문구(서버 FlashPushListener) — 처음 받는 알림과 같아야 알아본다
+                    Text('민수님이 툭 던졌어요',
+                        style: AppText.label14
+                            .copyWith(fontWeight: FontWeight.w600)),
+                    Text('술 · 지금 볼래?',
                         style: AppText.label14
                             .copyWith(fontWeight: FontWeight.w400)),
                   ],
@@ -515,32 +523,27 @@ class _Cut3 extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpace.x12),
-        // 수신 카드
+        // 받은 툭 카드 — 실제 화면처럼 "합류하기" 하나뿐. 거절 버튼은 없다(안 누르면 그만).
         _Card(
           padding: const EdgeInsets.all(AppSpace.x16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('지금 볼래? · 술',
-                  style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
-              const SizedBox(height: AppSpace.x12),
               Row(
                 children: [
-                  Expanded(
-                    child: _MiniButton(
-                      '나도',
-                      filled: true,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpace.x8),
-                  Expanded(
-                    child: _MiniButton('다음에', filled: false),
-                  ),
+                  Text('민수 · 술',
+                      style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+                  const Spacer(),
+                  Text('52분 뒤 끝나요', style: AppText.caption12),
                 ],
               ),
+              const SizedBox(height: AppSpace.x4),
+              Text('지금 볼래?', style: AppText.caption13),
+              const SizedBox(height: AppSpace.x12),
+              const _MiniButton('합류하기', filled: true),
               const SizedBox(height: AppSpace.x12),
               Center(
-                child: Text("'다음에'는 상대에게 보이지 않아요",
+                child: Text('안 누르고 지나쳐도 민수에겐 아무것도 안 보여요',
                     style: AppText.caption12),
               ),
             ],
@@ -583,7 +586,115 @@ class _MiniButton extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────── 컷 4
+// ─────────────────────────────────────────────────────────── 컷 4 (모임방)
+
+/// 합류한 다음. 예전 인트로는 "툭 던지기"에서 끝나서 그다음에 뭘 하는지 몰랐다.
+/// 9월에 만든 것들(약속 시간·장소 검색·지도·카톡 넘기기·변경 알림)을 한 장에 보여준다.
+class _CutRoom extends StatelessWidget {
+  const _CutRoom();
+
+  @override
+  Widget build(BuildContext context) {
+    return _CutBody(
+      children: [
+        // 변경 알림 (실제 푸시 문구와 같은 모양)
+        _Card(
+          border: false,
+          shadow: const [
+            BoxShadow(color: Color(0x142B2926), blurRadius: 24, offset: Offset(0, 8)),
+          ],
+          padding: const EdgeInsets.symmetric(horizontal: AppSpace.x16, vertical: 12),
+          child: Row(
+            children: [
+              const TukLogo(size: 28),
+              const SizedBox(width: AppSpace.x12),
+              Expanded(
+                child: Text('술 · 장소가 바뀌었어요',
+                    style: AppText.label14.copyWith(fontWeight: FontWeight.w600)),
+              ),
+              Text('지금', style: AppText.caption12),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpace.x12),
+        // 모임방 카드
+        _Card(
+          padding: const EdgeInsets.all(AppSpace.x16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _RoomRow(label: '언제', value: '오늘 오후 8시', note: '지호님이 정했어요'),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: AppSpace.x12),
+                child: Divider(height: 1, color: AppColors.border),
+              ),
+              _RoomRow(label: '어디서', value: '망원역', note: '민수님이 바꿨어요'),
+              const SizedBox(height: AppSpace.x8),
+              Row(
+                children: [
+                  const Icon(Icons.map_outlined, size: 16, color: AppColors.primary),
+                  const SizedBox(width: AppSpace.x4),
+                  Text('지도에서 보기',
+                      style: AppText.caption13.copyWith(
+                          color: AppColors.primary, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              const SizedBox(height: AppSpace.x16),
+              Container(
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEE500),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                ),
+                child: Text('카톡으로 이야기하기',
+                    style: AppText.label14.copyWith(
+                        color: const Color(0xFF191600), fontWeight: FontWeight.w600)),
+              ),
+              const SizedBox(height: AppSpace.x12),
+              Text('민수 · 지호 · 나  3명 모였어요', style: AppText.caption12),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpace.x32),
+        const _Headline(
+          '모이면 언제·어디서만\n정하면 돼요',
+          '장소는 검색해서 고르고 지도로 바로 열어요. 바뀌면 다 같이 알림을 받고, 이야기는 카톡에서 이어가요.',
+        ),
+      ],
+    );
+  }
+}
+
+/// 모임방 카드의 한 줄 — 라벨 / 값 / 누가 정했는지.
+class _RoomRow extends StatelessWidget {
+  const _RoomRow({required this.label, required this.value, required this.note});
+  final String label;
+  final String value;
+  final String note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(width: 48, child: Text(label, style: AppText.caption13)),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(value, style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 2),
+              Text(note, style: AppText.caption12),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────── 컷 5 (알아서 꺼져요)
 
 class _Cut4 extends StatelessWidget {
   const _Cut4();
@@ -671,7 +782,8 @@ class _Cut4 extends StatelessWidget {
         const SizedBox(height: AppSpace.x32),
         const _Headline(
           '그리고 알아서 꺼져요',
-          '한가하다는 표시도, 던진 툭도 시간이 지나면 사라져요. 끄는 걸 잊어도 부담이 남지 않아요.',
+          // 9월 말부터 합류 마감 ≠ 모임 종료다. "던진 툭도 사라져요"는 사실과 달라 고쳤다.
+          '한가하다는 표시도, 툭에 합류 받는 것도 시간이 지나면 끝나요. 끄는 걸 잊어도 부담이 남지 않고, 모인 약속은 그대로 남아요.',
         ),
       ],
     );
@@ -709,10 +821,11 @@ class _MiniToggle extends StatelessWidget {
 class _Cut5 extends StatelessWidget {
   const _Cut5();
 
+  // 랜딩과 같은 세 줄(landing_screen.dart). 둘이 다르게 말하면 안 된다.
   static const _summaries = [
     '한가한 친구가 먼저 보여요',
     '거절은 아무에게도 안 보여요',
-    '시간 지나면 알아서 꺼져요',
+    '한가함은 시간 지나면 알아서 꺼져요',
   ];
 
   @override
@@ -722,9 +835,10 @@ class _Cut5 extends StatelessWidget {
       children: [
         const TukLogo(size: 72),
         const SizedBox(height: AppSpace.x24),
+        // 닫힌 그룹 이야기를 여기서 — 첫 행동(친구 초대)으로 이어지게
         const _Headline(
           '이제 툭 던져볼까요?',
-          '친한 친구 몇 명만 모으면 바로 쓸 수 있어요.',
+          '초대 코드를 주고받은 친한 친구끼리만 보여요.\n몇 명만 모으면 바로 쓸 수 있어요.',
           center: true,
         ),
         const SizedBox(height: AppSpace.x32),
