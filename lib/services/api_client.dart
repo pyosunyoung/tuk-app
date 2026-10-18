@@ -38,7 +38,11 @@ class ApiException implements Exception {
 /// - Authorization: Bearer 자동 첨부
 /// - 401 → refresh(rotation) → 원요청 1회 재시도. 동시 401 은 single-flight.
 class ApiClient {
-  ApiClient(this._tokens, {required this.onSessionExpired}) {
+  ApiClient(
+    this._tokens, {
+    required this.onSessionExpired,
+    @visibleForTesting HttpClientAdapter? adapter,
+  }) {
     _dio = Dio(BaseOptions(
       baseUrl: AppConfig.baseUrl,
       connectTimeout: const Duration(seconds: 10),
@@ -57,6 +61,11 @@ class ApiClient {
       // 아래 '네트워크 오류' 분기로 빠지고, 세션 만료 처리가 영영 안 된다(좀비 세션).
       validateStatus: (_) => true,
     ));
+    // 테스트: 실제 네트워크 대신 가짜 서버로
+    if (adapter != null) {
+      _dio.httpClientAdapter = adapter;
+      _refreshDio.httpClientAdapter = adapter;
+    }
 
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
