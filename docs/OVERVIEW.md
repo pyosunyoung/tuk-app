@@ -9,7 +9,7 @@
 | 기간 | 2026-07-03 ~ 10-07 (기능 개발) |
 | 리포 | 백엔드 [tuk-server](https://github.com/pyosunyoung/tuk-server) · 앱 [tuk-app](https://github.com/pyosunyoung/tuk-app) |
 | 규모 | 커밋 148개(기능·버그 수정 79) · Java/Dart 파일 208개 |
-| 테스트 | 서버 **140** · 앱 **61** |
+| 테스트 | 서버 **146** · 앱 **61** |
 | 운영 | Vultr 서울 VM · Docker Compose · Caddy 자동 HTTPS · GitHub Actions 배포/자동 롤백 · 암호화 외부 백업 · 서버/백업 감시 |
 | 배포 | Android 릴리스 APK(서명 · R8)를 친구들에게 직접 배포 |
 
@@ -38,7 +38,7 @@ flowchart LR
     App -->|REST + JWT| Caddy
     App <-->|STOMP| Caddy
     Caddy[Caddy<br>HTTPS 자동] --> API[Spring Boot 4]
-    API --> PG[(PostgreSQL<br>Flyway V1~V5)]
+    API --> PG[(PostgreSQL<br>Flyway V1~V6)]
     API --> R[(Redis<br>한가함 TTL · refresh · 시도 제한)]
     API -->|앱이 꺼져 있으면| FCM --> App
     API --> Kakao[카카오<br>로그인 · 장소 검색]
