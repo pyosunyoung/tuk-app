@@ -357,7 +357,9 @@ class _AcceptButton extends StatelessWidget {
   }
 }
 
-/// 내 절친 행 — 아바타 + 이름, 오른쪽에 흐린 ⋯(친구 끊기). 자주 쓰는 동작이 아니라 눈에 띄지 않게.
+/// 내 친구 행 — 아바타 + 이름, 오른쪽 ⋯(친구 끊기).
+/// 처음엔 "자주 쓰는 동작이 아니니 눈에 띄지 않게" 테두리 색으로 뒀는데, 실사용에서 "⋯ 이 희미해 안 보인다"
+/// (10-25, 부모님 폰)는 의견이 왔다. 눈에 띄지 않는 것과 안 보이는 것은 다르다 → 보조 글자색 + 손가락 크기 터치 영역.
 class _FriendRow extends StatelessWidget {
   const _FriendRow({required this.friend, required this.onMore});
   final Friend friend;
@@ -382,12 +384,18 @@ class _FriendRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppText.label15.copyWith(fontWeight: FontWeight.w600)),
           ),
-          GestureDetector(
-            onTap: onMore,
-            behavior: HitTestBehavior.opaque,
-            child: const Padding(
-              padding: EdgeInsets.all(AppSpace.x4),
-              child: Icon(Icons.more_horiz, size: 20, color: AppColors.border),
+          Semantics(
+            button: true,
+            label: '${friend.nickname} 친구 메뉴',
+            child: InkResponse(
+              onTap: onMore,
+              radius: 22,
+              // 아이콘은 22지만 누르는 영역은 44×44 — 행 오른쪽 끝을 대충 눌러도 열리게
+              child: const SizedBox(
+                width: 44,
+                height: 44,
+                child: Icon(Icons.more_horiz, size: 22, color: AppColors.textSub),
+              ),
             ),
           ),
         ],

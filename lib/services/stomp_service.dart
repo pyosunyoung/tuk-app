@@ -15,15 +15,18 @@ typedef AccessTokenProvider = Future<String?> Function({bool forceRefresh});
 /// CONNECT 헤더의 JWT 로 인증. 구독:
 ///   /user/queue/presence  → PresenceEvent
 ///   /user/queue/flash     → FlashPushEvent
+///   /user/queue/friends   → 친구 관계가 사라졌다(끊기 · 신청 취소) — 목록만 조용히 다시 불러온다
 class StompService {
   StompClient? _client;
 
   final _presence = StreamController<PresenceEvent>.broadcast();
   final _flash = StreamController<FlashPushEvent>.broadcast();
+  final _friendsChanged = StreamController<void>.broadcast();
   final _connected = ValueNotifier<bool>(false);
 
   Stream<PresenceEvent> get presenceEvents => _presence.stream;
   Stream<FlashPushEvent> get flashEvents => _flash.stream;
+  Stream<void> get friendsChanged => _friendsChanged.stream;
   ValueListenable<bool> get connected => _connected;
 
   bool get isActive => _client?.connected ?? false;
@@ -80,6 +83,11 @@ class StompService {
       destination: '/user/queue/flash',
       callback: (f) => _emit(f.body, (m) => _flash.add(FlashPushEvent.fromJson(m))),
     );
+    // 알림이 아니라 데이터 신호 — 화면에 아무것도 띄우지 않는다("따로 알리지 않아요")
+    _client?.subscribe(
+      destination: '/user/queue/friends',
+      callback: (_) => _friendsChanged.add(null),
+    );
   }
 
   void _emit(String? body, void Function(Map<String, dynamic>) parse) {
@@ -102,6 +110,7 @@ class StompService {
     disconnect();
     _presence.close();
     _flash.close();
+    _friendsChanged.close();
     _connected.dispose();
   }
 }
