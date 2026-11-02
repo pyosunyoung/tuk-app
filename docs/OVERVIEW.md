@@ -9,7 +9,7 @@
 | 기간 | 2026-07-03 ~ 10-07 (기능 개발) |
 | 리포 | 백엔드 [tuk-server](https://github.com/pyosunyoung/tuk-server) · 앱 [tuk-app](https://github.com/pyosunyoung/tuk-app) |
 | 규모 | 커밋 148개(기능·버그 수정 79) · Java/Dart 파일 208개 |
-| 테스트 | 서버 **146** · 앱 **61** |
+| 테스트 | 서버 **149** · 앱 **61** |
 | 운영 | Vultr 서울 VM · Docker Compose · Caddy 자동 HTTPS · GitHub Actions 배포/자동 롤백 · 암호화 외부 백업 · 서버/백업 감시 |
 | 배포 | Android 릴리스 APK(서명 · R8)를 친구들에게 직접 배포 |
 
@@ -78,7 +78,7 @@ flowchart LR
 |---|---|---|
 | 배포 | Docker Compose + Caddy(Let's Encrypt 자동), `TZ=Asia/Seoul` 고정 | [OPS 09-02~10](https://github.com/pyosunyoung/tuk-server/blob/main/docs/OPS_NOTES_2026-09.md) |
 | CI/CD | push → 테스트(PG·Redis 컨테이너) → GHCR 이미지 → SSH 배포 → health 180초 → **실패 시 자동 롤백**. 서버에서 빌드하지 않음(2GB VM) | [09-15~18](FEATURE_NOTES_2026-09-15_09-18.md) 5~8 |
-| 보안 | 배포 키는 배포 스크립트만 실행, SSH 비밀번호 금지(하루 6,454회 대입 시도 관측), 운영에서 Swagger·dev 로그인 차단 | [09-15~18](FEATURE_NOTES_2026-09-15_09-18.md) 8 · 10 |
+| 보안 | 배포 키는 배포 스크립트만 실행, SSH 비밀번호 금지(비밀번호 실패 하루 5,855 → 0), 운영에서 Swagger·dev 로그인 차단 | [09-15~18](FEATURE_NOTES_2026-09-15_09-18.md) 8 · 10 |
 | 백업 | 매일 `pg_dump` → `age` 공개 키로 암호화 → B2(30일), **복호화 키는 서버 밖**. B2 에서 받아 복원해 운영과 일치 확인 | [09-30~10-07](FEATURE_NOTES_2026-09-30_10-07.md) 26 |
 | 감시 | UptimeRobot 5분(health 는 DB·Redis 포함) + healthchecks.io(백업이 안 돌면 알림) | [09-30~10-07](FEATURE_NOTES_2026-09-30_10-07.md) 27 |
 | 배포본 | 릴리스 키 서명 + 카카오 키 해시, 스토어 대신 업데이트 안내·Crashlytics·의견 보내기 | [09-30~10-07](FEATURE_NOTES_2026-09-30_10-07.md) 17~23 |
@@ -98,7 +98,7 @@ flowchart LR
 
 ## 7. 아직 아닌 것
 
-- **실사용 규모가 작다.** 친구 몇 명에게 APK 로 배포한 단계라 사용량 지표는 아직 없다
+- **실사용 규모가 작다.** 지인 3명과 1주(10-22~25) — 툭 9 · 합류 12 · 받고 합류까지 평균 1~2분 · 서버 에러 0, 의견 3통 중 2건을 1.0.1 로 반영. 장기 지표(리텐션 등)는 아직 없다
 - **iOS 는 실기기 검증 전**(Mac 없음). 코드는 있지만 푸시 등은 확인하지 못했다
 - **서버 한 대.** WebSocket 브로커·스케줄러가 단일 인스턴스 전제다(다중 서버로 갈 때 바꿀 곳은 서버 CLAUDE.md 에 적어 둠)
 - 도메인이 임시(`sslip.io`), 친구를 끊은 사이의 합류 전 초대 정리 등 작은 과제가 남아 있다

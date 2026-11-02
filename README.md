@@ -7,13 +7,53 @@
 단톡방에 "오늘 저녁 누구 시간 돼?"를 던지고 읽씹당하는 경험에서 시작했습니다.
 **지금 한가한 친한 친구만 보여주고, 한 탭으로 부르고, 거절은 아무에게도 보이지 않습니다.**
 
-| 랜딩 | 홈 | 모임방 | 인트로 |
-|---|---|---|---|
-| <img src="docs/images/landing-after.jpg" width="200"> | <img src="docs/images/pc-home.jpg" width="200"> | <img src="docs/images/c2-after.jpg" width="200"> | <img src="docs/images/intro4-new.jpg" width="200"> |
-| 카카오로 시작 · 세 줄 요약 | 받은 툭 · 지금 한가해요 · 한가한 친구 | 약속 시간 · 장소(검색·지도) · 누가 정했/바꿨는지 · 카톡으로 이야기 | 6컷 소개 |
+- **릴리스 APK 1.0.1** · 지인에게 직접 배포(카톡) · 서버는 운영 중(Vultr + Caddy HTTPS)
+- **테스트 61개** · Android 실기기로 기능마다 검증
 
-- **릴리스 APK 로 친구들에게 배포 중**(2026-10-02~). 서버는 운영 중(Vultr + Caddy HTTPS)
-- **테스트 61개** · Android 실기기(Galaxy S25)로 기능마다 검증
+## 실사용 — 지인 3명과 1주 (2026-10-22 ~ 25)
+
+친구 1명 · 부모님과 실제 폰 4대로 운영 서버에 붙여 썼습니다. **다른 사람의 이름 · 사진 · 초대 코드는 가렸습니다.**
+
+| 가입 | 친구 관계 | 던진 툭 | 합류 | 툭 받고 합류까지 | 서버 ERROR 로그 |
+|---|---|---|---|---|---|
+| 5 | 4 | 9 | 12 | **평균 1~2분** | **0** |
+
+**시작 → 친구**
+
+| 랜딩 | 인트로 | 카톡으로 받은 초대 | 코드 입력 | 친구 신청 받기 | 친구 목록 |
+|---|---|---|---|---|---|
+| <img src="docs/images/real/s_landing.jpg" width="150"> | <img src="docs/images/real/s_intro.jpg" width="150"> | <img src="docs/images/real/s_invite_card.jpg" width="150"> | <img src="docs/images/real/s_code.jpg" width="150"> | <img src="docs/images/real/s_request.jpg" width="150"> | <img src="docs/images/real/s_friends.jpg" width="150"> |
+
+**한가함 → 툭 → 모임**
+
+| 한가함 켜기 | 지금 한가한 친구 | 툭 던지기 | 툭이 온 홈 | 받은 툭 · 합류 | 모임방 |
+|---|---|---|---|---|---|
+| <img src="docs/images/real/s_presence_on.jpg" width="150"> | <img src="docs/images/real/s_presence_home.jpg" width="150"> | <img src="docs/images/real/compose.jpg" width="150"> | <img src="docs/images/real/s_home_received.jpg" width="150"> | <img src="docs/images/real/received.jpg" width="150"> | <img src="docs/images/real/room.jpg" width="150"> |
+
+| 지도 앱으로 | 카톡방에 올린 모임 카드 | 진행 중인 모임 4개 | 합류 마감 뒤에도 약속은 그대로 |
+|---|---|---|---|
+| <img src="docs/images/real/s_map.jpg" width="150"> | <img src="docs/images/real/s_share_card.jpg" width="200"> | <img src="docs/images/real/s_meetups.jpg" width="150"> | <img src="docs/images/real/join_closed.jpg" width="150"> |
+
+**실제 잠금화면 알림** — 친구 신청 · 수락 · 새 툭 · 합류 · 약속 시간 / 장소 변경(누가, 무엇에서 무엇으로)
+
+| | |
+|---|---|
+| <img src="docs/images/real/n_friend_request.jpg" width="380"> | <img src="docs/images/real/n_friend_accepted.jpg" width="380"> |
+| <img src="docs/images/real/n_flash.jpg" width="380"> | <img src="docs/images/real/n_joined.jpg" width="380"> |
+| <img src="docs/images/real/n_time.jpg" width="380"> | <img src="docs/images/real/n_place.jpg" width="380"> |
+
+**실사용 의견 → 1.0.1 (10-27)**
+
+의견 보내기(앱 버전 · 기기가 자동으로 붙는 메일)로 3통을 받았고, 그중 2건을 고쳐 바로 배포했습니다.
+
+| 받은 의견 | ⋯ 버튼 1.0.0 → 1.0.1 | 1.0.0 사용자에게 뜬 안내 |
+|---|---|---|
+| <img src="docs/images/real/feedback_dad.jpg" width="300"> | <img src="docs/images/real/dots_row_before.jpg" width="300"><br><img src="docs/images/real/dots_row_after.jpg" width="300"> | <img src="docs/images/real/update_notice.jpg" width="240"> |
+
+- **"친구 끊기가 바로 안 지워져요"** — 끊긴 쪽에 알리지 않으려고 아무 신호도 보내지 않아, 상대는 앱을 다시 열 때까지 끊은 사람을 봤다. 서버가 커밋 뒤 `/user/queue/friends` 로 **조용한 갱신 신호**만 보내고 앱은 목록을 다시 불러온다(토스트 · 푸시 없음)
+- **"⋯ 이 희미해요"** — 아이콘이 카드 테두리와 같은 색이었다. 보조 글자색 · 터치 영역 44px
+- 배포: 단톡방에 APK → 서버 `app-version.json` 한 줄 → 1.0.0 사용자에게 **한 번** 안내
+- "모임 쫓아내기" 요청은 거절이 드러나게 돼 만들지 않았다
 
 ---
 
