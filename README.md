@@ -10,6 +10,7 @@
 </table>
 
 - **역할**: 1인 개발 (기획, 앱, 서버, 인프라)
+- **개발 방식**: AI 코딩 도구(Claude Code)를 활용했으며, 설계 판단과 검증은 직접 수행했습니다.
 - **기간**: 2026년 7월부터 개발, 9월 운영 서버 배포, 10월 릴리스 APK 배포
 - **배포**: 운영 서버 상시 가동, 서명된 릴리스 APK 직접 배포 (Google Play 미출시)
 - **스택**: Flutter, Provider + MVVM, dio, STOMP, FCM, Crashlytics, 카카오 SDK
